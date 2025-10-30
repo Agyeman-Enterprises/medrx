@@ -128,9 +128,9 @@ async def create_checkout_session(request: Request):
             detail=f\"Failed to create checkout session: {str(e)}\"
         )
 
-@router.get(\"/checkout/status/{session_id}\")
+@router.get("/checkout/status/{session_id}")
 async def get_checkout_status(session_id: str, request: Request):
-    \"\"\"Get payment status and update database (called by frontend polling)\"\"\"
+    """Get payment status and update database (called by frontend polling)"""
     
     try:
         # Initialize Stripe checkout
