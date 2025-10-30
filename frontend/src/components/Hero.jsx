@@ -25,15 +25,18 @@ const Hero = () => {
           <span>Serving Hawaii, California & Guam</span>
         </div>
         <h1 className="heading-hero hero-title">
-          Care Your Way:<br />Pay Per Visit or Subscribe
+          GLP-1 Weight Loss Program
         </h1>
         <p className="body-large hero-subtitle">
-          Choose one-time visits for $85–$175 or unlock unlimited care with monthly subscriptions. Transparent pricing, expert clinicians, and personalized treatment—Hawaii, California & Guam.
+          Physician-supervised GLP-1 therapy using Semaglutide (Ozempic®, Wegovy®) and Tirzepatide (Mounjaro®, Zepbound®) for sustainable, science-based weight management. Personalized, private, and convenient telemedicine care.
         </p>
         <div className="hero-cta">
-          <button onClick={scrollToBooking} className="btn-primary">Book Your Visit</button>
-          <button onClick={() => document.getElementById('about').scrollIntoView({ behavior: 'smooth' })} className="btn-secondary">Learn More</button>
+          <button onClick={scrollToBooking} className="btn-primary">Book GLP-1 Evaluation</button>
+          <button onClick={() => document.getElementById('services').scrollIntoView({ behavior: 'smooth' })} className="btn-secondary">View Pricing</button>
         </div>
+        <p className="caption hero-note" style={{ marginTop: '1.5rem', opacity: 0.9 }}>
+          Initial evaluation: Semaglutide $150 • Tirzepatide $279 • Medication billed separately by pharmacy
+        </p>
       </div>
     </section>
   );
