@@ -762,4 +762,4 @@ async def run_comprehensive_glp1_tests():
         return passed, failed
 
 if __name__ == "__main__":
-    asyncio.run(run_comprehensive_tests())
+    asyncio.run(run_comprehensive_glp1_tests())
