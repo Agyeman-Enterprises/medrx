@@ -33,6 +33,7 @@ async def health_check():
 # Include routers (they already have /api prefix in their router definitions)
 app.include_router(appointments.router)
 app.include_router(subscriptions.router)
+app.include_router(payments.router)
 
 # Include the base api router
 app.include_router(api_router)
