@@ -383,7 +383,7 @@ class MedRxAPITester:
             
             # Try to book duplicate appointment (same date/time)
             appointment_data["name"] = "Different Person"
-            appointment_data["email"] = f"different_{timestamp}@medrx.test"
+            appointment_data["email"] = f"different_{timestamp}@example.com"
             appointment_data["notes"] = "Duplicate time slot"
             
             async with self.session.post(
