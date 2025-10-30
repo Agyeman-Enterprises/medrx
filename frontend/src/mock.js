@@ -216,9 +216,9 @@ export const mockHowItWorks = [
   }
 ];
 
-// Mock booking function
+// Mock booking function - REPLACED WITH REAL API
 export const mockBookAppointment = (bookingData) => {
-  console.log('Mock booking created:', bookingData);
+  console.log('WARNING: Using mock booking function. Replace with real API call.');
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({
