@@ -1,16 +1,39 @@
 # Service definitions matching frontend
 ONE_OFF_SERVICES = {
-    'oneoff-1': {
-        'id': 'oneoff-1',
+    'oneoff-glp1': {
+        'id': 'oneoff-glp1',
+        'title': 'GLP-1 Weight Loss - Semaglutide',
+        'price': 150,
+        'type': 'oneoff',
+        'category': 'weight-loss'
+    },
+    'oneoff-glp2': {
+        'id': 'oneoff-glp2',
+        'title': 'GLP-1 Weight Loss - Tirzepatide',
+        'price': 279,
+        'type': 'oneoff',
+        'category': 'weight-loss'
+    },
+    'oneoff-hormone': {
+        'id': 'oneoff-hormone',
+        'title': 'Hormone Health & Rx',
+        'price': 150,
+        'type': 'oneoff',
+        'category': 'hormone'
+    },
+    'oneoff-acute': {
+        'id': 'oneoff-acute',
         'title': 'Acute Care Visit',
         'price': 85,
-        'type': 'oneoff'
+        'type': 'oneoff',
+        'category': 'general'
     },
-    'oneoff-2': {
-        'id': 'oneoff-2',
+    'oneoff-functional': {
+        'id': 'oneoff-functional',
         'title': 'Functional Medicine Visit',
         'price': 175,
-        'type': 'oneoff'
+        'type': 'oneoff',
+        'category': 'functional'
     }
 }
 
