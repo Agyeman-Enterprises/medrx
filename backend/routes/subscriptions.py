@@ -146,7 +146,7 @@ async def update_subscription(subscription_id: str, update_data: SubscriptionUpd
     from bson import ObjectId
     try:
         existing = await db.subscriptions.find_one({"_id": ObjectId(subscription_id)})
-    except:
+    except Exception:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid subscription ID"
