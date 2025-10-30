@@ -417,7 +417,7 @@ class MedRxAPITester:
         
         # Test missing required fields
         invalid_data = {
-            "email": "invalid@test.com",
+            "email": "invalid@example.com",
             # Missing name, phone, serviceId, etc.
         }
         
