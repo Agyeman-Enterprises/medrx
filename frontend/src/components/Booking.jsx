@@ -58,7 +58,7 @@ const Booking = () => {
     };
 
     try {
-      const response = await axios.post(`${API}/appointments`, bookingData);
+      const response = await axios.post(`${API}/appointments/`, bookingData);
       if (response.data.success) {
         toast.success('Appointment booked successfully! Check your email for confirmation.');
         // Reset form
