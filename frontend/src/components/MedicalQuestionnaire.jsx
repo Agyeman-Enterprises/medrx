@@ -83,7 +83,7 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
       question: 'What is your current weight and height?',
       type: 'text',
       required: true,
-      placeholder: 'e.g., 180 lbs, 5\'6"'
+      placeholder: 'e.g., 180 lbs, 5 ft 6 in'
     },
     {
       id: 'weight_loss_goal',
