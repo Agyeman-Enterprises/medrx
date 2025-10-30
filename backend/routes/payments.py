@@ -50,7 +50,7 @@ async def create_checkout_session(request: Request):
         if not service_id or not origin_url or not email:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=\"Missing required fields: serviceId, originUrl, email\"
+                detail="Missing required fields: serviceId, originUrl, email"
             )
         
         # Get amount from server-side definition (NEVER from frontend)
