@@ -11,29 +11,27 @@ import BookingSuccess from './components/BookingSuccess';
 import Footer from './components/Footer';
 import { Toaster } from './components/ui/sonner';
 
-const HomePage = () => (
-  <>
-    <Header />
-    <Hero />
-    <About />
-    <Services />
-    <HowItWorks />
-    <Booking />
-    <Footer />
-  </>
-);
-
 function App() {
   return (
-    <div className="App">
-      <Toaster position="top-right" />
-      <BrowserRouter>
+    <BrowserRouter>
+      <div className="App">
+        <Toaster position="top-right" />
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={
+            <>
+              <Header />
+              <Hero />
+              <About />
+              <Services />
+              <HowItWorks />
+              <Booking />
+              <Footer />
+            </>
+          } />
           <Route path="/booking-success" element={<BookingSuccess />} />
         </Routes>
-      </BrowserRouter>
-    </div>
+      </div>
+    </BrowserRouter>
   );
 }
 
