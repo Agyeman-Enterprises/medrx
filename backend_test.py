@@ -66,7 +66,7 @@ class MedRxAPITester:
         
         # Generate unique test data
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        email = f"patient_{timestamp}@medrx.test"
+        email = f"patient_{timestamp}@example.com"
         
         appointment_data = {
             "name": f"John Patient {timestamp}",
