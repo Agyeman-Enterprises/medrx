@@ -1,37 +1,39 @@
 # Service definitions matching frontend
 ONE_OFF_SERVICES = {
-    'oneoff-glp1': {
-        'id': 'oneoff-glp1',
-        'title': 'GLP-1 Weight Loss - Semaglutide',
-        'price': 150,
+    # GLP-1 Initial Evaluations
+    'glp1-sema-initial': {
+        'id': 'glp1-sema-initial',
+        'title': 'GLP-1 Semaglutide - Initial Evaluation',
+        'price': 150.00,
         'type': 'oneoff',
         'category': 'weight-loss'
     },
-    'oneoff-glp2': {
-        'id': 'oneoff-glp2',
-        'title': 'GLP-1 Weight Loss - Tirzepatide',
-        'price': 279,
+    'glp1-tirz-initial': {
+        'id': 'glp1-tirz-initial',
+        'title': 'GLP-1 Tirzepatide - Initial Evaluation',
+        'price': 279.00,
         'type': 'oneoff',
         'category': 'weight-loss'
     },
-    'oneoff-hormone': {
-        'id': 'oneoff-hormone',
+    # Other Services
+    'hormone-health': {
+        'id': 'hormone-health',
         'title': 'Hormone Health & Rx',
-        'price': 150,
+        'price': 150.00,
         'type': 'oneoff',
         'category': 'hormone'
     },
-    'oneoff-acute': {
-        'id': 'oneoff-acute',
+    'acute-care': {
+        'id': 'acute-care',
         'title': 'Acute Care Visit',
-        'price': 85,
+        'price': 85.00,
         'type': 'oneoff',
         'category': 'general'
     },
-    'oneoff-functional': {
-        'id': 'oneoff-functional',
+    'functional-medicine': {
+        'id': 'functional-medicine',
         'title': 'Functional Medicine Visit',
-        'price': 175,
+        'price': 175.00,
         'type': 'oneoff',
         'category': 'functional'
     }
