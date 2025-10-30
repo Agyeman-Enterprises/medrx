@@ -101,3 +101,146 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "MedRx telemedicine booking system with appointment and subscription management"
+
+backend:
+  - task: "POST /api/appointments/ - Book one-off appointments"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/appointments.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ Successfully tested one-off appointments for both Acute Care ($85) and Functional Medicine ($175). Appointments created correctly with proper pricing, MongoDB storage verified, and appointment retrieval working."
+
+  - task: "GET /api/appointments?email={email} - Get user appointments"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/appointments.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ Successfully tested appointment retrieval by email. API correctly returns user appointments with proper formatting."
+
+  - task: "POST /api/subscriptions/ - Create subscription"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/subscriptions.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ Successfully tested subscription creation for both Basic Access ($35) and Standard Care ($150). Subscriptions created correctly with proper pricing and MongoDB storage verified."
+
+  - task: "GET /api/subscriptions/email/{email} - Get user subscription"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/subscriptions.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ Successfully tested subscription retrieval by email. API correctly returns user subscription details with proper plan information."
+
+  - task: "Subscription-based appointment booking"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/appointments.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ Successfully tested subscription-based appointments. Appointments are correctly created as free ($0) for subscription users and properly linked to their subscription."
+
+  - task: "Visit limits enforcement for Basic subscription"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/appointments.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ Successfully tested visit limits. Basic subscription correctly enforces 2 visits/month limit and properly rejects 3rd appointment with appropriate error message."
+
+  - task: "Unlimited visits for Standard subscription"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/appointments.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ Successfully tested unlimited visits. Standard subscription allows multiple appointments without limits as expected."
+
+  - task: "Duplicate booking prevention"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/appointments.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ Successfully tested duplicate booking prevention. System correctly prevents booking same time slot twice with appropriate error message."
+
+  - task: "API validation and error handling"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/appointments.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ Successfully tested API validation. System correctly validates required fields and returns proper 422 validation errors for missing data."
+
+  - task: "MongoDB data persistence"
+    implemented: true
+    working: true
+    file: "/app/backend/database.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ Successfully verified MongoDB storage. All appointments and subscriptions are properly stored and retrievable from database."
+
+frontend:
+  # No frontend testing performed as per instructions
+
+metadata:
+  created_by: "testing_agent"
+  version: "1.0"
+  test_sequence: 1
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "All backend APIs tested and working"
+  stuck_tasks: []
+  test_all: true
+  test_priority: "high_first"
+
+agent_communication:
+    - agent: "testing"
+      message: "Comprehensive backend testing completed successfully. All 14 test cases passed (100% success rate). Tested: one-off appointments ($85 Acute Care, $175 Functional Medicine), subscription creation ($35 Basic, $150 Standard), subscription-based appointments (free), visit limits enforcement (Basic 2/month limit working), unlimited visits (Standard working), duplicate booking prevention, API validation, and MongoDB persistence. All APIs are working correctly with proper error handling and data validation."
