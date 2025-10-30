@@ -46,21 +46,43 @@ SUBSCRIPTION_PLANS = {
         'title': 'GLP-1 Semaglutide - Monthly Management',
         'tier': 'glp1-management',
         'price': 249.00,
-        'visitLimit': None  # Unlimited
+        'visitLimit': None,  # Unlimited
+        'features': [
+            'Monthly GLP-1 Semaglutide medication',
+            'Unlimited provider consultations',
+            'Weight loss monitoring & support',
+            'Medication adjustment & titration',
+            'Side effect management'
+        ]
     },
     'glp1-tirz-monthly': {
         'id': 'glp1-tirz-monthly',
         'title': 'GLP-1 Tirzepatide - Monthly Management',
         'tier': 'glp1-management',
         'price': 329.00,
-        'visitLimit': None  # Unlimited
+        'visitLimit': None,  # Unlimited
+        'features': [
+            'Monthly GLP-1 Tirzepatide medication',
+            'Unlimited provider consultations',
+            'Advanced weight loss monitoring',
+            'Medication adjustment & titration',
+            'Side effect management',
+            'Enhanced metabolic support'
+        ]
     },
     'metabolic-coaching': {
         'id': 'metabolic-coaching',
         'title': 'Metabolic Coaching Add-On',
         'tier': 'coaching',
         'price': 99.00,
-        'visitLimit': 2  # 2 sessions per month
+        'visitLimit': 2,  # 2 sessions per month
+        'features': [
+            'Bi-monthly coaching sessions',
+            'Personalized nutrition guidance',
+            'Exercise planning & support',
+            'Lifestyle modification strategies',
+            'Progress tracking & accountability'
+        ]
     },
     # Standard Plans
     'sub-basic': {
