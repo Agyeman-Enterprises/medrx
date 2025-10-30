@@ -1,0 +1,80 @@
+.booking-success-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: var(--bg-section);
+}
+
+.booking-success-card {
+  background: var(--bg-card);
+  border-radius: 0.75rem;
+  padding: 3rem;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.status-icon {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.booking-success-card h1 {
+  margin-bottom: 1rem;
+}
+
+.booking-success-card p {
+  margin-bottom: 1rem;
+}
+
+.appointment-summary {
+  background: var(--bg-section);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  text-align: left;
+}
+
+.appointment-summary h3 {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.summary-item:last-child {
+  border-bottom: none;
+}
+
+.summary-item .label {
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.summary-item .value {
+  color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+  .booking-success-card {
+    padding: 2rem 1.5rem;
+  }
+}
