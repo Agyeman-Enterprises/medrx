@@ -8,7 +8,8 @@ const HowItWorks = () => {
     Calendar,
     FileText,
     Video,
-    CheckCircle
+    CheckCircle,
+    CreditCard
   };
 
   return (
