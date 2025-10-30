@@ -225,6 +225,138 @@ backend:
           agent: "testing"
           comment: "✅ Successfully verified MongoDB storage. All appointments and subscriptions are properly stored and retrievable from database."
 
+  - task: "POST /api/appointments/ - GLP-1 Semaglutide Initial ($150)"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/appointments.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ GLP-1 Semaglutide appointments working perfectly. Service ID 'glp1-sema-initial' correctly priced at $150. Address data properly stored for medication delivery. Medical questionnaire data stored in notes field as JSON."
+
+  - task: "POST /api/appointments/ - GLP-1 Tirzepatide Initial ($279)"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/appointments.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ GLP-1 Tirzepatide appointments working perfectly. Service ID 'glp1-tirz-initial' correctly priced at $279. Address data properly stored for medication delivery. Higher pricing tier correctly implemented."
+
+  - task: "POST /api/appointments/ - Hormone Health ($150)"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/appointments.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ Hormone Health appointments working perfectly. Service ID 'hormone-health' correctly priced at $150. Address data storage working for hormone therapy prescriptions."
+
+  - task: "Address data storage for GLP-1 services"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/appointments.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ Address storage working correctly for GLP-1 services. Address data properly stored in patientInfo.address field for medication delivery requirements. Address is optional but when provided, correctly persisted to MongoDB."
+
+  - task: "POST /api/payments/checkout/session - Stripe integration"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/payments.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ Stripe payment sessions working perfectly. All service IDs (glp1-sema-initial $150, glp1-tirz-initial $279, hormone-health $150) create valid checkout sessions. Payment metadata properly stored."
+
+  - task: "GET /api/payments/checkout/status/{session_id}"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/payments.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ Payment status checks working correctly. Session status, payment status, and amount properly retrieved from Stripe integration. Payment transaction tracking in MongoDB working."
+
+  - task: "POST /api/subscriptions/ - GLP-1 Monthly Management"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/subscriptions.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ GLP-1 monthly management subscriptions working perfectly. Semaglutide monthly ($249), Tirzepatide monthly ($329), and Metabolic Coaching ($99) all create successfully with proper features and unlimited visit limits."
+
+  - task: "Subscription-based appointment booking (free)"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/appointments.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ Subscription-based appointments working correctly. Appointments for subscription users are properly created as free ($0) with 'paid' payment status and 'scheduled' status. Subscription service IDs work correctly."
+
+  - task: "PATCH /api/appointments/{id} - Status updates"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/appointments.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ PATCH appointment updates working correctly. Status updates, notes updates, and other appointment modifications work properly. Updated timestamps correctly maintained."
+
+  - task: "Duplicate booking prevention for GLP-1 services"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/appointments.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ Duplicate booking prevention working correctly for GLP-1 services. System properly prevents booking same time slot twice with appropriate 400 error and 'already booked' message."
+
+  - task: "API validation for GLP-1 services"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/appointments.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ API validation working correctly. Invalid service IDs rejected with 400 error. Missing required fields rejected with 422 validation error. Proper error messages returned for all validation scenarios."
+
 frontend:
   - task: "GLP-1 Semaglutide Booking with Medical Questionnaire ($150)"
     implemented: true
