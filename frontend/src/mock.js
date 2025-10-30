@@ -1,37 +1,101 @@
 // Mock data for MedRx website
 
-// Pay-Per-Visit Services (One-time)
+// Pay-Per-Visit Services (One-time) - Prioritized by importance
 export const mockOneOffServices = [
   {
-    id: 'oneoff-1',
+    id: 'oneoff-glp1',
+    title: 'GLP-1 Weight Loss - Semaglutide',
+    price: 150,
+    billingPeriod: '/visit',
+    duration: '15-30 min',
+    type: 'oneoff',
+    category: 'weight-loss',
+    description: 'Physician-supervised semaglutide therapy for sustainable weight management. Includes medical screening, prescription, and ongoing support.',
+    features: [
+      '15-30 minute consultation',
+      'Medical screening questionnaire',
+      'Semaglutide prescription (Rx)',
+      'Home delivery coordination',
+      'Follow-up care plan'
+    ],
+    color: 'accent-purple',
+    requiresQuestionnaire: true
+  },
+  {
+    id: 'oneoff-glp2',
+    title: 'GLP-1 Weight Loss - Tirzepatide',
+    price: 279,
+    billingPeriod: '/visit',
+    duration: '15-30 min',
+    type: 'oneoff',
+    category: 'weight-loss',
+    description: 'Advanced dual-action tirzepatide therapy for enhanced weight loss results. Includes comprehensive medical evaluation and prescription.',
+    features: [
+      '15-30 minute consultation',
+      'Medical screening questionnaire',
+      'Tirzepatide prescription (Rx)',
+      'Home delivery coordination',
+      'Follow-up care plan'
+    ],
+    color: 'accent-purple',
+    requiresQuestionnaire: true
+  },
+  {
+    id: 'oneoff-hormone',
+    title: 'Hormone Health & Rx',
+    price: 150,
+    billingPeriod: '/visit',
+    duration: '15-30 min',
+    type: 'oneoff',
+    category: 'hormone',
+    description: 'Brief consultation for hormone therapy prescriptions. Includes screening, lab review, and Rx for hormone optimization.',
+    features: [
+      '15-30 minute consultation',
+      'Medical screening questionnaire',
+      'Hormone therapy prescription (Rx)',
+      'Lab interpretation',
+      'Treatment plan'
+    ],
+    color: 'accent-blue',
+    requiresQuestionnaire: true
+  },
+  {
+    id: 'oneoff-acute',
     title: 'Acute Care Visit',
     price: 85,
     billingPeriod: '/visit',
+    duration: '15-30 min',
     type: 'oneoff',
+    category: 'general',
     description: 'Same-day virtual visits for urgent concerns: infections, minor injuries, medication refills, and symptom evaluation.',
     features: [
+      '15-30 minute consultation',
+      'Medical screening questionnaire',
       'Video or phone consultation',
-      'Same or next-day availability',
       'E-prescriptions sent directly',
       'Clear follow-up plan'
     ],
-    color: 'accent-blue'
+    color: 'accent-blue',
+    requiresQuestionnaire: true
   },
   {
-    id: 'oneoff-2',
+    id: 'oneoff-functional',
     title: 'Functional Medicine Visit',
     price: 175,
     billingPeriod: '/visit',
+    duration: '15-30 min',
     type: 'oneoff',
-    description: 'Comprehensive metabolic health, hormone optimization, GLP-1 therapy, and preventive care with extended consultation time.',
+    category: 'functional',
+    description: 'Comprehensive metabolic health and preventive care consultation with personalized treatment approach.',
     features: [
-      'Extended 45-minute consultation',
-      'Hormone health & optimization',
-      'GLP-1 therapy management',
+      '15-30 minute consultation',
+      'Medical screening questionnaire',
+      'Metabolic health assessment',
       'Lab coordination & interpretation',
       'Personalized treatment plans'
     ],
-    color: 'accent-purple'
+    color: 'accent-orange-200',
+    requiresQuestionnaire: true
   }
 ];
 
