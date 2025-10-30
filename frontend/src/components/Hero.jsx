@@ -25,10 +25,10 @@ const Hero = () => {
           <span>Serving Hawaii, California & Guam</span>
         </div>
         <h1 className="heading-hero hero-title">
-          Subscription-Based Care<br />That Puts You First
+          Care Your Way:<br />Pay Per Visit or Subscribe
         </h1>
         <p className="body-large hero-subtitle">
-          Choose your level of care. Unlimited access to expert clinicians, transparent pricing, and personalized treatment plans—from basic visits to comprehensive concierge medicine.
+          Choose one-time visits for $85–$175 or unlock unlimited care with monthly subscriptions. Transparent pricing, expert clinicians, and personalized treatment—Hawaii, California & Guam.
         </p>
         <div className="hero-cta">
           <button onClick={scrollToBooking} className="btn-primary">Book Your Visit</button>
