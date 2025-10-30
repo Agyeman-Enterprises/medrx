@@ -4,6 +4,7 @@ import { Calendar } from '../components/ui/calendar';
 import { mockTimezones, getAvailableTimeSlots, mockServices, mockOneOffServices } from '../mock';
 import MedicalQuestionnaire from './MedicalQuestionnaire';
 import '../styles/Booking.css';
+import '../styles/BookingExtensions.css';
 import { Calendar as CalendarIcon, Clock, MapPin, User, Mail, Phone, Home } from 'lucide-react';
 import { toast } from 'sonner';
 import axios from 'axios';
