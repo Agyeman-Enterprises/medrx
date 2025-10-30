@@ -68,8 +68,9 @@ class MedRxAPITester:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
         email = f"patient_{service_id}_{timestamp}@example.com"
         
-        # Use different times for different services to avoid conflicts
-        time_offset = 0 if service_id == "oneoff-1" else 1
+        # Use different times and dates for different services to avoid conflicts
+        time_offset = 0 if service_id == "oneoff-1" else 2
+        date_offset = 7 + (1 if service_id == "oneoff-2" else 0)
         appointment_time = f"{10 + time_offset}:00 AM"
         
         appointment_data = {
@@ -78,7 +79,7 @@ class MedRxAPITester:
             "phone": "+1-555-0123",
             "serviceId": service_id,
             "serviceType": "oneoff",
-            "date": (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d"),
+            "date": (datetime.now() + timedelta(days=date_offset)).strftime("%Y-%m-%d"),
             "time": appointment_time,
             "timezone": "Pacific/Honolulu",
             "notes": f"Test appointment for {service_name}"
