@@ -40,11 +40,34 @@ ONE_OFF_SERVICES = {
 }
 
 SUBSCRIPTION_PLANS = {
-    'sub-1': {
-        'id': 'sub-1',
+    # GLP-1 Management Plans
+    'glp1-sema-monthly': {
+        'id': 'glp1-sema-monthly',
+        'title': 'GLP-1 Semaglutide - Monthly Management',
+        'tier': 'glp1-management',
+        'price': 249.00,
+        'visitLimit': None  # Unlimited
+    },
+    'glp1-tirz-monthly': {
+        'id': 'glp1-tirz-monthly',
+        'title': 'GLP-1 Tirzepatide - Monthly Management',
+        'tier': 'glp1-management',
+        'price': 329.00,
+        'visitLimit': None  # Unlimited
+    },
+    'metabolic-coaching': {
+        'id': 'metabolic-coaching',
+        'title': 'Metabolic Coaching Add-On',
+        'tier': 'coaching',
+        'price': 99.00,
+        'visitLimit': 2  # 2 sessions per month
+    },
+    # Standard Plans
+    'sub-basic': {
+        'id': 'sub-basic',
         'title': 'Basic Access',
         'tier': 'basic',
-        'price': 35,
+        'price': 35.00,
         'visitLimit': 2,  # Max visits per month
         'features': [
             'Limited urgent visits (1–2/month)',
@@ -53,11 +76,11 @@ SUBSCRIPTION_PLANS = {
             'Standard appointment booking'
         ]
     },
-    'sub-2': {
-        'id': 'sub-2',
+    'sub-standard': {
+        'id': 'sub-standard',
         'title': 'Standard Care',
         'tier': 'standard',
-        'price': 150,
+        'price': 150.00,
         'visitLimit': None,  # Unlimited
         'features': [
             'Unlimited general medicine consults',
@@ -65,37 +88,6 @@ SUBSCRIPTION_PLANS = {
             'Care coordination & follow-ups',
             'Physician messaging access',
             'Preventive care planning'
-        ]
-    },
-    'sub-3': {
-        'id': 'sub-3',
-        'title': 'Functional Medicine',
-        'tier': 'integrative',
-        'price': 400,
-        'visitLimit': None,  # Unlimited
-        'features': [
-            'Extended 45-minute consultations',
-            'Personalized labs & interpretation',
-            'GLP-1 therapy management',
-            'Hormone health optimization',
-            'Supplement recommendations',
-            'Health coaching sessions'
-        ]
-    },
-    'sub-4': {
-        'id': 'sub-4',
-        'title': 'VIP Concierge',
-        'tier': 'vip',
-        'price': 600,
-        'visitLimit': None,  # Unlimited
-        'features': [
-            'Dedicated physician partnership',
-            '24/7 physician messaging',
-            'Same-day appointment availability',
-            'Annual in-person wellness check',
-            'Specialist referral coordination',
-            'Advanced diagnostics & testing',
-            'Concierge care management'
         ]
     }
 }
