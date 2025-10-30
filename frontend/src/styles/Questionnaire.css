@@ -18,13 +18,51 @@
 
 .questionnaire-card.disqualification {
   text-align: center;
-  max-width: 500px;
+  max-width: 600px;
 }
 
 .disqualification-icon {
   margin-bottom: 1.5rem;
   display: flex;
   justify-content: center;
+}
+
+.alternative-offer {
+  background: var(--bg-section);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.alternative-details {
+  margin-top: 1rem;
+}
+
+.price-highlight {
+  font-size: 1.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 1rem 0;
+}
+
+.alternative-details ul {
+  list-style: none;
+  padding: 0;
+  display: inline-block;
+  text-align: left;
+}
+
+.alternative-details li {
+  padding: 0.25rem 0;
+  color: var(--text-secondary);
+}
+
+.alternative-details li:before {
+  content: "✓ ";
+  color: var(--text-primary);
+  font-weight: bold;
+  margin-right: 0.5rem;
 }
 
 .questionnaire-progress {
