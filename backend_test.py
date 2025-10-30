@@ -257,14 +257,17 @@ class MedRxAPITester:
         """Test creating an appointment with subscription"""
         test_name = "Create Subscription Appointment"
         
+        # Use unique timestamp for each subscription appointment
+        unique_timestamp = datetime.now().strftime("%H%M%S_%f")
+        
         appointment_data = {
             "name": "Jane Subscriber",
             "email": email,
             "phone": "+1-555-0456",
             "serviceId": "sub-1",  # Will be overridden by subscription logic
             "serviceType": service_type,
-            "date": (datetime.now() + timedelta(days=8)).strftime("%Y-%m-%d"),
-            "time": "11:00 AM",
+            "date": (datetime.now() + timedelta(days=30)).strftime("%Y-%m-%d"),
+            "time": f"11:{unique_timestamp[:2]} AM",  # Use unique minutes
             "timezone": "Pacific/Honolulu",
             "notes": "Subscription-based appointment"
         }
