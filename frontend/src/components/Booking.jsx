@@ -235,6 +235,71 @@ const Booking = () => {
                   required
                 />
               </div>
+
+              {/* Address fields for GLP-1 services (eRx requirement) */}
+              {requiresAddress && (
+                <>
+                  <div className="form-group">
+                    <label className="form-label">
+                      <Home size={16} />
+                      Street Address *
+                    </label>
+                    <input
+                      type="text"
+                      name="address.street"
+                      value={formData.address.street}
+                      onChange={handleInputChange}
+                      className="form-input"
+                      placeholder="123 Main Street"
+                      required={requiresAddress}
+                    />
+                  </div>
+                  <div className="form-grid-2">
+                    <div className="form-group">
+                      <label className="form-label">City *</label>
+                      <input
+                        type="text"
+                        name="address.city"
+                        value={formData.address.city}
+                        onChange={handleInputChange}
+                        className="form-input"
+                        placeholder="Honolulu"
+                        required={requiresAddress}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">State *</label>
+                      <select
+                        name="address.state"
+                        value={formData.address.state}
+                        onChange={handleInputChange}
+                        className="form-input"
+                        required={requiresAddress}
+                      >
+                        <option value="">Select State</option>
+                        <option value="HI">Hawaii</option>
+                        <option value="CA">California</option>
+                        <option value="GU">Guam</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">ZIP Code *</label>
+                    <input
+                      type="text"
+                      name="address.zip_code"
+                      value={formData.address.zip_code}
+                      onChange={handleInputChange}
+                      className="form-input"
+                      placeholder="96815"
+                      required={requiresAddress}
+                    />
+                  </div>
+                  <p className="caption" style={{ marginTop: '0.5rem', color: 'var(--text-muted)' }}>
+                    * Address required for eRx prescription delivery
+                  </p>
+                </>
+              )}
             </div>
 
             {/* Service Selection */}
