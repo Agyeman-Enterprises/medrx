@@ -4,7 +4,7 @@ import { Calendar } from '../components/ui/calendar';
 import { mockTimezones, getAvailableTimeSlots, mockServices, mockOneOffServices } from '../mock';
 import MedicalQuestionnaire from './MedicalQuestionnaire';
 import '../styles/Booking.css';
-import { Calendar as CalendarIcon, Clock, MapPin, User, Mail, Phone } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, MapPin, User, Mail, Phone, Home } from 'lucide-react';
 import { toast } from 'sonner';
 import axios from 'axios';
 
@@ -12,7 +12,7 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 const Booking = () => {
-  const [bookingStep, setBookingStep] = useState('form'); // 'form', 'questionnaire', 'complete'
+  const [bookingStep, setBookingStep] = useState('form'); // 'form', 'questionnaire', 'payment', 'processing'
   const [selectedService, setSelectedService] = useState('');
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState('');
@@ -20,22 +20,30 @@ const Booking = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    phone: ''
+    phone: '',
+    address: {
+      street: '',
+      city: '',
+      state: '',
+      zip_code: '',
+      country: 'US'
+    }
   });
   const [questionnaireAnswers, setQuestionnaireAnswers] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Get available time slots based on selected timezone
   const availableTimeSlots = useMemo(() => {
     return getAvailableTimeSlots(selectedTimezone);
   }, [selectedTimezone]);
 
-  // Reset selected time if it's no longer available after timezone change
   useEffect(() => {
     if (selectedTime && !availableTimeSlots.includes(selectedTime)) {
       setSelectedTime('');
     }
   }, [availableTimeSlots, selectedTime]);
+
+  const selectedServiceData = mockServices.find(s => s.id === selectedService);
+  const requiresAddress = selectedServiceData?.requiresAddress || false;
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -45,60 +53,76 @@ const Booking = () => {
       return;
     }
 
-    // Get service details
+    // Validate address for GLP-1 services
+    if (requiresAddress) {
+      if (!formData.address.street || !formData.address.city || !formData.address.state || !formData.address.zip_code) {
+        toast.error('Address is required for GLP-1 prescriptions (eRx orders)');
+        return;
+      }
+    }
+
     const service = mockServices.find(s => s.id === selectedService);
     
-    // If service requires questionnaire, show it
     if (service && service.requiresQuestionnaire) {
       setBookingStep('questionnaire');
     } else {
-      // Submit directly
       submitBooking();
     }
   };
 
   const handleQuestionnaireComplete = (answers) => {
     setQuestionnaireAnswers(answers);
-    submitBooking(answers);
+    // After questionnaire, proceed to payment
+    initiatePayment(answers);
   };
 
   const handleQuestionnaireCancel = () => {
     setBookingStep('form');
   };
 
-  const submitBooking = async (questionnaire = questionnaireAnswers) => {
+  const initiatePayment = async (questionnaire = questionnaireAnswers) => {
     setIsSubmitting(true);
+    setBookingStep('processing');
     
     const service = mockServices.find(s => s.id === selectedService);
-    const bookingData = {
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-      serviceId: selectedService,
-      serviceType: service.type,
-      date: format(selectedDate, 'yyyy-MM-dd'),
-      time: selectedTime,
-      timezone: selectedTimezone,
-      notes: questionnaire ? JSON.stringify(questionnaire) : ''
-    };
-
+    
     try {
-      const response = await axios.post(`${API}/appointments/`, bookingData);
+      // Create checkout session
+      const paymentData = {
+        serviceId: selectedService,
+        originUrl: window.location.origin,
+        email: formData.email,
+        appointmentData: {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          address: requiresAddress ? formData.address : null,
+          date: format(selectedDate, 'yyyy-MM-dd'),
+          time: selectedTime,
+          timezone: selectedTimezone,
+          notes: questionnaire ? JSON.stringify(questionnaire) : ''
+        }
+      };
+
+      const response = await axios.post(`${API}/payments/checkout/session`, paymentData);
+      
       if (response.data.success) {
-        toast.success('Appointment booked successfully! Check your email for confirmation.');
-        // Reset form
-        setBookingStep('form');
-        setSelectedService('');
-        setSelectedDate(null);
-        setSelectedTime('');
-        setFormData({ name: '', email: '', phone: '' });
-        setQuestionnaireAnswers(null);
+        // Store session ID and appointment data in sessionStorage
+        sessionStorage.setItem('pendingAppointment', JSON.stringify({
+          sessionId: response.data.sessionId,
+          ...paymentData.appointmentData,
+          serviceId: selectedService,
+          serviceType: service.type
+        }));
+        
+        // Redirect to Stripe checkout
+        window.location.href = response.data.url;
       }
     } catch (error) {
-      const errorMessage = error.response?.data?.detail || 'Booking failed. Please try again.';
+      const errorMessage = error.response?.data?.detail || 'Payment initialization failed';
       toast.error(errorMessage);
-      console.error('Booking error:', error);
-      setBookingStep('form'); // Return to form on error
+      console.error('Payment error:', error);
+      setBookingStep('form');
     } finally {
       setIsSubmitting(false);
     }
