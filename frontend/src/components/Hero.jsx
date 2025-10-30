@@ -13,8 +13,8 @@ const Hero = () => {
     <section className="hero-section">
       <div className="hero-image-container">
         <img 
-          src="https://images.unsplash.com/photo-1758691461916-dc7894eb8f94" 
-          alt="Professional telemedicine consultation"
+          src="https://images.unsplash.com/photo-1708491038948-095cf1428875?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzF8MHwxfHNlYXJjaHwyfHxibGFjayUyMGZlbWFsZSUyMGRvY3RvcnxlbnwwfHx8fDE3NjE4NDA5Mzd8MA&ixlib=rb-4.1.0&q=85" 
+          alt="Professional black female doctor - MedRx telemedicine"
           className="hero-image"
         />
         <div className="hero-overlay"></div>
