@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, status
 from datetime import datetime
 from typing import List
 
-from models import Appointment, AppointmentCreate, AppointmentUpdate, PatientInfo
+from models import Appointment, AppointmentCreate, AppointmentUpdate, PatientInfo, Address
 from services_data import ONE_OFF_SERVICES, SUBSCRIPTION_PLANS, get_service_info
 
 router = APIRouter(prefix="/api/appointments", tags=["appointments"])
