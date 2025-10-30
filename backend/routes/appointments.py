@@ -1,8 +1,6 @@
 from fastapi import APIRouter, HTTPException, status
-from motor.motor_asyncio import AsyncIOMotorClient
 from datetime import datetime
 from typing import List
-import os
 
 from models import Appointment, AppointmentCreate, AppointmentUpdate, PatientInfo
 from services_data import ONE_OFF_SERVICES, SUBSCRIPTION_PLANS, get_service_info
