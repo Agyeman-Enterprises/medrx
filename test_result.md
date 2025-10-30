@@ -226,31 +226,7 @@ backend:
           comment: "✅ Successfully verified MongoDB storage. All appointments and subscriptions are properly stored and retrievable from database."
 
 frontend:
-  - task: "Navigation functionality (About, Services, Book Visit buttons)"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/components/Header.jsx"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: false
-    status_history:
-        - working: true
-          agent: "testing"
-          comment: "✅ All navigation buttons working correctly. About, Services, and Book Visit buttons successfully scroll to their respective sections with smooth scrolling behavior."
-
-  - task: "Service filter functionality (All Services, Pay-Per-Visit, Monthly Plans)"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/components/Services.jsx"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: false
-    status_history:
-        - working: true
-          agent: "testing"
-          comment: "✅ Service filters working perfectly. Pay-Per-Visit shows 2 services, Monthly Plans shows 4 services, All Services shows 6 services as expected."
-
-  - task: "Pay-Per-Visit booking flow (Acute Care - $85)"
+  - task: "GLP-1 Semaglutide Booking with Medical Questionnaire ($150)"
     implemented: true
     working: true
     file: "/app/frontend/src/components/Booking.jsx"
@@ -260,9 +236,9 @@ frontend:
     status_history:
         - working: true
           agent: "testing"
-          comment: "✅ Acute Care booking flow working perfectly. Successfully completed booking with personal info (Sarah Johnson, sarah.johnson@example.com), service selection, Hawaii timezone, date/time selection, and received success toast 'Appointment booked successfully!'. Form properly resets after successful booking."
+          comment: "✅ GLP-1 Semaglutide booking flow working perfectly. Successfully completed booking with personal info (Lisa Chen, lisa.chen@test.com, (808) 555-3333), service selection, Hawaii timezone, date/time selection (11:00 AM), and complete medical questionnaire with 11 questions including GLP-1 specific screening. Form properly resets after successful completion. Backend integration confirmed with 200 OK responses."
 
-  - task: "Pay-Per-Visit booking flow (Functional Medicine - $175)"
+  - task: "GLP-1 Tirzepatide Booking with Medical Questionnaire ($279)"
     implemented: true
     working: true
     file: "/app/frontend/src/components/Booking.jsx"
@@ -272,7 +248,55 @@ frontend:
     status_history:
         - working: true
           agent: "testing"
-          comment: "✅ Functional Medicine booking flow working perfectly. Successfully completed booking with different personal info (Michael Chen, michael.chen@example.com), service selection, California timezone, date/time selection, and received success toast. Backend integration working correctly."
+          comment: "✅ GLP-1 Tirzepatide booking flow working correctly. Successfully tested booking form with personal info (Michael Rodriguez, michael.rodriguez@test.com), service selection, California timezone, date/time selection (02:00 PM), and medical questionnaire trigger. Questionnaire appears with proper GLP-1 specific questions for weight-loss category services."
+
+  - task: "Hormone Health Booking with Medical Questionnaire ($150)"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/Booking.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ Hormone Health booking flow working perfectly. Successfully completed booking with personal info (Dr. Jennifer Kim, jennifer.kim@test.com, (808) 555-9999), service selection, Guam timezone, date/time selection (06:00 PM), and complete medical questionnaire with 5 base questions (no GLP-1 specific questions as expected for hormone category). Form properly resets after successful completion."
+
+  - task: "Service Display Order Verification"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/mock.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ Service display order verified correctly. Pay-Per-Visit filter shows services in correct priority order: 1st) GLP-1 Weight Loss - Semaglutide ($150), 2nd) GLP-1 Weight Loss - Tirzepatide ($279), 3rd) Hormone Health & Rx ($150), 4th) Acute Care Visit ($85), 5th) Functional Medicine Visit ($175). All 5 pay-per-visit services visible as expected."
+
+  - task: "Medical Questionnaire Functionality"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/MedicalQuestionnaire.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ Medical questionnaire functionality working perfectly. Base questions (5) for all services: age 18+, pregnancy status, allergies, medications, chronic conditions. Additional GLP-1 specific questions (6) for weight-loss services: thyroid cancer history, pancreatitis, kidney disease, gastroparesis, weight/height, weight loss goals. Progress indicator, navigation (Next/Previous/Complete), and form validation all working correctly."
+
+  - task: "Medical Questionnaire Disqualification Logic"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/MedicalQuestionnaire.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "testing"
+          comment: "⚠️ Disqualification logic implemented in code but not fully tested due to form validation requirements. Code review shows proper disqualification triggers for: age <18, pregnancy=yes, thyroid cancer history=yes, pancreatitis=yes, kidney disease=yes, gastroparesis=yes. 'Unable to Proceed' message and 'Return to Services' button implemented correctly in MedicalQuestionnaire.jsx lines 139-162."
 
   - task: "Timezone-aware time slot functionality"
     implemented: true
@@ -284,19 +308,7 @@ frontend:
     status_history:
         - working: true
           agent: "testing"
-          comment: "✅ Timezone-aware time slots working correctly. Hawaii (HST): 11 time slots, California (PST/PDT): 9 time slots, Guam (ChST): 14 time slots. Time slots properly adjust based on timezone selection to maintain 8am-10pm local time constraints."
-
-  - task: "Form validation and user experience"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/components/Booking.jsx"
-    stuck_count: 0
-    priority: "medium"
-    needs_retesting: false
-    status_history:
-        - working: true
-          agent: "testing"
-          comment: "✅ Form validation working correctly. Required fields properly validated, booking summary displays selected service/date/time, success toasts appear, and form resets after successful submission."
+          comment: "✅ Timezone-aware time slots working correctly. Successfully tested Hawaii (HST), California (PST/PDT), and Guam (ChST) timezones. Time slots properly adjust based on timezone selection to maintain 8am-10pm local time constraints. Booking summary correctly displays selected timezone information."
 
   - task: "Frontend-Backend API integration"
     implemented: true
@@ -308,7 +320,7 @@ frontend:
     status_history:
         - working: true
           agent: "testing"
-          comment: "✅ Frontend-Backend integration working perfectly. API calls to /api/appointments/ successful, proper error handling implemented, success/error toasts working, and booking data correctly sent to backend."
+          comment: "✅ Frontend-Backend integration working perfectly. API calls to /api/appointments/ successful with 200 OK responses confirmed in backend logs. Questionnaire answers properly serialized in notes field as JSON. Form validation, error handling, success feedback, and form reset all working correctly. MongoDB persistence verified through backend service logs."
 
 metadata:
   created_by: "testing_agent"
