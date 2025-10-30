@@ -13,9 +13,39 @@
   margin-bottom: 1rem;
 }
 
+.service-toggle {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.toggle-btn {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 2rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggle-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.toggle-btn.active {
+  background: var(--text-primary);
+  color: white;
+  border-color: var(--text-primary);
+}
+
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
 }
 
@@ -32,6 +62,20 @@
   height: 100%;
 }
 
+.service-type-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--text-primary);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
 .service-card.accent-blue {
   background: var(--accent-blue-200);
 }
@@ -40,11 +84,20 @@
   background: var(--accent-purple-200);
 }
 
+.service-card.accent-grey-200 {
+  background: var(--accent-grey-200);
+}
+
+.service-card.accent-pink-200 {
+  background: var(--accent-pink-200);
+}
+
 .service-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 .service-icon {
@@ -116,5 +169,10 @@
 
   .service-card {
     padding: 1.5rem;
+  }
+
+  .toggle-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
   }
 }
