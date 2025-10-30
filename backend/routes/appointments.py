@@ -9,10 +9,8 @@ from services_data import ONE_OFF_SERVICES, SUBSCRIPTION_PLANS, get_service_info
 
 router = APIRouter(prefix="/api/appointments", tags=["appointments"])
 
-# MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+# MongoDB connection will be imported from main server
+from server import db
 
 @router.post("/", response_model=dict)
 async def create_appointment(appointment_data: AppointmentCreate):
