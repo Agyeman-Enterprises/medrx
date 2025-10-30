@@ -1,49 +1,123 @@
-// Mock data for MedRx website
+// GLP-1 Weight Loss Services - Initial Evaluations (One-time)
+export const glp1InitialServices = [
+  {
+    id: 'glp1-sema-initial',
+    title: 'GLP-1 Semaglutide - Initial Evaluation',
+    price: 150.00,
+    billingPeriod: '/visit',
+    duration: '15-30 min',
+    type: 'oneoff',
+    category: 'weight-loss',
+    medication: 'Semaglutide',
+    description: '15-30 minute telemedicine visit, medical screening, eligibility review, prescription if appropriate, home-delivery coordination.',
+    features: [
+      '15-30 minute telemedicine visit',
+      'Medical screening questionnaire',
+      'Eligibility review',
+      'Semaglutide prescription (if appropriate)',
+      'Home-delivery coordination'
+    ],
+    note: 'Medication billed separately by pharmacy',
+    color: 'accent-purple',
+    requiresQuestionnaire: true,
+    requiresPayment: true,
+    requiresAddress: true
+  },
+  {
+    id: 'glp1-tirz-initial',
+    title: 'GLP-1 Tirzepatide - Initial Evaluation',
+    price: 279.00,
+    billingPeriod: '/visit',
+    duration: '15-30 min',
+    type: 'oneoff',
+    category: 'weight-loss',
+    medication: 'Tirzepatide',
+    description: '15-30 minute telemedicine visit, medical screening, eligibility review, prescription if appropriate, home-delivery coordination.',
+    features: [
+      '15-30 minute telemedicine visit',
+      'Medical screening questionnaire',
+      'Eligibility review',
+      'Tirzepatide prescription (if appropriate)',
+      'Home-delivery coordination'
+    ],
+    note: 'Medication billed separately by pharmacy',
+    color: 'accent-purple',
+    requiresQuestionnaire: true,
+    requiresPayment: true,
+    requiresAddress: true
+  }
+];
 
-// Pay-Per-Visit Services (One-time) - Prioritized by importance
-export const mockOneOffServices = [
+// GLP-1 Monthly Management Subscriptions
+export const glp1Subscriptions = [
   {
-    id: 'oneoff-glp1',
-    title: 'GLP-1 Weight Loss - Semaglutide',
-    price: 150,
-    billingPeriod: '/visit',
-    duration: '15-30 min',
-    type: 'oneoff',
-    category: 'weight-loss',
-    description: 'Physician-supervised semaglutide therapy for sustainable weight management. Includes medical screening, prescription, and ongoing support.',
+    id: 'glp1-sema-monthly',
+    title: 'GLP-1 Semaglutide - Monthly Management',
+    price: 249.00,
+    billingPeriod: '/month',
+    type: 'subscription',
+    category: 'weight-loss-management',
+    medication: 'Semaglutide',
+    description: 'Ongoing physician supervision, dose adjustments, secure messaging, side-effect support, monthly follow-up, lab monitoring.',
     features: [
-      '15-30 minute consultation',
-      'Medical screening questionnaire',
-      'Semaglutide prescription (Rx)',
-      'Home delivery coordination',
-      'Follow-up care plan'
+      'Ongoing physician supervision',
+      'Dose adjustments',
+      'Secure messaging with care team',
+      'Side-effect support',
+      'Monthly follow-up visits',
+      'Lab monitoring coordination'
     ],
+    note: 'Medication typically $349-$499/mo via pharmacy',
     color: 'accent-purple',
-    requiresQuestionnaire: true
+    tier: 'glp1-management'
   },
   {
-    id: 'oneoff-glp2',
-    title: 'GLP-1 Weight Loss - Tirzepatide',
-    price: 279,
-    billingPeriod: '/visit',
-    duration: '15-30 min',
-    type: 'oneoff',
-    category: 'weight-loss',
-    description: 'Advanced dual-action tirzepatide therapy for enhanced weight loss results. Includes comprehensive medical evaluation and prescription.',
+    id: 'glp1-tirz-monthly',
+    title: 'GLP-1 Tirzepatide - Monthly Management',
+    price: 329.00,
+    billingPeriod: '/month',
+    type: 'subscription',
+    category: 'weight-loss-management',
+    medication: 'Tirzepatide',
+    description: 'Ongoing physician supervision, dose adjustments, secure messaging, side-effect support, monthly follow-up, lab monitoring.',
     features: [
-      '15-30 minute consultation',
-      'Medical screening questionnaire',
-      'Tirzepatide prescription (Rx)',
-      'Home delivery coordination',
-      'Follow-up care plan'
+      'Ongoing physician supervision',
+      'Dose adjustments',
+      'Secure messaging with care team',
+      'Side-effect support',
+      'Monthly follow-up visits',
+      'Lab monitoring coordination'
     ],
+    note: 'Medication typically $349-$499/mo via pharmacy',
     color: 'accent-purple',
-    requiresQuestionnaire: true
+    tier: 'glp1-management'
   },
   {
-    id: 'oneoff-hormone',
+    id: 'metabolic-coaching',
+    title: 'Metabolic Coaching Add-On',
+    price: 99.00,
+    billingPeriod: '/month',
+    type: 'subscription',
+    category: 'coaching',
+    description: '2x/month health coach check-ins for diet, exercise, motivation.',
+    features: [
+      '2 health coach sessions per month',
+      'Diet guidance',
+      'Exercise planning',
+      'Motivation support'
+    ],
+    color: 'accent-green-200',
+    tier: 'coaching',
+    addon: true
+  }
+];
+
+// Other Pay-Per-Visit Services
+export const otherServices = [
+  {
+    id: 'hormone-health',
     title: 'Hormone Health & Rx',
-    price: 150,
+    price: 150.00,
     billingPeriod: '/visit',
     duration: '15-30 min',
     type: 'oneoff',
@@ -52,17 +126,18 @@ export const mockOneOffServices = [
     features: [
       '15-30 minute consultation',
       'Medical screening questionnaire',
-      'Hormone therapy prescription (Rx)',
+      'Hormone therapy prescription',
       'Lab interpretation',
       'Treatment plan'
     ],
     color: 'accent-blue',
-    requiresQuestionnaire: true
+    requiresQuestionnaire: true,
+    requiresPayment: true
   },
   {
-    id: 'oneoff-acute',
+    id: 'acute-care',
     title: 'Acute Care Visit',
-    price: 85,
+    price: 85.00,
     billingPeriod: '/visit',
     duration: '15-30 min',
     type: 'oneoff',
@@ -76,12 +151,13 @@ export const mockOneOffServices = [
       'Clear follow-up plan'
     ],
     color: 'accent-blue',
-    requiresQuestionnaire: true
+    requiresQuestionnaire: true,
+    requiresPayment: true
   },
   {
-    id: 'oneoff-functional',
+    id: 'functional-medicine',
     title: 'Functional Medicine Visit',
-    price: 175,
+    price: 175.00,
     billingPeriod: '/visit',
     duration: '15-30 min',
     type: 'oneoff',
@@ -95,16 +171,17 @@ export const mockOneOffServices = [
       'Personalized treatment plans'
     ],
     color: 'accent-orange-200',
-    requiresQuestionnaire: true
+    requiresQuestionnaire: true,
+    requiresPayment: true
   }
 ];
 
-// Subscription Plans (Monthly)
-export const mockSubscriptions = [
+// Standard subscription plans
+export const standardSubscriptions = [
   {
-    id: 'sub-1',
+    id: 'sub-basic',
     title: 'Basic Access',
-    price: 35,
+    price: 35.00,
     priceRange: '$25–$50',
     billingPeriod: '/month',
     type: 'subscription',
@@ -119,9 +196,9 @@ export const mockSubscriptions = [
     tier: 'basic'
   },
   {
-    id: 'sub-2',
+    id: 'sub-standard',
     title: 'Standard Care',
-    price: 150,
+    price: 150.00,
     priceRange: '$100–$200',
     billingPeriod: '/month',
     type: 'subscription',
@@ -135,63 +212,24 @@ export const mockSubscriptions = [
     ],
     color: 'accent-blue',
     tier: 'standard'
-  },
-  {
-    id: 'sub-3',
-    title: 'Functional Medicine',
-    price: 400,
-    priceRange: '$300–$500',
-    billingPeriod: '/month',
-    type: 'subscription',
-    description: 'Integrative approach to optimal health with personalized protocols, hormone optimization, and advanced therapeutics.',
-    features: [
-      'Extended 45-minute consultations',
-      'Personalized labs & interpretation',
-      'GLP-1 therapy management',
-      'Hormone health optimization',
-      'Supplement recommendations',
-      'Health coaching sessions'
-    ],
-    color: 'accent-purple',
-    tier: 'integrative'
-  },
-  {
-    id: 'sub-4',
-    title: 'VIP Concierge',
-    price: 600,
-    priceRange: '$600+',
-    billingPeriod: '/month',
-    type: 'subscription',
-    description: 'Premium white-glove service with dedicated physician access, comprehensive wellness planning, and 24/7 support.',
-    features: [
-      'Dedicated physician partnership',
-      '24/7 physician messaging',
-      'Same-day appointment availability',
-      'Annual in-person wellness check',
-      'Specialist referral coordination',
-      'Advanced diagnostics & testing',
-      'Concierge care management'
-    ],
-    color: 'accent-pink-200',
-    tier: 'vip'
   }
 ];
 
-// Combined services for display
+// Combined for display
+export const mockOneOffServices = [...glp1InitialServices, ...otherServices];
+export const mockSubscriptions = [...glp1Subscriptions, ...standardSubscriptions];
 export const mockServices = [...mockOneOffServices, ...mockSubscriptions];
 
 export const mockTimezones = [
-  { value: 'Pacific/Honolulu', label: 'Hawaii (HST)', offset: -10 }, // UTC-10
-  { value: 'America/Los_Angeles', label: 'California (PST/PDT)', offset: -8 }, // UTC-8 (PST) / UTC-7 (PDT)
-  { value: 'Pacific/Guam', label: 'Guam (ChST)', offset: 10 } // UTC+10
+  { value: 'Pacific/Honolulu', label: 'Hawaii (HST)', offset: -10 },
+  { value: 'America/Los_Angeles', label: 'California (PST/PDT)', offset: -8 },
+  { value: 'Pacific/Guam', label: 'Guam (ChST)', offset: 10 }
 ];
 
 // Guam operating hours: 8am-9pm ChST
-// Generate time slots that respect both Guam hours AND local time limits
 export const getAvailableTimeSlots = (selectedTimezone) => {
   const allSlots = [];
   
-  // Generate hourly slots from 8am to 9pm
   for (let hour = 8; hour <= 21; hour++) {
     const period = hour < 12 ? 'AM' : 'PM';
     const displayHour = hour <= 12 ? hour : hour - 12;
@@ -203,54 +241,25 @@ export const getAvailableTimeSlots = (selectedTimezone) => {
     });
   }
   
-  // Filter based on timezone to ensure socially acceptable hours
   if (!selectedTimezone) return allSlots.map(s => s.value);
   
   const tz = mockTimezones.find(t => t.value === selectedTimezone);
   if (!tz) return allSlots.map(s => s.value);
   
-  // Calculate time difference from Guam
-  const guamOffset = 10; // UTC+10
+  const guamOffset = 10;
   const timeDiff = tz.offset - guamOffset;
   
   return allSlots.filter(slot => {
     const localHour = slot.guamTime + timeDiff;
     const adjustedHour = localHour < 0 ? localHour + 24 : localHour >= 24 ? localHour - 24 : localHour;
-    
-    // Must be between 8am and 10pm local time
     return adjustedHour >= 8 && adjustedHour <= 22;
   }).map(s => s.value);
 };
 
-// Default time slots (for Guam timezone)
 export const mockTimeSlots = [
   '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
   '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM',
   '06:00 PM', '07:00 PM', '08:00 PM', '09:00 PM'
-];
-
-export const mockTestimonials = [
-  {
-    id: '1',
-    name: 'Sarah M.',
-    location: 'Honolulu, HI',
-    text: 'Finally, a doctor who takes time to listen. The intake was thorough, and my GLP-1 therapy has been life-changing.',
-    rating: 5
-  },
-  {
-    id: '2',
-    name: 'James K.',
-    location: 'San Diego, CA',
-    text: 'Transparent pricing, easy scheduling, and genuine care. MedRx feels like medicine should be.',
-    rating: 5
-  },
-  {
-    id: '3',
-    name: 'Linda T.',
-    location: 'Guam',
-    text: 'The hormone therapy consultation was incredibly detailed. I left with a clear plan and real answers.',
-    rating: 5
-  }
 ];
 
 export const mockHowItWorks = [
@@ -262,47 +271,44 @@ export const mockHowItWorks = [
   },
   {
     step: '02',
-    title: 'Complete Your Intake',
-    description: 'Detailed health history and voice-dictation notes ensure your clinician arrives prepared.',
+    title: 'Complete Medical Screening',
+    description: 'Answer our comprehensive questionnaire to ensure the treatment is safe and appropriate for you.',
     icon: 'FileText'
   },
   {
     step: '03',
-    title: 'Meet Your Clinician',
-    description: 'Video or phone visit focused on listening, understanding, and building your personalized care plan.',
-    icon: 'Video'
+    title: 'Secure Payment',
+    description: 'Complete payment securely via Stripe before your appointment is confirmed.',
+    icon: 'CreditCard'
   },
   {
     step: '04',
-    title: 'Seamless Follow-Up',
-    description: 'Prescriptions, lab orders, and next steps—all coordinated and clearly communicated.',
-    icon: 'CheckCircle'
+    title: 'Meet Your Physician',
+    description: 'Video or phone visit focused on your health goals, with prescription sent to your pharmacy if appropriate.',
+    icon: 'Video'
   }
 ];
 
-// Mock booking function - REPLACED WITH REAL API
-export const mockBookAppointment = (bookingData) => {
-  console.log('WARNING: Using mock booking function. Replace with real API call.');
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        success: true,
-        bookingId: 'MOCK-' + Date.now(),
-        message: 'Appointment booked successfully!'
-      });
-    }, 1000);
-  });
-};
-
-// Mock contact submission
-export const mockContactSubmit = (contactData) => {
-  console.log('Mock contact submission:', contactData);
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        success: true,
-        message: 'Thank you! We\'ll be in touch within 24 hours.'
-      });
-    }, 1000);
-  });
-};
+export const mockTestimonials = [
+  {
+    id: '1',
+    name: 'Sarah M.',
+    location: 'Honolulu, HI',
+    text: 'The GLP-1 program changed my life. Lost 35 lbs in 4 months with Dr. Chen\'s guidance.',
+    rating: 5
+  },
+  {
+    id: '2',
+    name: 'James K.',
+    location: 'San Diego, CA',
+    text: 'Transparent pricing, easy scheduling, and genuine care. Best telemedicine experience.',
+    rating: 5
+  },
+  {
+    id: '3',
+    name: 'Linda T.',
+    location: 'Guam',
+    text: 'The hormone therapy consultation was incredibly detailed. I left with a clear plan and real answers.',
+    rating: 5
+  }
+];
