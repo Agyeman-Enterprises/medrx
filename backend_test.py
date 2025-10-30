@@ -691,58 +691,72 @@ class MedRxGLP1Tester:
         
         return passed_tests, failed_tests
 
-async def run_comprehensive_tests():
-    """Run all backend API tests"""
-    print("Starting MedRx Backend API Comprehensive Tests")
+async def run_comprehensive_glp1_tests():
+    """Run comprehensive GLP-1 platform backend API tests"""
+    print("Starting MedRx GLP-1 Platform Backend API Comprehensive Tests")
     print(f"Testing against: {BASE_URL}")
-    print("="*60)
+    print("="*80)
     
-    async with MedRxAPITester() as tester:
+    async with MedRxGLP1Tester() as tester:
         # 1. Health check
         health_ok = await tester.test_health_check()
         if not health_ok:
             print("❌ API is not healthy, stopping tests")
             return
         
-        # 2. Test one-off appointments
-        print("\n📋 Testing One-off Appointments...")
-        acute_result = await tester.create_oneoff_appointment("oneoff-1", "Acute Care", 85)
-        functional_result = await tester.create_oneoff_appointment("oneoff-2", "Functional Medicine", 175)
+        # 2. Test GLP-1 Appointments with Address Requirements
+        print("\n💉 Testing GLP-1 Appointments with Address Data...")
+        sema_result = await tester.create_glp1_appointment(
+            "glp1-sema-initial", "GLP-1 Semaglutide Initial", 150.00, requires_address=True)
+        
+        tirz_result = await tester.create_glp1_appointment(
+            "glp1-tirz-initial", "GLP-1 Tirzepatide Initial", 279.00, requires_address=True)
+        
+        hormone_result = await tester.create_glp1_appointment(
+            "hormone-health", "Hormone Health & Rx", 150.00, requires_address=True)
         
         # 3. Test appointment retrieval
-        if acute_result['success']:
-            await tester.get_appointments_by_email(acute_result['email'])
+        print("\n📋 Testing Appointment Retrieval...")
+        if sema_result['success']:
+            await tester.get_appointments_by_email(sema_result['email'])
         
-        # 4. Test subscriptions
-        print("\n💳 Testing Subscriptions...")
-        basic_sub = await tester.create_subscription("sub-1", "Basic Access", 35)
-        standard_sub = await tester.create_subscription("sub-2", "Standard Care", 150)
+        # 4. Test Payment API
+        print("\n💳 Testing Payment Checkout Sessions...")
+        sema_payment = await tester.test_payment_checkout_session("glp1-sema-initial", 150.00)
+        tirz_payment = await tester.test_payment_checkout_session("glp1-tirz-initial", 279.00)
+        hormone_payment = await tester.test_payment_checkout_session("hormone-health", 150.00)
         
-        # 5. Test subscription retrieval
-        if basic_sub['success']:
-            await tester.get_subscription_by_email(basic_sub['email'])
+        # 5. Test payment status checks
+        if sema_payment['success']:
+            await tester.test_payment_status_check(sema_payment['session_id'])
         
-        # 6. Test subscription appointments
-        print("\n🏥 Testing Subscription Appointments...")
-        if basic_sub['success']:
-            # First appointment with Basic subscription
-            await tester.create_subscription_appointment(basic_sub['email'])
-            # Second appointment with Basic subscription
-            await tester.create_subscription_appointment(basic_sub['email'])
-            # Test visit limits (3rd appointment should fail)
-            await tester.test_visit_limits(basic_sub['email'], "Basic Access")
+        # 6. Test GLP-1 Subscriptions
+        print("\n🔄 Testing GLP-1 Monthly Management Subscriptions...")
+        sema_sub = await tester.create_glp1_subscription(
+            "glp1-sema-monthly", "GLP-1 Semaglutide Monthly Management", 249.00)
         
-        if standard_sub['success']:
-            # Test unlimited appointments with Standard subscription
-            await tester.create_subscription_appointment(standard_sub['email'])
-            await tester.test_visit_limits(standard_sub['email'], "Standard Care")
+        tirz_sub = await tester.create_glp1_subscription(
+            "glp1-tirz-monthly", "GLP-1 Tirzepatide Monthly Management", 329.00)
         
-        # 7. Test edge cases
-        print("\n🔍 Testing Edge Cases...")
+        coaching_sub = await tester.create_glp1_subscription(
+            "metabolic-coaching", "Metabolic Coaching Add-On", 99.00)
+        
+        # 7. Test subscription retrieval
+        if sema_sub['success']:
+            await tester.get_subscription_by_email(sema_sub['email'])
+        
+        # 8. Test Standard Subscriptions (Basic & Standard)
+        print("\n📊 Testing Standard Subscription Plans...")
+        basic_sub = await tester.create_glp1_subscription("sub-basic", "Basic Access", 35.00)
+        standard_sub = await tester.create_glp1_subscription("sub-standard", "Standard Care", 150.00)
+        
+        # 9. Test validation and edge cases
+        print("\n🔍 Testing Validation & Edge Cases...")
         await tester.test_duplicate_booking_prevention()
         await tester.test_validation_errors()
+        await tester.test_invalid_service_ids()
         
-        # 8. Print summary
+        # 10. Print summary
         passed, failed = tester.print_summary()
         
         return passed, failed
