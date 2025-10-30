@@ -466,6 +466,102 @@ frontend:
           agent: "testing"
           comment: "✅ Frontend-Backend integration working perfectly. API calls to /api/appointments/ successful with 200 OK responses confirmed in backend logs. Questionnaire answers properly serialized in notes field as JSON. Form validation, error handling, success feedback, and form reset all working correctly. MongoDB persistence verified through backend service logs."
 
+  - task: "Complete GLP-1 Semaglutide booking flow end-to-end testing"
+    implemented: true
+    working: false
+    file: "/app/frontend/src/components/Booking.jsx"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "testing"
+          comment: "✅ PARTIAL SUCCESS: GLP-1 Semaglutide booking flow works perfectly until payment. Personal info (Dr. Sarah Chen, sarah.chen@medtest.com, (808) 555-1234), address fields (1234 Ala Moana Blvd, Honolulu, HI 96814), service selection, Hawaii timezone, date/time (Oct 31, 11:00 AM), and complete 11-question medical questionnaire all working correctly. ❌ PAYMENT FAILS: Stripe returns 500 error due to questionnaire metadata exceeding 500-character limit (652 chars). Form validation, address requirement for eRx, and questionnaire flow all working as designed."
+
+  - task: "Complete GLP-1 Tirzepatide booking flow end-to-end testing"
+    implemented: true
+    working: false
+    file: "/app/frontend/src/components/Booking.jsx"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "testing"
+          comment: "✅ PARTIAL SUCCESS: GLP-1 Tirzepatide booking flow works perfectly until payment. Personal info (Michael Rodriguez, michael.rodriguez@test.com), address fields (456 Kalakaua Ave, Honolulu, HI), service selection ($279 pricing correct), California timezone, date/time (Oct 31, 02:00 PM), and questionnaire trigger (shows 'Question 1 of 11') all working correctly. ❌ SAME PAYMENT ISSUE: Will fail at payment due to same Stripe metadata size limit issue as Semaglutide."
+
+  - task: "Complete Hormone Health booking flow end-to-end testing"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/Booking.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ COMPLETE SUCCESS: Hormone Health booking flow works end-to-end. Personal info (Dr. Jennifer Kim, jennifer.kim@test.com, (808) 555-9999), service selection ($150 pricing), Guam timezone, date/time (Oct 31, 06:00 PM), and complete 5-question medical questionnaire (no GLP-1 questions) all working. ✅ PAYMENT SUCCESS: Successfully redirected to Stripe checkout ($150.00 payment page confirmed). Address fields correctly hidden (not required for hormone therapy). Questionnaire metadata under 500-character limit allows successful payment processing."
+
+  - task: "GLP-1 disqualification flow with alternative Functional Medicine offer"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/MedicalQuestionnaire.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ DISQUALIFICATION FLOW WORKING PERFECTLY: Answering 'Yes' to thyroid cancer question triggers immediate disqualification screen. Shows 'GLP-1 Therapy Not Recommended' message with explanation 'GLP-1 medications are contraindicated with personal or family history of MTC or MEN 2.' Displays 'Alternative Option Available' section with Functional Medicine consultation offer ($175/visit) including features list (comprehensive metabolic assessment, personalized treatment plan, lab coordination, alternative therapies discussion). 'Book Functional Medicine Visit' button successfully redirects to booking page. 'Return to Services' button also available."
+
+  - task: "Service display order and filtering verification"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/Services.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ SERVICE ORDER VERIFIED CORRECTLY: Pay-Per-Visit filter shows exact requested order: 1st) GLP-1 Semaglutide ($150), 2nd) GLP-1 Tirzepatide ($279), 3rd) Hormone Health ($150), 4th) Acute Care ($85), 5th) Functional Medicine ($175). All 5 pay-per-visit services visible with correct pricing and descriptions. Service filtering (All Services, Pay-Per-Visit, Monthly Plans) working correctly."
+
+  - task: "Hero section GLP-1 Weight Loss Program display"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/Hero.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ HERO SECTION VERIFIED: Hero displays 'GLP-1 Weight Loss Program' as main heading exactly as requested. Subtitle shows 'Physician-supervised GLP-1 therapy using Semaglutide (Ozempic®, Wegovy®) and Tirzepatide (Mounjaro®, Zepbound®) for sustainable, science-based weight management.' Pricing information shows 'Initial evaluation: Semaglutide $150 • Tirzepatide $279 • Medication billed separately by pharmacy'. 'BOOK GLP-1 EVALUATION' and 'VIEW PRICING' buttons working correctly."
+
+  - task: "Address field visibility and validation for GLP-1 services"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/Booking.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ ADDRESS FIELDS WORKING CORRECTLY: Address fields (street, city, state, ZIP) appear when GLP-1 services (Semaglutide, Tirzepatide) are selected and are hidden for other services (Hormone Health, Acute Care, Functional Medicine). Form validation correctly requires address completion for GLP-1 services with error message 'Address is required for GLP-1 prescriptions (eRx orders)'. Address data properly stored in patientInfo.address field for medication delivery requirements."
+
+  - task: "Timezone-aware time slot functionality for all regions"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/Booking.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ TIMEZONE FUNCTIONALITY VERIFIED: All three supported timezones working correctly - Hawaii (HST), California (PST/PDT), and Guam (ChST). Time slots properly adjust to maintain 8am-10pm local time constraints. Booking summary correctly displays selected timezone information. Time slot availability varies by timezone as expected (Hawaii: multiple slots, California: 9+ slots, Guam: 14+ slots). Timezone selection properly updates available time slots in real-time."
+
 metadata:
   created_by: "testing_agent"
   version: "1.1"
