@@ -154,14 +154,18 @@ class MedRxAPITester:
         email = f"subscriber_{plan_id}_{timestamp}@example.com"
         
         # First create a user by booking an appointment (this creates the user)
+        # Use unique date/time for each subscription test
+        date_offset = 20 + (1 if plan_id == "sub-2" else 0)
+        time_hour = 9 if plan_id == "sub-1" else 10
+        
         user_creation_data = {
             "name": f"Subscriber User {timestamp}",
             "email": email,
             "phone": "+1-555-0999",
             "serviceId": "oneoff-1",
             "serviceType": "oneoff",
-            "date": (datetime.now() + timedelta(days=20)).strftime("%Y-%m-%d"),
-            "time": "9:00 AM",
+            "date": (datetime.now() + timedelta(days=date_offset)).strftime("%Y-%m-%d"),
+            "time": f"{time_hour}:00 AM",
             "timezone": "Pacific/Honolulu",
             "notes": "Creating user for subscription test"
         }
