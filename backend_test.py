@@ -146,7 +146,7 @@ class MedRxAPITester:
         
         # Generate unique test data
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        email = f"subscriber_{timestamp}@medrx.test"
+        email = f"subscriber_{timestamp}@example.com"
         
         subscription_data = {
             "email": email,
