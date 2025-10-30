@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { format } from 'date-fns';
 import { Calendar } from '../components/ui/calendar';
-import { mockTimezones, getAvailableTimeSlots, mockServices } from '../mock';
+import { mockTimezones, getAvailableTimeSlots, mockServices, mockOneOffServices } from '../mock';
+import MedicalQuestionnaire from './MedicalQuestionnaire';
 import '../styles/Booking.css';
 import { Calendar as CalendarIcon, Clock, MapPin, User, Mail, Phone } from 'lucide-react';
 import { toast } from 'sonner';
@@ -11,6 +12,7 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 const Booking = () => {
+  const [bookingStep, setBookingStep] = useState('form'); // 'form', 'questionnaire', 'complete'
   const [selectedService, setSelectedService] = useState('');
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState('');
@@ -20,6 +22,7 @@ const Booking = () => {
     email: '',
     phone: ''
   });
+  const [questionnaireAnswers, setQuestionnaireAnswers] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Get available time slots based on selected timezone
@@ -34,7 +37,7 @@ const Booking = () => {
     }
   }, [availableTimeSlots, selectedTime]);
 
-  const handleSubmit = async (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
     
     if (!selectedService || !selectedDate || !selectedTime) {
@@ -42,6 +45,28 @@ const Booking = () => {
       return;
     }
 
+    // Get service details
+    const service = mockServices.find(s => s.id === selectedService);
+    
+    // If service requires questionnaire, show it
+    if (service && service.requiresQuestionnaire) {
+      setBookingStep('questionnaire');
+    } else {
+      // Submit directly
+      submitBooking();
+    }
+  };
+
+  const handleQuestionnaireComplete = (answers) => {
+    setQuestionnaireAnswers(answers);
+    submitBooking(answers);
+  };
+
+  const handleQuestionnaireCancel = () => {
+    setBookingStep('form');
+  };
+
+  const submitBooking = async (questionnaire = questionnaireAnswers) => {
     setIsSubmitting(true);
     
     const service = mockServices.find(s => s.id === selectedService);
@@ -54,7 +79,7 @@ const Booking = () => {
       date: format(selectedDate, 'yyyy-MM-dd'),
       time: selectedTime,
       timezone: selectedTimezone,
-      notes: ''
+      notes: questionnaire ? JSON.stringify(questionnaire) : ''
     };
 
     try {
@@ -62,15 +87,18 @@ const Booking = () => {
       if (response.data.success) {
         toast.success('Appointment booked successfully! Check your email for confirmation.');
         // Reset form
+        setBookingStep('form');
         setSelectedService('');
         setSelectedDate(null);
         setSelectedTime('');
         setFormData({ name: '', email: '', phone: '' });
+        setQuestionnaireAnswers(null);
       }
     } catch (error) {
       const errorMessage = error.response?.data?.detail || 'Booking failed. Please try again.';
       toast.error(errorMessage);
       console.error('Booking error:', error);
+      setBookingStep('form'); // Return to form on error
     } finally {
       setIsSubmitting(false);
     }
