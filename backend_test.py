@@ -18,7 +18,7 @@ load_dotenv('/app/frontend/.env')
 BACKEND_URL = os.getenv('REACT_APP_BACKEND_URL', 'https://tele-clinical.preview.emergentagent.com')
 BASE_URL = f"{BACKEND_URL}/api"
 
-class MedRxAPITester:
+class MedRxGLP1Tester:
     def __init__(self):
         self.session = None
         self.test_results = []
