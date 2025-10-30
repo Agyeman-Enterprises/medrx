@@ -149,8 +149,35 @@ class MedRxAPITester:
         test_name = f"Create Subscription ({plan_name})"
         
         # Generate unique test data
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        email = f"subscriber_{timestamp}@example.com"
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+        email = f"subscriber_{plan_id}_{timestamp}@example.com"
+        
+        # First create a user by booking an appointment (this creates the user)
+        user_creation_data = {
+            "name": f"Subscriber User {timestamp}",
+            "email": email,
+            "phone": "+1-555-0999",
+            "serviceId": "oneoff-1",
+            "serviceType": "oneoff",
+            "date": (datetime.now() + timedelta(days=20)).strftime("%Y-%m-%d"),
+            "time": "9:00 AM",
+            "timezone": "Pacific/Honolulu",
+            "notes": "Creating user for subscription test"
+        }
+        
+        # Create user first
+        try:
+            async with self.session.post(
+                f"{BASE_URL}/appointments/",
+                json=user_creation_data,
+                headers={"Content-Type": "application/json"}
+            ) as response:
+                if response.status != 200:
+                    self.log_test(test_name, False, "Failed to create user for subscription test")
+                    return {'success': False}
+        except Exception as e:
+            self.log_test(test_name, False, f"Failed to create user: {str(e)}")
+            return {'success': False}
         
         subscription_data = {
             "email": email,
