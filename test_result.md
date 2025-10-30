@@ -357,6 +357,18 @@ backend:
           agent: "testing"
           comment: "✅ API validation working correctly. Invalid service IDs rejected with 400 error. Missing required fields rejected with 422 validation error. Proper error messages returned for all validation scenarios."
 
+  - task: "Stripe payment metadata size limit issue for GLP-1 questionnaires"
+    implemented: true
+    working: false
+    file: "/app/backend/routes/payments.py"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "testing"
+          comment: "❌ CRITICAL ISSUE: GLP-1 questionnaire data (652 characters) exceeds Stripe metadata limit (500 characters). Error: 'Metadata values can have up to 500 characters, but you passed in a value that is 652 characters.' This prevents GLP-1 Semaglutide and Tirzepatide bookings from completing payment. Hormone Health works (shorter questionnaire). Backend logs show 500 error from Stripe API. Need to either: 1) Truncate questionnaire data in metadata, 2) Store questionnaire separately and reference by ID, or 3) Compress questionnaire data."
+
 frontend:
   - task: "GLP-1 Semaglutide Booking with Medical Questionnaire ($150)"
     implemented: true
