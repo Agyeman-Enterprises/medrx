@@ -177,7 +177,7 @@ async def update_appointment(appointment_id: str, update_data: AppointmentUpdate
     from bson import ObjectId
     try:
         existing = await db.appointments.find_one({"_id": ObjectId(appointment_id)})
-    except:
+    except Exception:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid appointment ID"
