@@ -38,7 +38,7 @@ SERVICE_PACKAGES = {
 
 @router.post("/checkout/session")
 async def create_checkout_session(request: Request):
-    \"\"\"Create Stripe checkout session for appointment payment\"\"\"
+    """Create Stripe checkout session for appointment payment"""
     
     try:
         body = await request.json()
