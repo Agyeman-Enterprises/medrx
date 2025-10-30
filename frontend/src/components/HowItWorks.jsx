@@ -1,7 +1,7 @@
 import React from 'react';
 import { mockHowItWorks } from '../mock';
 import '../styles/HowItWorks.css';
-import { Calendar, FileText, Video, CheckCircle } from 'lucide-react';
+import { Calendar, FileText, Video, CheckCircle, CreditCard } from 'lucide-react';
 
 const HowItWorks = () => {
   const iconMap = {
