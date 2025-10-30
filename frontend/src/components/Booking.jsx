@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { format } from 'date-fns';
 import { Calendar } from '../components/ui/calendar';
-import { mockTimezones, mockTimeSlots, mockServices, mockBookAppointment } from '../mock';
+import { mockTimezones, getAvailableTimeSlots, mockServices, mockBookAppointment } from '../mock';
 import '../styles/Booking.css';
 import { Calendar as CalendarIcon, Clock, MapPin, User, Mail, Phone } from 'lucide-react';
 import { toast } from 'sonner';
@@ -17,6 +17,18 @@ const Booking = () => {
     phone: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Get available time slots based on selected timezone
+  const availableTimeSlots = useMemo(() => {
+    return getAvailableTimeSlots(selectedTimezone);
+  }, [selectedTimezone]);
+
+  // Reset selected time if it's no longer available after timezone change
+  useEffect(() => {
+    if (selectedTime && !availableTimeSlots.includes(selectedTime)) {
+      setSelectedTime('');
+    }
+  }, [availableTimeSlots, selectedTime]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
