@@ -1,12 +1,49 @@
 // Mock data for MedRx website
 
-export const mockServices = [
+// Pay-Per-Visit Services (One-time)
+export const mockOneOffServices = [
   {
-    id: '1',
+    id: 'oneoff-1',
+    title: 'Acute Care Visit',
+    price: 85,
+    billingPeriod: '/visit',
+    type: 'oneoff',
+    description: 'Same-day virtual visits for urgent concerns: infections, minor injuries, medication refills, and symptom evaluation.',
+    features: [
+      'Video or phone consultation',
+      'Same or next-day availability',
+      'E-prescriptions sent directly',
+      'Clear follow-up plan'
+    ],
+    color: 'accent-blue'
+  },
+  {
+    id: 'oneoff-2',
+    title: 'Functional Medicine Visit',
+    price: 175,
+    billingPeriod: '/visit',
+    type: 'oneoff',
+    description: 'Comprehensive metabolic health, hormone optimization, GLP-1 therapy, and preventive care with extended consultation time.',
+    features: [
+      'Extended 45-minute consultation',
+      'Hormone health & optimization',
+      'GLP-1 therapy management',
+      'Lab coordination & interpretation',
+      'Personalized treatment plans'
+    ],
+    color: 'accent-purple'
+  }
+];
+
+// Subscription Plans (Monthly)
+export const mockSubscriptions = [
+  {
+    id: 'sub-1',
     title: 'Basic Access',
-    price: 25,
+    price: 35,
     priceRange: '$25–$50',
     billingPeriod: '/month',
+    type: 'subscription',
     description: 'Essential telemedicine access for occasional healthcare needs with cost-effective virtual care.',
     features: [
       'Limited urgent visits (1–2/month)',
@@ -18,11 +55,12 @@ export const mockServices = [
     tier: 'basic'
   },
   {
-    id: '2',
+    id: 'sub-2',
     title: 'Standard Care',
     price: 150,
     priceRange: '$100–$200',
     billingPeriod: '/month',
+    type: 'subscription',
     description: 'Comprehensive primary care coverage with unlimited consultations and priority access to your care team.',
     features: [
       'Unlimited general medicine consults',
@@ -35,11 +73,12 @@ export const mockServices = [
     tier: 'standard'
   },
   {
-    id: '3',
+    id: 'sub-3',
     title: 'Functional Medicine',
     price: 400,
     priceRange: '$300–$500',
     billingPeriod: '/month',
+    type: 'subscription',
     description: 'Integrative approach to optimal health with personalized protocols, hormone optimization, and advanced therapeutics.',
     features: [
       'Extended 45-minute consultations',
@@ -53,11 +92,12 @@ export const mockServices = [
     tier: 'integrative'
   },
   {
-    id: '4',
+    id: 'sub-4',
     title: 'VIP Concierge',
     price: 600,
     priceRange: '$600+',
     billingPeriod: '/month',
+    type: 'subscription',
     description: 'Premium white-glove service with dedicated physician access, comprehensive wellness planning, and 24/7 support.',
     features: [
       'Dedicated physician partnership',
@@ -72,6 +112,9 @@ export const mockServices = [
     tier: 'vip'
   }
 ];
+
+// Combined services for display
+export const mockServices = [...mockOneOffServices, ...mockSubscriptions];
 
 export const mockTimezones = [
   { value: 'Pacific/Honolulu', label: 'Hawaii (HST)', offset: -10 }, // UTC-10
