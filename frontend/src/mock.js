@@ -31,14 +31,52 @@ export const mockServices = [
 ];
 
 export const mockTimezones = [
-  { value: 'Pacific/Honolulu', label: 'Hawaii (HST)' },
-  { value: 'America/Los_Angeles', label: 'California (PST/PDT)' },
-  { value: 'Pacific/Guam', label: 'Guam (ChST)' }
+  { value: 'Pacific/Honolulu', label: 'Hawaii (HST)', offset: -10 }, // UTC-10
+  { value: 'America/Los_Angeles', label: 'California (PST/PDT)', offset: -8 }, // UTC-8 (PST) / UTC-7 (PDT)
+  { value: 'Pacific/Guam', label: 'Guam (ChST)', offset: 10 } // UTC+10
 ];
 
+// Guam operating hours: 8am-9pm ChST
+// Generate time slots that respect both Guam hours AND local time limits
+export const getAvailableTimeSlots = (selectedTimezone) => {
+  const allSlots = [];
+  
+  // Generate hourly slots from 8am to 9pm
+  for (let hour = 8; hour <= 21; hour++) {
+    const period = hour < 12 ? 'AM' : 'PM';
+    const displayHour = hour <= 12 ? hour : hour - 12;
+    const timeString = `${displayHour.toString().padStart(2, '0')}:00 ${period}`;
+    allSlots.push({
+      guamTime: hour,
+      display: timeString,
+      value: timeString
+    });
+  }
+  
+  // Filter based on timezone to ensure socially acceptable hours
+  if (!selectedTimezone) return allSlots.map(s => s.value);
+  
+  const tz = mockTimezones.find(t => t.value === selectedTimezone);
+  if (!tz) return allSlots.map(s => s.value);
+  
+  // Calculate time difference from Guam
+  const guamOffset = 10; // UTC+10
+  const timeDiff = tz.offset - guamOffset;
+  
+  return allSlots.filter(slot => {
+    const localHour = slot.guamTime + timeDiff;
+    const adjustedHour = localHour < 0 ? localHour + 24 : localHour >= 24 ? localHour - 24 : localHour;
+    
+    // Must be between 8am and 10pm local time
+    return adjustedHour >= 8 && adjustedHour <= 22;
+  }).map(s => s.value);
+};
+
+// Default time slots (for Guam timezone)
 export const mockTimeSlots = [
-  '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM',
-  '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM'
+  '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
+  '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM',
+  '06:00 PM', '07:00 PM', '08:00 PM', '09:00 PM'
 ];
 
 export const mockTestimonials = [
