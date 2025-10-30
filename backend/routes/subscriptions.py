@@ -204,7 +204,7 @@ async def get_subscription_usage(subscription_id: str):
     from bson import ObjectId
     try:
         subscription = await db.subscriptions.find_one({"_id": ObjectId(subscription_id)})
-    except:
+    except Exception:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid subscription ID"
