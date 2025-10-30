@@ -176,6 +176,9 @@ const Booking = () => {
                     </option>
                   ))}
                 </select>
+                <p className="caption" style={{ marginTop: '0.5rem', color: 'var(--text-muted)' }}>
+                  Available times shown are within 8am-10pm your local time
+                </p>
               </div>
             </div>
 
