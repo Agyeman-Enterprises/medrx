@@ -35,10 +35,18 @@ class MedRxGLP1Tester:
     def get_unique_time_slot(self):
         """Get a unique time slot to avoid conflicts"""
         self.time_counter += 1
-        # Use different days and more granular times to avoid conflicts
-        base_date = datetime.now() + timedelta(days=10 + (self.time_counter // 10))
-        time_hour = 8 + (self.time_counter % 12)  # 8 AM to 7 PM
-        time_minute = (self.time_counter * 15) % 60  # 0, 15, 30, 45 minutes
+        # Use microseconds and counter for maximum uniqueness
+        now = datetime.now()
+        microsecond_part = now.microsecond
+        
+        # Use different days based on counter and microseconds
+        days_offset = 15 + (self.time_counter % 30) + (microsecond_part % 10)
+        base_date = now + timedelta(days=days_offset)
+        
+        # Use counter and microseconds for time calculation
+        time_seed = self.time_counter + (microsecond_part // 1000)
+        time_hour = 8 + (time_seed % 10)  # 8 AM to 5 PM
+        time_minute = (time_seed * 7) % 60  # Various minutes
         
         if time_hour > 12:
             time_str = f"{time_hour - 12}:{time_minute:02d} PM"
