@@ -25,10 +25,10 @@ const Hero = () => {
           <span>Serving Hawaii, California & Guam</span>
         </div>
         <h1 className="heading-hero hero-title">
-          Medicine That Listens,<br />Technology That Serves
+          Subscription-Based Care<br />That Puts You First
         </h1>
         <p className="body-large hero-subtitle">
-          Trusted clinical expertise meets AI-powered care. Same-day visits, transparent pricing, and personalized treatment plans—no 15-minute rushes.
+          Choose your level of care. Unlimited access to expert clinicians, transparent pricing, and personalized treatment plans—from basic visits to comprehensive concierge medicine.
         </p>
         <div className="hero-cta">
           <button onClick={scrollToBooking} className="btn-primary">Book Your Visit</button>
