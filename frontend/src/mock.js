@@ -3,30 +3,73 @@
 export const mockServices = [
   {
     id: '1',
-    title: 'Acute Care',
-    price: 85,
-    description: 'Same-day virtual visits for urgent concerns: infections, minor injuries, medication refills, and symptom evaluation.',
+    title: 'Basic Access',
+    price: 25,
+    priceRange: '$25–$50',
+    billingPeriod: '/month',
+    description: 'Essential telemedicine access for occasional healthcare needs with cost-effective virtual care.',
     features: [
-      'Video or phone consultation',
-      'Same or next-day availability',
-      'E-prescriptions sent directly',
-      'Clear follow-up plan'
+      'Limited urgent visits (1–2/month)',
+      'Chat messaging with RN/MA',
+      'Discounted labs & prescriptions',
+      'Standard appointment booking'
     ],
-    color: 'accent-blue'
+    color: 'accent-grey-200',
+    tier: 'basic'
   },
   {
     id: '2',
-    title: 'Wellness & Functional Medicine',
-    price: 175,
-    description: 'Comprehensive metabolic health, hormone optimization, GLP-1 therapy, and preventive care with extended consultation time.',
+    title: 'Standard Care',
+    price: 150,
+    priceRange: '$100–$200',
+    billingPeriod: '/month',
+    description: 'Comprehensive primary care coverage with unlimited consultations and priority access to your care team.',
     features: [
-      'Extended 45-minute consultation',
-      'Hormone health & optimization',
-      'GLP-1 therapy management',
-      'Lab coordination & interpretation',
-      'Personalized treatment plans'
+      'Unlimited general medicine consults',
+      'Priority appointment booking',
+      'Care coordination & follow-ups',
+      'Physician messaging access',
+      'Preventive care planning'
     ],
-    color: 'accent-purple'
+    color: 'accent-blue',
+    tier: 'standard'
+  },
+  {
+    id: '3',
+    title: 'Functional Medicine',
+    price: 400,
+    priceRange: '$300–$500',
+    billingPeriod: '/month',
+    description: 'Integrative approach to optimal health with personalized protocols, hormone optimization, and advanced therapeutics.',
+    features: [
+      'Extended 45-minute consultations',
+      'Personalized labs & interpretation',
+      'GLP-1 therapy management',
+      'Hormone health optimization',
+      'Supplement recommendations',
+      'Health coaching sessions'
+    ],
+    color: 'accent-purple',
+    tier: 'integrative'
+  },
+  {
+    id: '4',
+    title: 'VIP Concierge',
+    price: 600,
+    priceRange: '$600+',
+    billingPeriod: '/month',
+    description: 'Premium white-glove service with dedicated physician access, comprehensive wellness planning, and 24/7 support.',
+    features: [
+      'Dedicated physician partnership',
+      '24/7 physician messaging',
+      'Same-day appointment availability',
+      'Annual in-person wellness check',
+      'Specialist referral coordination',
+      'Advanced diagnostics & testing',
+      'Concierge care management'
+    ],
+    color: 'accent-pink-200',
+    tier: 'vip'
   }
 ];
 
