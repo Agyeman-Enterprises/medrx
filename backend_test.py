@@ -385,7 +385,7 @@ class MedRxAPITester:
         test_name = "Duplicate Booking Prevention"
         
         # Generate unique test data
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
         email = f"duplicate_test_{timestamp}@example.com"
         
         appointment_data = {
