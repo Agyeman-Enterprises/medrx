@@ -596,12 +596,13 @@ class MedRxGLP1Tester:
     
     async def test_validation_errors(self):
         """Test API validation for missing/invalid fields"""
-        test_name = "API Validation"
+        test_name = "GLP-1 API Validation"
         
-        # Test missing required fields
+        # Test missing required fields for GLP-1 appointment
         invalid_data = {
-            "email": "invalid@example.com",
-            # Missing name, phone, serviceId, etc.
+            "email": "invalid.glp1@medicaltesting.com",
+            "serviceId": "glp1-sema-initial",
+            # Missing name, phone, date, time, etc.
         }
         
         try:
@@ -613,11 +614,55 @@ class MedRxGLP1Tester:
                 
                 if response.status == 422:  # FastAPI validation error
                     self.log_test(test_name, True, 
-                                "Validation correctly rejects missing fields")
+                                "GLP-1 validation correctly rejects missing fields")
                     return {'success': True}
                 else:
                     self.log_test(test_name, False, 
                                 f"Expected 422 validation error, got {response.status}")
+                    return {'success': False}
+                    
+        except Exception as e:
+            self.log_test(test_name, False, f"Request error: {str(e)}")
+            return {'success': False}
+    
+    async def test_invalid_service_ids(self):
+        """Test invalid service ID handling"""
+        test_name = "Invalid Service ID Validation"
+        
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+        appointment_date, appointment_time = self.get_unique_time_slot()
+        
+        invalid_appointment_data = {
+            "name": "Test Patient",
+            "email": f"invalid.service.{timestamp}@medicaltesting.com",
+            "phone": "+1-555-4000",
+            "serviceId": "invalid-service-id",
+            "serviceType": "oneoff",
+            "date": appointment_date,
+            "time": appointment_time,
+            "timezone": "America/Los_Angeles"
+        }
+        
+        try:
+            async with self.session.post(
+                f"{BASE_URL}/appointments/",
+                json=invalid_appointment_data,
+                headers={"Content-Type": "application/json"}
+            ) as response:
+                
+                if response.status == 400:
+                    error_data = await response.json()
+                    if "invalid service" in error_data.get('detail', '').lower():
+                        self.log_test(test_name, True, 
+                                    "Invalid service ID correctly rejected")
+                        return {'success': True}
+                    else:
+                        self.log_test(test_name, False, 
+                                    f"Wrong error message: {error_data.get('detail')}")
+                        return {'success': False}
+                else:
+                    self.log_test(test_name, False, 
+                                f"Expected 400 error for invalid service ID, got {response.status}")
                     return {'success': False}
                     
         except Exception as e:
