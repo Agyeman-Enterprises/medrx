@@ -32,6 +32,13 @@ class MedRxAPITester:
         if self.session:
             await self.session.close()
     
+    def get_unique_time_slot(self):
+        """Get a unique time slot to avoid conflicts"""
+        self.time_counter += 1
+        base_date = datetime.now() + timedelta(days=7 + self.time_counter)
+        time_hour = 9 + (self.time_counter % 8)  # 9 AM to 4 PM
+        return base_date.strftime("%Y-%m-%d"), f"{time_hour}:00 AM"
+    
     def log_test(self, test_name, success, message, details=None):
         """Log test result"""
         status = "✅ PASS" if success else "❌ FAIL"
