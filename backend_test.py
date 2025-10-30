@@ -400,14 +400,17 @@ class MedRxAPITester:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
         email = f"duplicate_test_{timestamp}@example.com"
         
+        # Get unique time slot for duplicate test
+        appointment_date, appointment_time = self.get_unique_time_slot()
+        
         appointment_data = {
             "name": f"Duplicate Test {timestamp}",
             "email": email,
             "phone": "+1-555-0789",
             "serviceId": "oneoff-1",
             "serviceType": "oneoff",
-            "date": (datetime.now() + timedelta(days=10)).strftime("%Y-%m-%d"),
-            "time": "3:00 PM",
+            "date": appointment_date,
+            "time": appointment_time,
             "timezone": "Pacific/Honolulu",
             "notes": "First appointment"
         }
