@@ -522,30 +522,37 @@ class MedRxGLP1Tester:
         return {'success': True}
     
     async def test_duplicate_booking_prevention(self):
-        """Test duplicate booking prevention"""
-        test_name = "Duplicate Booking Prevention"
+        """Test duplicate booking prevention for GLP-1 services"""
+        test_name = "GLP-1 Duplicate Booking Prevention"
         
         # Generate unique test data
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-        email = f"duplicate_test_{timestamp}@example.com"
+        email = f"duplicate.glp1.test.{timestamp}@medicaltesting.com"
         
         # Get unique time slot for duplicate test
         appointment_date, appointment_time = self.get_unique_time_slot()
         
         appointment_data = {
-            "name": f"Duplicate Test {timestamp}",
+            "name": "Dr. Patricia Williams",
             "email": email,
-            "phone": "+1-555-0789",
-            "serviceId": "oneoff-1",
+            "phone": "+1-555-3000",
+            "serviceId": "glp1-sema-initial",
             "serviceType": "oneoff",
             "date": appointment_date,
             "time": appointment_time,
-            "timezone": "Pacific/Honolulu",
-            "notes": "First appointment"
+            "timezone": "America/Chicago",
+            "address": {
+                "street": "300 Medical Center Dr",
+                "city": "Chicago",
+                "state": "IL",
+                "zip_code": "60601",
+                "country": "US"
+            },
+            "notes": json.dumps({"test": "first_appointment"})
         }
         
         try:
-            # Book first appointment
+            # Book first GLP-1 appointment
             async with self.session.post(
                 f"{BASE_URL}/appointments/",
                 json=appointment_data,
@@ -553,13 +560,14 @@ class MedRxGLP1Tester:
             ) as response:
                 
                 if response.status != 200:
-                    self.log_test(test_name, False, "Failed to create first appointment")
+                    self.log_test(test_name, False, "Failed to create first GLP-1 appointment")
                     return {'success': False}
             
             # Try to book duplicate appointment (same date/time)
-            appointment_data["name"] = "Different Person"
-            appointment_data["email"] = f"different_{timestamp}@example.com"
-            appointment_data["notes"] = "Duplicate time slot"
+            appointment_data["name"] = "Dr. Different Patient"
+            appointment_data["email"] = f"different.glp1.{timestamp}@medicaltesting.com"
+            appointment_data["serviceId"] = "glp1-tirz-initial"  # Different service, same time
+            appointment_data["notes"] = json.dumps({"test": "duplicate_time_slot"})
             
             async with self.session.post(
                 f"{BASE_URL}/appointments/",
@@ -571,7 +579,7 @@ class MedRxGLP1Tester:
                     error_data = await response.json()
                     if "already booked" in error_data.get('detail', '').lower():
                         self.log_test(test_name, True, 
-                                    "Duplicate booking correctly prevented")
+                                    "GLP-1 duplicate booking correctly prevented")
                         return {'success': True}
                     else:
                         self.log_test(test_name, False, 
@@ -579,7 +587,7 @@ class MedRxGLP1Tester:
                         return {'success': False}
                 else:
                     self.log_test(test_name, False, 
-                                "Expected 400 error for duplicate booking")
+                                "Expected 400 error for duplicate GLP-1 booking")
                     return {'success': False}
                     
         except Exception as e:
