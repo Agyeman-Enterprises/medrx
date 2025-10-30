@@ -69,8 +69,9 @@ async def create_checkout_session(request: Request):
         metadata = {
             'service_id': service_id,
             'service_name': service['title'],
-            'email': email,
-            'appointment_data': json.dumps(appointment_data)
+            'email': email
+            # Questionnaire data removed from metadata - too large for Stripe 500 char limit
+            # Will be stored in appointment notes field instead
         }
         
         checkout_request = CheckoutSessionRequest(
