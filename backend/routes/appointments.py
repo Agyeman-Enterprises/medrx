@@ -12,7 +12,7 @@ from database import db
 
 @router.post("/", response_model=dict)
 async def create_appointment(appointment_data: AppointmentCreate):
-    """Book a new appointment (pay-per-visit or subscription)"""
+    """Book a new appointment - creates pending appointment requiring payment"""
     
     # Get service info
     service = get_service_info(appointment_data.serviceId)
@@ -20,6 +20,19 @@ async def create_appointment(appointment_data: AppointmentCreate):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid service ID"
+        )
+    
+    # Check for already-booked time slot
+    existing = await db.appointments.find_one({
+        "appointmentDate": appointment_data.date,
+        "appointmentTime": appointment_data.time,
+        "status": {"$in": ["pending_payment", "scheduled", "completed"]}
+    })
+    
+    if existing:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This time slot is already booked. Please select a different time."
         )
     
     # Check if user exists, create if new
@@ -31,6 +44,7 @@ async def create_appointment(appointment_data: AppointmentCreate):
             "email": appointment_data.email,
             "phone": appointment_data.phone,
             "timezone": appointment_data.timezone,
+            "address": appointment_data.address.dict() if appointment_data.address else None,
             "subscriptionId": None,
             "createdAt": datetime.utcnow(),
             "updatedAt": datetime.utcnow()
@@ -39,6 +53,12 @@ async def create_appointment(appointment_data: AppointmentCreate):
         user_id = str(result.inserted_id)
     else:
         user_id = str(user["_id"])
+        # Update user address if provided
+        if appointment_data.address:
+            await db.users.update_one(
+                {"_id": user["_id"]},
+                {"$set": {"address": appointment_data.address.dict(), "updatedAt": datetime.utcnow()}}
+            )
     
     # Check for subscription appointments
     if appointment_data.serviceType == "subscription":
@@ -65,23 +85,14 @@ async def create_appointment(appointment_data: AppointmentCreate):
         
         price = 0  # Subscription appointments are covered
         service_name = plan['title']
+        payment_status = 'paid'  # Subscriptions are already paid
+        appointment_status = 'scheduled'
     else:
-        # One-off appointment
+        # One-off appointment - requires payment
         price = service['price']
         service_name = service['title']
-    
-    # Check for existing appointment at same time
-    existing = await db.appointments.find_one({
-        "appointmentDate": appointment_data.date,
-        "appointmentTime": appointment_data.time,
-        "status": {"$ne": "cancelled"}
-    })
-    
-    if existing:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="This time slot is already booked"
-        )
+        payment_status = 'pending'
+        appointment_status = 'pending_payment'
     
     # Create appointment
     appointment = {
@@ -92,14 +103,17 @@ async def create_appointment(appointment_data: AppointmentCreate):
         "appointmentDate": appointment_data.date,
         "appointmentTime": appointment_data.time,
         "timezone": appointment_data.timezone,
-        "status": "scheduled",
+        "status": appointment_status,
         "price": price,
         "patientInfo": {
             "name": appointment_data.name,
             "email": appointment_data.email,
-            "phone": appointment_data.phone
+            "phone": appointment_data.phone,
+            "address": appointment_data.address.dict() if appointment_data.address else None
         },
         "notes": appointment_data.notes,
+        "paymentSessionId": appointment_data.paymentSessionId,
+        "paymentStatus": payment_status,
         "createdAt": datetime.utcnow(),
         "updatedAt": datetime.utcnow()
     }
@@ -118,7 +132,8 @@ async def create_appointment(appointment_data: AppointmentCreate):
     return {
         "success": True,
         "appointmentId": appointment["id"],
-        "message": "Appointment booked successfully!",
+        "message": "Appointment created successfully" if payment_status == 'paid' else "Please complete payment to confirm appointment",
+        "requiresPayment": payment_status == 'pending',
         "appointment": appointment
     }
 
