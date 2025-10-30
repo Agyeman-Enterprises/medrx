@@ -66,7 +66,7 @@ async def create_checkout_session(request: Request):
         if not service:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=\"Service not found\"
+                detail="Service not found"
             )
         
         # Build success and cancel URLs using frontend origin
