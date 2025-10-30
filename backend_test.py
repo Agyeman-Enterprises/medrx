@@ -359,14 +359,16 @@ class MedRxAPITester:
         elif "Standard" in plan_name:
             # Standard plan has unlimited visits, should succeed
             for i in range(3, 6):  # Try booking 3 more appointments
+                appointment_date, appointment_time = self.get_unique_time_slot()
+                
                 appointment_data = {
                     "name": "Jane Subscriber",
                     "email": email,
                     "phone": "+1-555-0456",
                     "serviceId": "sub-2",
                     "serviceType": "subscription",
-                    "date": (datetime.now() + timedelta(days=9+i)).strftime("%Y-%m-%d"),
-                    "time": f"{10+i}:00 AM",
+                    "date": appointment_date,
+                    "time": appointment_time,
                     "timezone": "Pacific/Honolulu",
                     "notes": f"Unlimited appointment #{i}"
                 }
