@@ -462,11 +462,11 @@ metadata:
 
 test_plan:
   current_focus:
-    - "GLP-1 Semaglutide Booking with Medical Questionnaire ($150)"
-    - "GLP-1 Tirzepatide Booking with Medical Questionnaire ($279)"
-    - "Hormone Health Booking with Medical Questionnaire ($150)"
-    - "Service Display Order Verification"
-    - "Medical Questionnaire Disqualification Logic"
+    - "POST /api/appointments/ - GLP-1 Semaglutide Initial ($150)"
+    - "POST /api/appointments/ - GLP-1 Tirzepatide Initial ($279)"
+    - "POST /api/appointments/ - Hormone Health ($150)"
+    - "POST /api/payments/checkout/session - Stripe integration"
+    - "POST /api/subscriptions/ - GLP-1 Monthly Management"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
