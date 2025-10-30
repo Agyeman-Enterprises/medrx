@@ -64,9 +64,9 @@ class MedRxAPITester:
         """Test creating a one-off appointment"""
         test_name = f"Create One-off Appointment ({service_name})"
         
-        # Generate unique test data
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        email = f"patient_{timestamp}@example.com"
+        # Generate unique test data with microseconds for uniqueness
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+        email = f"patient_{service_id}_{timestamp}@example.com"
         
         appointment_data = {
             "name": f"John Patient {timestamp}",
