@@ -570,12 +570,9 @@ metadata:
 
 test_plan:
   current_focus:
-    - "POST /api/appointments/ - GLP-1 Semaglutide Initial ($150)"
-    - "POST /api/appointments/ - GLP-1 Tirzepatide Initial ($279)"
-    - "POST /api/appointments/ - Hormone Health ($150)"
-    - "POST /api/payments/checkout/session - Stripe integration"
-    - "POST /api/subscriptions/ - GLP-1 Monthly Management"
-  stuck_tasks: []
+    - "Stripe payment metadata size limit issue for GLP-1 questionnaires"
+  stuck_tasks:
+    - "Stripe payment metadata size limit issue for GLP-1 questionnaires"
   test_all: false
   test_priority: "high_first"
 
