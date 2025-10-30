@@ -138,21 +138,21 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
 
   if (!isEligible && answers[currentQuestion.id] === currentQuestion.disqualifyIf) {
     return (
-      <div className=\"questionnaire-container\">
-        <div className=\"questionnaire-card disqualification\">
-          <div className=\"disqualification-icon\">
-            <AlertCircle size={48} color=\"#dc2626\" />
+      <div className="questionnaire-container">
+        <div className="questionnaire-card disqualification">
+          <div className="disqualification-icon">
+            <AlertCircle size={48} color="#dc2626" />
           </div>
-          <h2 className=\"heading-2\">Unable to Proceed</h2>
-          <p className=\"body-medium\">
+          <h2 className="heading-2">Unable to Proceed</h2>
+          <p className="body-medium">
             Based on your medical history, we're unable to prescribe this medication at this time. 
             {currentQuestion.explanation && ` ${currentQuestion.explanation}.`}
           </p>
-          <p className=\"body-medium\" style={{ marginTop: '1rem' }}>
+          <p className="body-medium" style={{ marginTop: '1rem' }}>
             We recommend consulting with your primary care physician or a specialist for alternative treatment options.
           </p>
-          <div className=\"questionnaire-actions\">
-            <button onClick={onCancel} className=\"btn-primary\">
+          <div className="questionnaire-actions">
+            <button onClick={onCancel} className="btn-primary">
               Return to Services
             </button>
           </div>
@@ -162,25 +162,25 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
   }
 
   return (
-    <div className=\"questionnaire-container\">
-      <div className=\"questionnaire-card\">
-        <div className=\"questionnaire-progress\">
-          <div className=\"progress-bar\">
+    <div className="questionnaire-container">
+      <div className="questionnaire-card">
+        <div className="questionnaire-progress">
+          <div className="progress-bar">
             <div 
-              className=\"progress-fill\" 
+              className="progress-fill" 
               style={{ width: `${((currentStep + 1) / questions.length) * 100}%` }}
             />
           </div>
-          <span className=\"progress-text caption\">
+          <span className="progress-text caption">
             Question {currentStep + 1} of {questions.length}
           </span>
         </div>
 
-        <h2 className=\"heading-2 question-title\">{currentQuestion.question}</h2>
+        <h2 className="heading-2 question-title">{currentQuestion.question}</h2>
 
-        <div className=\"answer-section\">
+        <div className="answer-section">
           {currentQuestion.type === 'yesno' && (
-            <div className=\"yesno-buttons\">
+            <div className="yesno-buttons">
               <button
                 className={`yesno-btn ${answers[currentQuestion.id] === 'yes' ? 'active' : ''}`}
                 onClick={() => handleAnswer('yes')}
@@ -200,8 +200,8 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
 
           {currentQuestion.type === 'text' && (
             <input
-              type=\"text\"
-              className=\"form-input\"
+              type="text"
+              className="form-input"
               placeholder={currentQuestion.placeholder}
               value={answers[currentQuestion.id] || ''}
               onChange={(e) => handleAnswer(e.target.value)}
@@ -210,7 +210,7 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
 
           {currentQuestion.type === 'textarea' && (
             <textarea
-              className=\"form-textarea\"
+              className="form-textarea"
               placeholder={currentQuestion.placeholder}
               rows={4}
               value={answers[currentQuestion.id] || ''}
@@ -219,16 +219,16 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
           )}
         </div>
 
-        <div className=\"questionnaire-actions\">
+        <div className="questionnaire-actions">
           {currentStep > 0 && (
-            <button onClick={handlePrevious} className=\"btn-secondary\">
+            <button onClick={handlePrevious} className="btn-secondary">
               Previous
             </button>
           )}
-          <button onClick={handleNext} className=\"btn-primary\">
+          <button onClick={handleNext} className="btn-primary">
             {currentStep < questions.length - 1 ? 'Next' : 'Complete'}
           </button>
-          <button onClick={onCancel} className=\"btn-secondary\">
+          <button onClick={onCancel} className="btn-secondary">
             Cancel
           </button>
         </div>
