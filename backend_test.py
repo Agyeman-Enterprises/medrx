@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-MedRx Telemedicine Backend API Test Suite
-Tests all appointment and subscription endpoints comprehensively
+MedRx GLP-1 Platform Backend API Test Suite
+Tests all GLP-1 appointment, payment, and subscription endpoints comprehensively
 """
 
 import asyncio
