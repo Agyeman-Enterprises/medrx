@@ -9,8 +9,8 @@ from services_data import ONE_OFF_SERVICES, SUBSCRIPTION_PLANS, get_service_info
 
 router = APIRouter(prefix="/api/appointments", tags=["appointments"])
 
-# MongoDB connection will be imported from main server
-from server import db
+# MongoDB connection
+from database import db
 
 @router.post("/", response_model=dict)
 async def create_appointment(appointment_data: AppointmentCreate):
