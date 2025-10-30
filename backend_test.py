@@ -68,28 +68,58 @@ class MedRxGLP1Tester:
             self.log_test("Health Check", False, f"Health check error: {str(e)}")
             return False
     
-    async def create_oneoff_appointment(self, service_id, service_name, price):
-        """Test creating a one-off appointment"""
-        test_name = f"Create One-off Appointment ({service_name})"
+    async def create_glp1_appointment(self, service_id, service_name, price, requires_address=True):
+        """Test creating a GLP-1 appointment with address data"""
+        test_name = f"Create GLP-1 Appointment ({service_name})"
         
-        # Generate unique test data with microseconds for uniqueness
+        # Generate unique test data with realistic names
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-        email = f"patient_{service_id}_{timestamp}@example.com"
+        
+        # Use realistic patient names for GLP-1 testing
+        patient_names = [
+            "Sarah Johnson", "Michael Chen", "Jennifer Rodriguez", 
+            "David Kim", "Lisa Thompson", "Robert Martinez"
+        ]
+        patient_name = patient_names[self.time_counter % len(patient_names)]
+        email = f"glp1.patient.{service_id.replace('-', '.')}.{timestamp}@medicaltesting.com"
         
         # Get unique time slot to avoid conflicts
         appointment_date, appointment_time = self.get_unique_time_slot()
         
         appointment_data = {
-            "name": f"John Patient {timestamp}",
+            "name": patient_name,
             "email": email,
-            "phone": "+1-555-0123",
+            "phone": f"+1-555-{1000 + self.time_counter:04d}",
             "serviceId": service_id,
             "serviceType": "oneoff",
             "date": appointment_date,
             "time": appointment_time,
-            "timezone": "Pacific/Honolulu",
-            "notes": f"Test appointment for {service_name}"
+            "timezone": "America/Los_Angeles",
+            "notes": json.dumps({
+                "age": "35",
+                "pregnant": "no",
+                "allergies": "None",
+                "medications": "Metformin",
+                "conditions": "Type 2 Diabetes",
+                "thyroid_cancer": "no",
+                "pancreatitis": "no",
+                "kidney_disease": "no",
+                "gastroparesis": "no",
+                "current_weight": "185",
+                "height": "5'6\"",
+                "weight_loss_goal": "30 pounds"
+            })
         }
+        
+        # Add address for GLP-1 services (required for medication delivery)
+        if requires_address:
+            appointment_data["address"] = {
+                "street": f"{100 + self.time_counter} Medical Plaza Dr",
+                "city": "Los Angeles",
+                "state": "CA",
+                "zip_code": "90210",
+                "country": "US"
+            }
         
         try:
             async with self.session.post(
@@ -104,10 +134,24 @@ class MedRxGLP1Tester:
                         appointment = data.get('appointment', {})
                         actual_price = appointment.get('price', 0)
                         
+                        # Verify address is stored for GLP-1 services
+                        patient_info = appointment.get('patientInfo', {})
+                        stored_address = patient_info.get('address')
+                        
                         if actual_price == price:
-                            self.log_test(test_name, True, 
-                                        f"Appointment created successfully with correct price ${price}",
-                                        f"ID: {data['appointmentId']}, Email: {email}")
+                            if requires_address and stored_address:
+                                self.log_test(test_name, True, 
+                                            f"GLP-1 appointment created with address - ${price}",
+                                            f"ID: {data['appointmentId']}, Address: {stored_address['city']}, {stored_address['state']}")
+                            elif not requires_address:
+                                self.log_test(test_name, True, 
+                                            f"Appointment created successfully - ${price}",
+                                            f"ID: {data['appointmentId']}")
+                            else:
+                                self.log_test(test_name, False, 
+                                            "Address required for GLP-1 service but not stored")
+                                return {'success': False}
+                            
                             return {'success': True, 'email': email, 'appointment_id': data['appointmentId']}
                         else:
                             self.log_test(test_name, False, 
