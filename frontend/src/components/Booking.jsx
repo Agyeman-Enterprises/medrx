@@ -111,17 +111,31 @@ const Booking = () => {
     });
   };
 
+  // Show questionnaire step
+  if (bookingStep === 'questionnaire') {
+    const service = mockServices.find(s => s.id === selectedService);
+    return (
+      <section id="booking" className="booking-section">
+        <MedicalQuestionnaire 
+          serviceCategory={service.category}
+          onComplete={handleQuestionnaireComplete}
+          onCancel={handleQuestionnaireCancel}
+        />
+      </section>
+    );
+  }
+
   return (
     <section id="booking" className="booking-section">
       <div className="container">
         <div className="section-header">
           <h2 className="heading-1">Book Your Visit</h2>
           <p className="body-large">
-            Select your service, choose a convenient time, and we'll take care of the rest
+            Select your service, choose a convenient time, and complete the medical screening
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="booking-form">
+        <form onSubmit={handleFormSubmit} className="booking-form">
           <div className="booking-grid">
             {/* Personal Information */}
             <div className="booking-card">
