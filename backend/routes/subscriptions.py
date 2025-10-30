@@ -9,10 +9,8 @@ from services_data import SUBSCRIPTION_PLANS
 
 router = APIRouter(prefix="/api/subscriptions", tags=["subscriptions"])
 
-# MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+# MongoDB connection will be imported from main server
+from server import db
 
 @router.post("/", response_model=dict)
 async def create_subscription(subscription_data: SubscriptionCreate):
