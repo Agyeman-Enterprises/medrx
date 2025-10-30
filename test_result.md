@@ -318,9 +318,13 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Complete frontend and backend testing completed"
+    - "GLP-1 Semaglutide Booking with Medical Questionnaire ($150)"
+    - "GLP-1 Tirzepatide Booking with Medical Questionnaire ($279)"
+    - "Hormone Health Booking with Medical Questionnaire ($150)"
+    - "Service Display Order Verification"
+    - "Medical Questionnaire Disqualification Logic"
   stuck_tasks: []
-  test_all: true
+  test_all: false
   test_priority: "high_first"
 
 agent_communication:
@@ -328,3 +332,5 @@ agent_communication:
       message: "Comprehensive backend testing completed successfully. All 14 test cases passed (100% success rate). Tested: one-off appointments ($85 Acute Care, $175 Functional Medicine), subscription creation ($35 Basic, $150 Standard), subscription-based appointments (free), visit limits enforcement (Basic 2/month limit working), unlimited visits (Standard working), duplicate booking prevention, API validation, and MongoDB persistence. All APIs are working correctly with proper error handling and data validation."
     - agent: "testing"
       message: "✅ COMPLETE FRONTEND TESTING SUCCESSFUL: All 7 frontend components tested and working perfectly. Navigation (About/Services/Book Visit buttons), service filters (2 pay-per-visit, 4 monthly plans, 6 total), both booking flows (Acute Care $85 & Functional Medicine $175), timezone-aware time slots (Hawaii: 11, California: 9, Guam: 14 slots), form validation, success toasts, form reset, and frontend-backend API integration all working correctly. MedRx telemedicine booking system is fully functional end-to-end."
+    - agent: "testing"
+      message: "Starting comprehensive testing of updated MedRx GLP-1 platform with medical questionnaire functionality. Testing focus: GLP-1 Semaglutide ($150), GLP-1 Tirzepatide ($279), Hormone Health ($150) bookings with questionnaire flows, service display order verification, and disqualification logic testing."
