@@ -191,9 +191,9 @@ async def get_checkout_status(session_id: str, request: Request):
             detail=f\"Failed to get checkout status: {str(e)}\"
         )
 
-@router.post(\"/webhook/stripe\")
+@router.post("/webhook/stripe")
 async def stripe_webhook(request: Request):
-    \"\"\"Handle Stripe webhook events\"\"\"
+    """Handle Stripe webhook events"""
     
     try:
         # Get raw body and signature
