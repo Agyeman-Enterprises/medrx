@@ -206,7 +206,7 @@ const Booking = () => {
                 Select Time
               </h3>
               <div className="time-slots">
-                {mockTimeSlots.map((time) => (
+                {availableTimeSlots.map((time) => (
                   <button
                     key={time}
                     type="button"
@@ -217,6 +217,11 @@ const Booking = () => {
                   </button>
                 ))}
               </div>
+              {availableTimeSlots.length === 0 && (
+                <p className="body-medium" style={{ textAlign: 'center', color: 'var(--text-muted)' }}>
+                  No available times for selected timezone
+                </p>
+              )}
             </div>
           </div>
 
