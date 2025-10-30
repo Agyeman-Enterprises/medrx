@@ -143,16 +143,43 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
           <div className="disqualification-icon">
             <AlertCircle size={48} color="#dc2626" />
           </div>
-          <h2 className="heading-2">Unable to Proceed</h2>
+          <h2 className="heading-2">GLP-1 Therapy Not Recommended</h2>
           <p className="body-medium">
-            Based on your medical history, we're unable to prescribe this medication at this time. 
+            Based on your medical history, GLP-1 medications may not be appropriate at this time. 
             {currentQuestion.explanation && ` ${currentQuestion.explanation}.`}
           </p>
-          <p className="body-medium" style={{ marginTop: '1rem' }}>
-            We recommend consulting with your primary care physician or a specialist for alternative treatment options.
-          </p>
+          <div className="alternative-offer">
+            <h3 className="heading-2" style={{ marginTop: '2rem', marginBottom: '1rem' }}>
+              Alternative Option Available
+            </h3>
+            <p className="body-medium">
+              Consider a <strong>Functional Medicine consultation</strong> to explore other physician-supervised weight loss alternatives and metabolic health optimization.
+            </p>
+            <div className="alternative-details">
+              <div className="price-highlight">$175 / visit</div>
+              <ul style={{ textAlign: 'left', marginTop: '1rem' }}>
+                <li>Comprehensive metabolic assessment</li>
+                <li>Personalized treatment plan</li>
+                <li>Lab coordination</li>
+                <li>Alternative therapies discussion</li>
+              </ul>
+            </div>
+          </div>
           <div className="questionnaire-actions">
-            <button onClick={onCancel} className="btn-primary">
+            <button 
+              onClick={() => {
+                // Redirect to booking with Functional Medicine pre-selected
+                window.location.href = '/#booking';
+                setTimeout(() => {
+                  const funcMedRadio = document.querySelector('input[value="functional-medicine"]');
+                  if (funcMedRadio) funcMedRadio.click();
+                }, 500);
+              }} 
+              className="btn-primary"
+            >
+              Book Functional Medicine Visit
+            </button>
+            <button onClick={onCancel} className="btn-secondary">
               Return to Services
             </button>
           </div>
