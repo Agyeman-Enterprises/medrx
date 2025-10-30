@@ -35,9 +35,17 @@ class MedRxGLP1Tester:
     def get_unique_time_slot(self):
         """Get a unique time slot to avoid conflicts"""
         self.time_counter += 1
-        base_date = datetime.now() + timedelta(days=7 + self.time_counter)
-        time_hour = 9 + (self.time_counter % 8)  # 9 AM to 4 PM
-        return base_date.strftime("%Y-%m-%d"), f"{time_hour}:00 AM"
+        # Use different days and more granular times to avoid conflicts
+        base_date = datetime.now() + timedelta(days=10 + (self.time_counter // 10))
+        time_hour = 8 + (self.time_counter % 12)  # 8 AM to 7 PM
+        time_minute = (self.time_counter * 15) % 60  # 0, 15, 30, 45 minutes
+        
+        if time_hour > 12:
+            time_str = f"{time_hour - 12}:{time_minute:02d} PM"
+        else:
+            time_str = f"{time_hour}:{time_minute:02d} AM"
+            
+        return base_date.strftime("%Y-%m-%d"), time_str
     
     def log_test(self, test_name, success, message, details=None):
         """Log test result"""
