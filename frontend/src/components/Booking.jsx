@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { format } from 'date-fns';
 import { Calendar } from '../components/ui/calendar';
-import { mockTimezones, getAvailableTimeSlots, mockServices, mockBookAppointment } from '../mock';
+import { mockTimezones, getAvailableTimeSlots, mockServices } from '../mock';
 import '../styles/Booking.css';
 import { Calendar as CalendarIcon, Clock, MapPin, User, Mail, Phone } from 'lucide-react';
 import { toast } from 'sonner';
+import axios from 'axios';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
 
 const Booking = () => {
   const [selectedService, setSelectedService] = useState('');
@@ -40,17 +44,22 @@ const Booking = () => {
 
     setIsSubmitting(true);
     
+    const service = mockServices.find(s => s.id === selectedService);
     const bookingData = {
-      ...formData,
-      service: selectedService,
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      serviceId: selectedService,
+      serviceType: service.type,
       date: format(selectedDate, 'yyyy-MM-dd'),
       time: selectedTime,
-      timezone: selectedTimezone
+      timezone: selectedTimezone,
+      notes: ''
     };
 
     try {
-      const result = await mockBookAppointment(bookingData);
-      if (result.success) {
+      const response = await axios.post(`${API}/appointments`, bookingData);
+      if (response.data.success) {
         toast.success('Appointment booked successfully! Check your email for confirmation.');
         // Reset form
         setSelectedService('');
@@ -59,7 +68,9 @@ const Booking = () => {
         setFormData({ name: '', email: '', phone: '' });
       }
     } catch (error) {
-      toast.error('Booking failed. Please try again.');
+      const errorMessage = error.response?.data?.detail || 'Booking failed. Please try again.';
+      toast.error(errorMessage);
+      console.error('Booking error:', error);
     } finally {
       setIsSubmitting(false);
     }
