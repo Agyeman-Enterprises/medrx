@@ -316,14 +316,16 @@ class MedRxAPITester:
         
         if "Basic" in plan_name:
             # Basic plan has 2 visit limit, try to book 3rd appointment
+            appointment_date, appointment_time = self.get_unique_time_slot()
+            
             appointment_data = {
                 "name": "Jane Subscriber",
                 "email": email,
                 "phone": "+1-555-0456",
                 "serviceId": "sub-1",
                 "serviceType": "subscription",
-                "date": (datetime.now() + timedelta(days=9)).strftime("%Y-%m-%d"),
-                "time": "2:00 PM",
+                "date": appointment_date,
+                "time": appointment_time,
                 "timezone": "Pacific/Honolulu",
                 "notes": "Third appointment - should fail"
             }
