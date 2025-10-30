@@ -129,10 +129,22 @@ const Booking = () => {
   };
 
   const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    if (name.startsWith('address.')) {
+      const addressField = name.split('.')[1];
+      setFormData({
+        ...formData,
+        address: {
+          ...formData.address,
+          [addressField]: value
+        }
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    }
   };
 
   // Show questionnaire step
@@ -145,6 +157,20 @@ const Booking = () => {
           onComplete={handleQuestionnaireComplete}
           onCancel={handleQuestionnaireCancel}
         />
+      </section>
+    );
+  }
+
+  // Show processing step
+  if (bookingStep === 'processing') {
+    return (
+      <section id="booking" className="booking-section">
+        <div className="container">
+          <div className="processing-message">
+            <h2 className="heading-1">Redirecting to Payment...</h2>
+            <p className="body-large">Please wait while we prepare your secure checkout.</p>
+          </div>
+        </div>
       </section>
     );
   }
