@@ -22,6 +22,7 @@ class MedRxAPITester:
     def __init__(self):
         self.session = None
         self.test_results = []
+        self.time_counter = 0  # To avoid time slot conflicts
         
     async def __aenter__(self):
         self.session = aiohttp.ClientSession()
