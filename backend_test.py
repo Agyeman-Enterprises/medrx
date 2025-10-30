@@ -195,27 +195,34 @@ class MedRxGLP1Tester:
             self.log_test(test_name, False, f"Request error: {str(e)}")
             return {'success': False}
     
-    async def create_subscription(self, plan_id, plan_name, price):
-        """Test creating a subscription"""
-        test_name = f"Create Subscription ({plan_name})"
+    async def create_glp1_subscription(self, plan_id, plan_name, price):
+        """Test creating a GLP-1 subscription"""
+        test_name = f"Create GLP-1 Subscription ({plan_name})"
         
         # Generate unique test data
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-        email = f"subscriber_{plan_id}_{timestamp}@example.com"
+        email = f"glp1.subscriber.{plan_id.replace('-', '.')}.{timestamp}@medicaltesting.com"
         
-        # First create a user by booking an appointment (this creates the user)
+        # First create a user by booking a GLP-1 appointment (this creates the user)
         user_date, user_time = self.get_unique_time_slot()
         
         user_creation_data = {
-            "name": f"Subscriber User {timestamp}",
+            "name": "Dr. Amanda Wilson",
             "email": email,
-            "phone": "+1-555-0999",
-            "serviceId": "oneoff-1",
+            "phone": f"+1-555-{2000 + self.time_counter:04d}",
+            "serviceId": "glp1-sema-initial",
             "serviceType": "oneoff",
             "date": user_date,
             "time": user_time,
-            "timezone": "Pacific/Honolulu",
-            "notes": "Creating user for subscription test"
+            "timezone": "America/New_York",
+            "address": {
+                "street": f"{200 + self.time_counter} Wellness Center Blvd",
+                "city": "New York",
+                "state": "NY",
+                "zip_code": "10001",
+                "country": "US"
+            },
+            "notes": "Creating user for GLP-1 subscription test"
         }
         
         # Create user first
@@ -252,8 +259,8 @@ class MedRxGLP1Tester:
                         
                         if actual_price == price:
                             self.log_test(test_name, True, 
-                                        f"Subscription created successfully with correct price ${price}",
-                                        f"ID: {data['subscriptionId']}, Email: {email}")
+                                        f"GLP-1 subscription created successfully - ${price}/month",
+                                        f"ID: {data['subscriptionId']}, Plan: {plan_name}")
                             return {'success': True, 'email': email, 'subscription_id': data['subscriptionId']}
                         else:
                             self.log_test(test_name, False, 
@@ -261,6 +268,80 @@ class MedRxGLP1Tester:
                             return {'success': False}
                     else:
                         self.log_test(test_name, False, "Invalid response format")
+                        return {'success': False}
+                else:
+                    error_text = await response.text()
+                    self.log_test(test_name, False, f"HTTP {response.status}: {error_text}")
+                    return {'success': False}
+                    
+        except Exception as e:
+            self.log_test(test_name, False, f"Request error: {str(e)}")
+            return {'success': False}
+    
+    async def test_payment_checkout_session(self, service_id, expected_amount):
+        """Test creating Stripe checkout session"""
+        test_name = f"Payment Checkout Session ({service_id})"
+        
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+        email = f"payment.test.{service_id.replace('-', '.')}.{timestamp}@medicaltesting.com"
+        
+        checkout_data = {
+            "serviceId": service_id,
+            "originUrl": BACKEND_URL,
+            "email": email,
+            "appointmentData": {
+                "name": "Payment Test Patient",
+                "date": "2024-12-20",
+                "time": "10:00 AM",
+                "timezone": "America/Los_Angeles"
+            }
+        }
+        
+        try:
+            async with self.session.post(
+                f"{BASE_URL}/payments/checkout/session",
+                json=checkout_data,
+                headers={"Content-Type": "application/json"}
+            ) as response:
+                
+                if response.status == 200:
+                    data = await response.json()
+                    if data.get('success') and data.get('url') and data.get('sessionId'):
+                        self.log_test(test_name, True, 
+                                    f"Checkout session created for ${expected_amount}",
+                                    f"Session ID: {data['sessionId']}")
+                        return {'success': True, 'session_id': data['sessionId'], 'url': data['url']}
+                    else:
+                        self.log_test(test_name, False, "Invalid checkout response format")
+                        return {'success': False}
+                else:
+                    error_text = await response.text()
+                    self.log_test(test_name, False, f"HTTP {response.status}: {error_text}")
+                    return {'success': False}
+                    
+        except Exception as e:
+            self.log_test(test_name, False, f"Request error: {str(e)}")
+            return {'success': False}
+    
+    async def test_payment_status_check(self, session_id):
+        """Test checking payment status"""
+        test_name = "Payment Status Check"
+        
+        try:
+            async with self.session.get(f"{BASE_URL}/payments/checkout/status/{session_id}") as response:
+                if response.status == 200:
+                    data = await response.json()
+                    if data.get('success'):
+                        status = data.get('status')
+                        payment_status = data.get('paymentStatus')
+                        amount = data.get('amount')
+                        
+                        self.log_test(test_name, True, 
+                                    f"Payment status retrieved: {status}/{payment_status}",
+                                    f"Amount: ${amount}")
+                        return {'success': True, 'status': status, 'payment_status': payment_status}
+                    else:
+                        self.log_test(test_name, False, "Invalid status response format")
                         return {'success': False}
                 else:
                     error_text = await response.text()
