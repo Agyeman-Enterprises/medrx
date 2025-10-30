@@ -1,8 +1,6 @@
 from fastapi import APIRouter, HTTPException, status
-from motor.motor_asyncio import AsyncIOMotorClient
 from datetime import datetime, timedelta
 from typing import List
-import os
 
 from models import Subscription, SubscriptionCreate, SubscriptionUpdate
 from services_data import SUBSCRIPTION_PLANS
