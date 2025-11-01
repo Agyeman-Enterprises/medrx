@@ -35,8 +35,9 @@ const Booking = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const availableTimeSlots = useMemo(() => {
-    return getAvailableTimeSlots();
-  }, []);
+    if (!selectedDate) return [];
+    return getAvailableSlotsForTimezone(selectedDate, selectedTimezone);
+  }, [selectedDate, selectedTimezone]);
 
   useEffect(() => {
     if (selectedTime && !availableTimeSlots.includes(selectedTime)) {
