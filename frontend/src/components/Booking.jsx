@@ -130,9 +130,13 @@ const Booking = () => {
         }
       };
 
+      console.log('Initiating payment with data:', paymentData);
+      
       const response = await axios.post(`${API}/payments/checkout/session`, paymentData);
       
-      if (response.data.success) {
+      console.log('Payment response:', response.data);
+      
+      if (response.data.success && response.data.url) {
         // Store session ID and appointment data in sessionStorage
         sessionStorage.setItem('pendingAppointment', JSON.stringify({
           sessionId: response.data.sessionId,
@@ -141,11 +145,15 @@ const Booking = () => {
           serviceType: service.type
         }));
         
+        console.log('Redirecting to Stripe:', response.data.url);
+        
         // Redirect to Stripe checkout
         window.location.href = response.data.url;
+      } else {
+        throw new Error('Invalid payment response - missing URL');
       }
     } catch (error) {
-      const errorMessage = error.response?.data?.detail || 'Payment initialization failed';
+      const errorMessage = error.response?.data?.detail || error.message || 'Payment initialization failed';
       toast.error(errorMessage);
       console.error('Payment error:', error);
       setBookingStep('form');
