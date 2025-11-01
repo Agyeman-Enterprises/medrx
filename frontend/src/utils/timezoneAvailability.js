@@ -11,20 +11,8 @@ export const TIMEZONES = {
   CALIFORNIA: 'America/Los_Angeles'
 };
 
-// Provider availability in Guam time
-export const PROVIDER_AVAILABILITY = {
-  timezone: TIMEZONES.GUAM,
-  daysOfWeek: [2, 3, 4, 5, 6, 0], // Tuesday(2) through Sunday(0) - Monday closed
-  startHour: 8,  // 8 AM ChST
-  endHour: 22,   // 10 PM ChST
-  slotDuration: 30 // 30 minute slots
-};
-
-// Patient booking windows (THEIR local time)
-export const PATIENT_BOOKING_WINDOW = {
-  startHour: 10,  // 10 AM local
-  endHour: 22     // 10 PM local
-};
+// Provider availability days (0=Sunday, 1=Monday, etc.)
+export const AVAILABLE_DAYS = [0, 2, 3, 4, 5, 6]; // Tuesday-Sunday (Monday=1 is excluded)
 
 /**
  * Calculate available time windows for each timezone
