@@ -45,50 +45,42 @@ export const TIMEZONE_WINDOWS = {
 };
 
 /**
- * Get available time slots for a specific date and timezone
- * Returns slots in patient's local time that fit BOTH constraints
+ * Get available time slots for a date in patient's timezone
  */
 export const getAvailableSlotsForTimezone = (date, patientTimezone) => {
-  const slots = [];
-  const window = TIMEZONE_WINDOWS[patientTimezone];
+  if (!date || !patientTimezone) return [];
   
+  const slots = [];
+  const dayOfWeek = date.getDay();
+  
+  // Check if this day is available (Monday closed)
+  if (!AVAILABLE_DAYS.includes(dayOfWeek)) {
+    return [];
+  }
+  
+  const window = TIMEZONE_WINDOWS[patientTimezone];
   if (!window) {
     console.error('Unknown timezone:', patientTimezone);
     return [];
   }
   
-  // Check if this is an available day (check in Guam time logic)
-  const dayOfWeek = date.getDay();
-  
-  // Simple check: assume same day for now (proper implementation would convert)
-  if (!PROVIDER_AVAILABILITY.daysOfWeek.includes(dayOfWeek)) {
-    return [];
-  }
-  
-  // Generate slots based on the intersection window
-  // Use the local time window that maps to Guam availability
-  for (let hour = window.localStartHour; hour < window.localEndHour; hour++) {
-    for (let minute = 0; minute < 60; minute += PROVIDER_AVAILABILITY.slotDuration) {
+  // Generate 30-minute slots within the available window
+  for (let hour = window.startHour; hour < window.endHour; hour++) {
+    for (let minute of [0, 30]) {
       const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-      const displayString = format(
-        parse(timeString, 'HH:mm', date),
-        'h:mm a'
-      );
       
-      // Calculate corresponding Guam time for display
-      const guamHour = hour - window.offset;
-      const guamTimeString = `${guamHour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-      const guamDisplay = format(
-        parse(guamTimeString, 'HH:mm', date),
-        'h:mm a'
-      ) + ' ChST';
-      
-      slots.push({
-        time: timeString,
-        display: displayString,
-        guamTime: guamDisplay,
-        date: date
-      });
+      try {
+        const timeObj = parse(timeString, 'HH:mm', new Date());
+        const displayString = format(timeObj, 'h:mm a');
+        
+        slots.push({
+          time: timeString,
+          display: displayString,
+          guamTime: window.guamEquivalent
+        });
+      } catch (error) {
+        console.error('Error formatting time:', timeString, error);
+      }
     }
   }
   
