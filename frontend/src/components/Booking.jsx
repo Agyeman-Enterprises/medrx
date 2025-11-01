@@ -18,7 +18,7 @@ const Booking = () => {
   const [selectedService, setSelectedService] = useState('');
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState('');
-  const [selectedTimezone, setSelectedTimezone] = useState(mockTimezones[0].value);
+  const [selectedTimezone, setSelectedTimezone] = useState(TIMEZONES.CALIFORNIA);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
