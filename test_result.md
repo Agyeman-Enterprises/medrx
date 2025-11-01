@@ -594,8 +594,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Review Request: Comprehensive System Test - Full Deployment Readiness Check"
-    - "Stripe payment metadata size limit issue for GLP-1 questionnaires"
+    - "Complete MedRx booking flow through to Stripe payment (Review Request)"
   stuck_tasks:
     - "Stripe payment metadata size limit issue for GLP-1 questionnaires"
   test_all: false
