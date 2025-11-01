@@ -723,6 +723,83 @@ class MedRxGLP1Tester:
             self.log_test("DrChrono Health Check", False, f"DrChrono health check error: {str(e)}")
             return False
     
+    async def test_voice_intake_health(self):
+        """Test Voice Intake service health endpoint"""
+        try:
+            async with self.session.get(f"{BASE_URL}/voice-intake/health") as response:
+                if response.status == 200:
+                    data = await response.json()
+                    self.log_test("Voice Intake Health Check", True, 
+                                f"Voice service status: {data.get('status')}, Deepgram: {data.get('deepgram_configured')}, LLM: {data.get('llm_configured')}")
+                    return True
+                else:
+                    self.log_test("Voice Intake Health Check", False, f"Voice intake health check failed with status {response.status}")
+                    return False
+        except Exception as e:
+            self.log_test("Voice Intake Health Check", False, f"Voice intake health check error: {str(e)}")
+            return False
+
+    async def test_mongodb_connection(self):
+        """Test MongoDB connection by checking if we can access collections"""
+        test_name = "MongoDB Connection Test"
+        
+        # Try to create a test document and retrieve it
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+        test_email = f"mongodb.test.{timestamp}@medicaltesting.com"
+        
+        # Test creating an appointment (which tests MongoDB write)
+        appointment_date, appointment_time = self.get_unique_time_slot()
+        
+        test_appointment = {
+            "name": "MongoDB Test Patient",
+            "email": test_email,
+            "phone": "+1-555-0000",
+            "serviceId": "glp1-weight-loss",
+            "serviceType": "oneoff",
+            "date": appointment_date,
+            "time": appointment_time,
+            "timezone": "America/Los_Angeles",
+            "notes": "MongoDB connection test"
+        }
+        
+        try:
+            # Create appointment (tests MongoDB write)
+            async with self.session.post(
+                f"{BASE_URL}/appointments/",
+                json=test_appointment,
+                headers={"Content-Type": "application/json"}
+            ) as response:
+                
+                if response.status == 200:
+                    data = await response.json()
+                    if data.get('success') and data.get('appointmentId'):
+                        # Test MongoDB read by retrieving the appointment
+                        async with self.session.get(f"{BASE_URL}/appointments/?email={test_email}") as read_response:
+                            if read_response.status == 200:
+                                read_data = await read_response.json()
+                                if read_data.get('success') and read_data.get('appointments'):
+                                    self.log_test(test_name, True, 
+                                                "MongoDB connection working - write and read successful",
+                                                f"Created and retrieved appointment: {data['appointmentId']}")
+                                    return {'success': True}
+                                else:
+                                    self.log_test(test_name, False, "MongoDB read failed")
+                                    return {'success': False}
+                            else:
+                                self.log_test(test_name, False, f"MongoDB read failed with status {read_response.status}")
+                                return {'success': False}
+                    else:
+                        self.log_test(test_name, False, "MongoDB write failed - invalid response")
+                        return {'success': False}
+                else:
+                    error_text = await response.text()
+                    self.log_test(test_name, False, f"MongoDB write failed - HTTP {response.status}: {error_text}")
+                    return {'success': False}
+                    
+        except Exception as e:
+            self.log_test(test_name, False, f"MongoDB connection error: {str(e)}")
+            return {'success': False}
+    
     async def test_glp1_weight_loss_booking_flow(self):
         """Test complete GLP-1 weight loss booking flow as specified in review request"""
         test_name = "GLP-1 Weight Loss Booking Flow (Complete)"
