@@ -14,43 +14,33 @@ export const TIMEZONES = {
 // Provider availability days (0=Sunday, 1=Monday, etc.)
 export const AVAILABLE_DAYS = [0, 2, 3, 4, 5, 6]; // Tuesday-Sunday (Monday=1 is excluded)
 
-/**
- * Calculate available time windows for each timezone
- * Shows intersection of provider Guam hours AND patient local 10 AM-10 PM window
- */
+// Timezone-specific booking windows
+// These are the INTERSECTION of Guam 8AM-10PM and patient's local 10AM-10PM
 export const TIMEZONE_WINDOWS = {
   [TIMEZONES.CALIFORNIA]: {
-    // California is 18 hours behind Guam (PST) or 17 hours (PDT)
+    // CA is ~18 hours behind Guam
     // Guam 8 AM = CA 2 PM previous day
     // Guam 4 PM = CA 10 PM (CA cutoff)
-    // Available: CA 2 PM - 10 PM = Guam 8 AM - 4 PM
-    localStartHour: 14, // 2 PM California time
-    localEndHour: 22,   // 10 PM California time
-    guamStartHour: 8,   // Corresponds to Guam 8 AM
-    guamEndHour: 16,    // Corresponds to Guam 4 PM
-    label: 'California (PST/PDT)',
-    offset: -18 // Approximate (varies with DST)
+    startHour: 14, // 2 PM CA time
+    endHour: 22,   // 10 PM CA time
+    label: 'California (Available 2 PM - 10 PM)',
+    guamEquivalent: 'Guam 8 AM - 4 PM'
   },
   [TIMEZONES.HAWAII]: {
-    // Hawaii is 20 hours behind Guam
+    // HI is 20 hours behind Guam
     // Guam 8 AM = HI 12 PM noon previous day
     // Guam 6 PM = HI 10 PM (HI cutoff)
-    // Available: HI 12 PM - 10 PM = Guam 8 AM - 6 PM
-    localStartHour: 12, // 12 PM Hawaii time
-    localEndHour: 22,   // 10 PM Hawaii time
-    guamStartHour: 8,   // Corresponds to Guam 8 AM
-    guamEndHour: 18,    // Corresponds to Guam 6 PM
-    label: 'Hawaii (HST)',
-    offset: -20
+    startHour: 12, // 12 PM HI time
+    endHour: 22,   // 10 PM HI time
+    label: 'Hawaii (Available 12 PM - 10 PM)',
+    guamEquivalent: 'Guam 8 AM - 6 PM'
   },
   [TIMEZONES.GUAM]: {
     // Guam patients see full availability
-    localStartHour: 8,  // 8 AM Guam time
-    localEndHour: 22,   // 10 PM Guam time
-    guamStartHour: 8,
-    guamEndHour: 22,
-    label: 'Guam (ChST)',
-    offset: 0
+    startHour: 8,  // 8 AM Guam time
+    endHour: 22,   // 10 PM Guam time
+    label: 'Guam (Available 8 AM - 10 PM)',
+    guamEquivalent: 'Full availability'
   }
 };
 
