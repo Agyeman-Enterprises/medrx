@@ -58,15 +58,31 @@ const Booking = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     
-    if (!selectedService || !selectedDate || !selectedTime) {
-      toast.error('Please complete all booking fields');
+    // Basic validation
+    if (!selectedService) {
+      toast.error('Please select a service');
+      return;
+    }
+    
+    if (!selectedDate) {
+      toast.error('Please select a date');
+      return;
+    }
+    
+    if (!selectedTime) {
+      toast.error('Please select a time');
+      return;
+    }
+    
+    if (!formData.name || !formData.email || !formData.phone) {
+      toast.error('Please fill in your name, email, and phone number');
       return;
     }
 
-    // Validate address for GLP-1 services
+    // Validate address for services that require it
     if (requiresAddress) {
       if (!formData.address.street || !formData.address.city || !formData.address.state || !formData.address.zip_code) {
-        toast.error('Address is required for GLP-1 prescriptions (eRx orders)');
+        toast.error('Address is required for prescription delivery');
         return;
       }
     }
