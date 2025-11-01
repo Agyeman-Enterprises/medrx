@@ -22,34 +22,45 @@ SUPPORTED_REGIONS = {
     }
 }
 
-# Service Lines (MedRx Focus: Weight Loss & Hormones)
+# Service Lines (MedRx Focus: Weight Loss, Hormones, Hair Loss ONLY)
 SERVICE_LINES = {
     "weight-loss": {
-        "name": "Weight Loss & GLP-1 Therapy",
+        "name": "GLP-1 Weight Loss",
         "description": "Semaglutide and Tirzepatide programs with smart monitoring, personalized dosing, and results-driven follow-up.",
+        "consultation_fee": 175,
         "duration_minutes": 30,
         "color": "accent-purple",
         "icon": "scale",
-        "services": ["glp1-sema", "glp1-tirz"]
+        "medications": ["Semaglutide", "Tirzepatide"]
     },
     "hormone-health": {
         "name": "Hormone Health",
         "description": "Women's health, men's testosterone, thyroid optimization — root-cause, not just symptom suppression.",
+        "consultation_fee": 175,
         "duration_minutes": 30,
         "color": "accent-pink",
         "icon": "heart-pulse",
-        "services": ["womens-hormone", "mens-testosterone", "thyroid"]
+        "medications": ["Bioidentical Hormones", "Testosterone", "Thyroid medications"]
+    },
+    "hair-loss": {
+        "name": "Hair Loss Solutions",
+        "description": "Medical-grade topical and oral therapies for natural-looking hair restoration.",
+        "consultation_fee": 175,
+        "duration_minutes": 30,
+        "color": "accent-green",
+        "icon": "sparkles",
+        "medications": ["Finasteride", "Minoxidil", "Topical compounds"]
     }
 }
 
-# External Service Redirects (handled by bookadoc2u.com)
+# Consultation fee (all services)
+CONSULTATION_FEE = 175
+
+# External Service Redirects (Other services handled by bookadoc2u.com)
 EXTERNAL_SERVICES = {
-    "acute-care": os.getenv("EXTERNAL_SERVICE_URL_ACUTE_CARE", "https://bookadoc2u.com/acute-care"),
-    "functional-medicine": os.getenv("EXTERNAL_SERVICE_URL_FUNCTIONAL", "https://bookadoc2u.com/functional-medicine"),
-    "basic-access": os.getenv("EXTERNAL_SERVICE_URL_BASIC", "https://bookadoc2u.com/subscriptions/basic"),
-    "standard-care": os.getenv("EXTERNAL_SERVICE_URL_STANDARD", "https://bookadoc2u.com/subscriptions/standard"),
-    "mens-health": os.getenv("EXTERNAL_SERVICE_URL_MENS", "https://bookadoc2u.com/mens-health"),
-    "hair-loss": os.getenv("EXTERNAL_SERVICE_URL_HAIR", "https://bookadoc2u.com/hair-loss")
+    "acute-care": os.getenv("EXTERNAL_SERVICE_URL_ACUTE_CARE", "https://bookadoc2u.com"),
+    "functional-medicine": os.getenv("EXTERNAL_SERVICE_URL_FUNCTIONAL", "https://bookadoc2u.com"),
+    "primary-care": os.getenv("EXTERNAL_SERVICE_URL_PRIMARY", "https://bookadoc2u.com")
 }
 
 # GLP-1 Medications
