@@ -11,13 +11,10 @@ const Footer = () => {
         <div className="footer-grid">
           <div className="footer-column">
             <img 
-              src="/logo-medrx-wordmark.svg" 
+              src="/logo.png" 
               alt="MedRx" 
               className="footer-logo"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = 'https://customer-assets.emergentagent.com/job_47ed8f55-718c-4942-89cb-56d7d4044384/artifacts/7ig9cj8r_logo-medrx-wordmark.svg';
-              }}
+              style={{ height: '40px', width: 'auto' }}
             />
             <p className="body-medium footer-tagline">
               Medicine that listens, technology that serves.
