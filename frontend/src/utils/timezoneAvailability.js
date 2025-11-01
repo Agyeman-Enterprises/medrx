@@ -118,8 +118,8 @@ export const isTimeSlotAvailable = (datetime, timezone) => {
 
 export default {
   TIMEZONES,
-  PROVIDER_AVAILABILITY,
   TIMEZONE_WINDOWS,
+  AVAILABLE_DAYS,
   getAvailableSlotsForTimezone,
   getTimezoneLabel,
   isTimeSlotAvailable
