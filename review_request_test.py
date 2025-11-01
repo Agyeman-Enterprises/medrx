@@ -212,7 +212,7 @@ class ReviewRequestTester:
             "serviceId": "glp1-weight-loss",
             "serviceType": "oneoff",
             "date": (datetime.now() + timedelta(days=20 + abs(hash(timezone)) % 10)).strftime("%Y-%m-%d"),
-            "time": time_slot,
+            "time": f"{time_slot.split(':')[0]}:{(int(time_slot.split(':')[1].split()[0]) + abs(hash(timezone)) % 30):02d} {time_slot.split()[1]}",
             "timezone": timezone,
             "address": {
                 "street": f"456 {location_name} St",
