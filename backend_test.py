@@ -707,6 +707,184 @@ class MedRxGLP1Tester:
         
         return passed_tests, failed_tests
 
+    async def test_drchrono_health(self):
+        """Test DrChrono integration health endpoint"""
+        try:
+            async with self.session.get(f"{BASE_URL}/drchrono/health") as response:
+                if response.status == 200:
+                    data = await response.json()
+                    self.log_test("DrChrono Health Check", True, 
+                                f"DrChrono integration status: {data.get('status')}, configured: {data.get('drchrono_configured')}")
+                    return True
+                else:
+                    self.log_test("DrChrono Health Check", False, f"DrChrono health check failed with status {response.status}")
+                    return False
+        except Exception as e:
+            self.log_test("DrChrono Health Check", False, f"DrChrono health check error: {str(e)}")
+            return False
+    
+    async def test_glp1_weight_loss_booking_flow(self):
+        """Test complete GLP-1 weight loss booking flow as specified in review request"""
+        test_name = "GLP-1 Weight Loss Booking Flow (Complete)"
+        
+        # Generate unique test data
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+        
+        # Calculate tomorrow's date
+        tomorrow = datetime.now() + timedelta(days=1)
+        appointment_date = tomorrow.strftime("%Y-%m-%d")
+        appointment_time = "2:00 PM"  # 14:00 (2 PM California time)
+        
+        appointment_data = {
+            "name": "Test Patient California",
+            "email": f"glp1.weight.loss.test.{timestamp}@medicaltesting.com",
+            "phone": "+1-555-7777",
+            "serviceId": "glp1-weight-loss",  # As specified in review request
+            "serviceType": "oneoff",
+            "date": appointment_date,
+            "time": appointment_time,
+            "timezone": "America/Los_Angeles",  # California timezone as specified
+            "address": {
+                "street": "123 Weight Loss Center Dr",
+                "city": "Los Angeles", 
+                "state": "CA",
+                "zip_code": "90210",
+                "country": "US"
+            },
+            "notes": json.dumps({
+                "age": "32",
+                "pregnant": "no",
+                "allergies": "None",
+                "medications": "None",
+                "conditions": "None",
+                "thyroid_cancer": "no",
+                "pancreatitis": "no", 
+                "kidney_disease": "no",
+                "gastroparesis": "no",
+                "current_weight": "180",
+                "height": "5'7\"",
+                "weight_loss_goal": "25 pounds"
+            })
+        }
+        
+        try:
+            async with self.session.post(
+                f"{BASE_URL}/appointments/",
+                json=appointment_data,
+                headers={"Content-Type": "application/json"}
+            ) as response:
+                
+                if response.status == 200:
+                    data = await response.json()
+                    if data.get('success') and data.get('appointmentId'):
+                        appointment = data.get('appointment', {})
+                        
+                        # Verify appointment details
+                        stored_date = appointment.get('date')
+                        stored_time = appointment.get('time')
+                        stored_timezone = appointment.get('timezone')
+                        patient_info = appointment.get('patientInfo', {})
+                        stored_address = patient_info.get('address')
+                        
+                        success_details = []
+                        success_details.append(f"Appointment ID: {data['appointmentId']}")
+                        success_details.append(f"Date: {stored_date}, Time: {stored_time}")
+                        success_details.append(f"Timezone: {stored_timezone}")
+                        success_details.append(f"Address: {stored_address['city']}, {stored_address['state']}" if stored_address else "No address")
+                        
+                        self.log_test(test_name, True, 
+                                    "Complete GLP-1 weight loss booking successful",
+                                    "; ".join(success_details))
+                        return {'success': True, 'appointment_id': data['appointmentId'], 'email': appointment_data['email']}
+                    else:
+                        self.log_test(test_name, False, "Invalid response format")
+                        return {'success': False}
+                else:
+                    error_text = await response.text()
+                    self.log_test(test_name, False, f"HTTP {response.status}: {error_text}")
+                    return {'success': False}
+                    
+        except Exception as e:
+            self.log_test(test_name, False, f"Request error: {str(e)}")
+            return {'success': False}
+    
+    async def test_timezone_availability_logic(self):
+        """Test timezone-aware availability logic for different timezones"""
+        test_name = "Timezone Availability Logic"
+        
+        # Test California timezone (should show 2 PM - 10 PM slots)
+        california_data = {
+            "name": "California Test Patient",
+            "email": f"california.timezone.test.{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}@medicaltesting.com",
+            "phone": "+1-555-8888",
+            "serviceId": "glp1-sema-initial",
+            "serviceType": "oneoff",
+            "date": (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d"),
+            "time": "2:00 PM",  # Should be available in California window
+            "timezone": "America/Los_Angeles",
+            "address": {
+                "street": "456 California St",
+                "city": "San Francisco",
+                "state": "CA", 
+                "zip_code": "94102",
+                "country": "US"
+            },
+            "notes": json.dumps({"test": "california_timezone"})
+        }
+        
+        # Test other timezone (different window)
+        hawaii_data = {
+            "name": "Hawaii Test Patient", 
+            "email": f"hawaii.timezone.test.{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}@medicaltesting.com",
+            "phone": "+1-555-9999",
+            "serviceId": "glp1-sema-initial",
+            "serviceType": "oneoff",
+            "date": (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d"),
+            "time": "11:00 AM",  # Should be available in Hawaii window
+            "timezone": "Pacific/Honolulu",
+            "address": {
+                "street": "789 Aloha Ave",
+                "city": "Honolulu",
+                "state": "HI",
+                "zip_code": "96815", 
+                "country": "US"
+            },
+            "notes": json.dumps({"test": "hawaii_timezone"})
+        }
+        
+        try:
+            # Test California booking
+            async with self.session.post(
+                f"{BASE_URL}/appointments/",
+                json=california_data,
+                headers={"Content-Type": "application/json"}
+            ) as response:
+                
+                california_success = response.status == 200
+                
+            # Test Hawaii booking  
+            async with self.session.post(
+                f"{BASE_URL}/appointments/",
+                json=hawaii_data,
+                headers={"Content-Type": "application/json"}
+            ) as response:
+                
+                hawaii_success = response.status == 200
+            
+            if california_success and hawaii_success:
+                self.log_test(test_name, True, 
+                            "Timezone availability logic working correctly",
+                            "California 2 PM and Hawaii 11 AM slots both accepted")
+                return {'success': True}
+            else:
+                self.log_test(test_name, False, 
+                            f"Timezone logic issues - CA success: {california_success}, HI success: {hawaii_success}")
+                return {'success': False}
+                
+        except Exception as e:
+            self.log_test(test_name, False, f"Request error: {str(e)}")
+            return {'success': False}
+
 async def run_comprehensive_glp1_tests():
     """Run comprehensive GLP-1 platform backend API tests"""
     print("Starting MedRx GLP-1 Platform Backend API Comprehensive Tests")
@@ -720,7 +898,19 @@ async def run_comprehensive_glp1_tests():
             print("❌ API is not healthy, stopping tests")
             return
         
-        # 2. Test GLP-1 Appointments with Address Requirements
+        # 2. DrChrono Health Check (from review request)
+        print("\n🏥 Testing DrChrono Integration...")
+        await tester.test_drchrono_health()
+        
+        # 3. Test specific GLP-1 weight loss booking flow (from review request)
+        print("\n🎯 Testing Specific GLP-1 Weight Loss Booking Flow...")
+        booking_result = await tester.test_glp1_weight_loss_booking_flow()
+        
+        # 4. Test timezone availability logic (from review request)
+        print("\n🌍 Testing Timezone Availability Logic...")
+        await tester.test_timezone_availability_logic()
+        
+        # 5. Test GLP-1 Appointments with Address Requirements
         print("\n💉 Testing GLP-1 Appointments with Address Data...")
         sema_result = await tester.create_glp1_appointment(
             "glp1-sema-initial", "GLP-1 Semaglutide Initial", 150.00, requires_address=True)
@@ -731,22 +921,22 @@ async def run_comprehensive_glp1_tests():
         hormone_result = await tester.create_glp1_appointment(
             "hormone-health", "Hormone Health & Rx", 150.00, requires_address=True)
         
-        # 3. Test appointment retrieval
+        # 6. Test appointment retrieval
         print("\n📋 Testing Appointment Retrieval...")
         if sema_result['success']:
             await tester.get_appointments_by_email(sema_result['email'])
         
-        # 4. Test Payment API
+        # 7. Test Payment API
         print("\n💳 Testing Payment Checkout Sessions...")
         sema_payment = await tester.test_payment_checkout_session("glp1-sema-initial", 150.00)
         tirz_payment = await tester.test_payment_checkout_session("glp1-tirz-initial", 279.00)
         hormone_payment = await tester.test_payment_checkout_session("hormone-health", 150.00)
         
-        # 5. Test payment status checks
+        # 8. Test payment status checks
         if sema_payment['success']:
             await tester.test_payment_status_check(sema_payment['session_id'])
         
-        # 6. Test GLP-1 Subscriptions
+        # 9. Test GLP-1 Subscriptions
         print("\n🔄 Testing GLP-1 Monthly Management Subscriptions...")
         sema_sub = await tester.create_glp1_subscription(
             "glp1-sema-monthly", "GLP-1 Semaglutide Monthly Management", 249.00)
@@ -757,22 +947,22 @@ async def run_comprehensive_glp1_tests():
         coaching_sub = await tester.create_glp1_subscription(
             "metabolic-coaching", "Metabolic Coaching Add-On", 99.00)
         
-        # 7. Test subscription retrieval
+        # 10. Test subscription retrieval
         if sema_sub['success']:
             await tester.get_subscription_by_email(sema_sub['email'])
         
-        # 8. Test Standard Subscriptions (Basic & Standard)
+        # 11. Test Standard Subscriptions (Basic & Standard)
         print("\n📊 Testing Standard Subscription Plans...")
         basic_sub = await tester.create_glp1_subscription("sub-basic", "Basic Access", 35.00)
         standard_sub = await tester.create_glp1_subscription("sub-standard", "Standard Care", 150.00)
         
-        # 9. Test validation and edge cases
+        # 12. Test validation and edge cases
         print("\n🔍 Testing Validation & Edge Cases...")
         await tester.test_duplicate_booking_prevention()
         await tester.test_validation_errors()
         await tester.test_invalid_service_ids()
         
-        # 10. Print summary
+        # 13. Print summary
         passed, failed = tester.print_summary()
         
         return passed, failed
