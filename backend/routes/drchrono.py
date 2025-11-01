@@ -1,10 +1,13 @@
 from fastapi import APIRouter, HTTPException, Query, Request
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
+from datetime import datetime, timedelta
 from services.drchrono_service import DrChronoService
 from database import db
 import logging
+import requests
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +35,11 @@ class AddClinicalNoteRequest(BaseModel):
 
 class RefreshTokenRequest(BaseModel):
     refresh_token: str
+
+class CheckAvailabilityRequest(BaseModel):
+    datetime: str
+    timezone: str
+    duration: int = 30
 
 @router.get("/auth/authorize")
 async def authorize_drchrono(state: Optional[str] = None):
@@ -77,6 +85,79 @@ async def drchrono_callback(
     except Exception as e:
         logger.error(f"DrChrono callback error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/check-availability")
+async def check_availability(request: CheckAvailabilityRequest):
+    """
+    Check if provider is available at requested time
+    Uses DrChrono calendar ICS feed
+    """
+    try:
+        calendar_link = os.getenv("DRCHRONO_CALENDAR_LINK")
+        
+        if not calendar_link or "placeholder" in calendar_link:
+            # Graceful degradation - assume available if no calendar configured
+            return {
+                "available": True,
+                "conflicts": [],
+                "note": "Calendar check skipped - not configured"
+            }
+        
+        # Fetch ICS calendar
+        response = requests.get(calendar_link, timeout=5)
+        
+        if response.status_code != 200:
+            logger.warning(f"Failed to fetch DrChrono calendar: {response.status_code}")
+            return {
+                "available": True,
+                "conflicts": [],
+                "note": "Calendar check failed - assuming available"
+            }
+        
+        # Parse ICS for conflicts
+        # Simple check: look for DTSTART entries that overlap
+        ics_content = response.text
+        requested_time = datetime.fromisoformat(request.datetime.replace('Z', '+00:00'))
+        appointment_end = requested_time + timedelta(minutes=request.duration)
+        
+        conflicts = []
+        
+        # Basic ICS parsing (simplified)
+        lines = ics_content.split('\n')
+        for i, line in enumerate(lines):
+            if line.startswith('DTSTART'):
+                # Extract datetime from ICS format
+                dt_str = line.split(':')[1].strip()
+                try:
+                    # Handle YYYYMMDDTHHMMSS format
+                    if 'T' in dt_str:
+                        event_start = datetime.strptime(dt_str[:15], '%Y%m%dT%H%M%S')
+                        # Check if there's overlap
+                        event_end = event_start + timedelta(minutes=30)  # Assume 30 min
+                        
+                        if (event_start < appointment_end and event_end > requested_time):
+                            conflicts.append({
+                                'start': event_start.isoformat(),
+                                'end': event_end.isoformat()
+                            })
+                except Exception as parse_error:
+                    logger.debug(f"Could not parse ICS date: {dt_str}")
+                    continue
+        
+        return {
+            "available": len(conflicts) == 0,
+            "conflicts": conflicts
+        }
+        
+    except Exception as e:
+        logger.error(f"Availability check error: {e}")
+        # Graceful degradation
+        return {
+            "available": True,
+            "conflicts": [],
+            "error": str(e)
+        }
 
 
 @router.post("/auth/refresh")
