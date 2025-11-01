@@ -1,0 +1,51 @@
+<analysis>
+The previous AI engineer developed the MedRx telemedicine platform from scratch to a production-ready state. The work began with a React frontend, integrating Shadcn UI and a custom design playbook (warm-ai). Initial features included a hero, about, services, and booking sections with mock data. The AI engineer then implemented timezone-aware booking, followed by a backend using FastAPI and MongoDB for appointments and subscriptions. Extensive debugging was performed to resolve frontend-backend integration issues. A significant update involved incorporating a MedVi-style GLP-1 weight loss program, adding a medical screening questionnaire, and integrating Stripe for payments. The development phase concluded with comprehensive testing, fixing a Stripe metadata issue, and preparing full deployment documentation. The current phase involves a major architectural shift to an AI-powered voice intake system and a more streamlined patient funnel, with initial setup for integrations underway.
+</analysis>
+
+<product_requirements>
+The MedRx platform started as a professional telemedicine website for one-off acute care (5) and functional medicine (75) visits. Key requirements included a conversion-optimized design, emotional impact, and clear messaging. The booking system was enhanced to support timezone-aware availability (Guam 8 AM-9 PM, local ending 10 PM). The product evolved to include tiered subscription plans (Basic, Standard, Functional Medicine/Integrative, VIP/Concierge), while retaining one-off visit options. The core focus shifted to a MedVi-inspired GLP-1 Weight Loss Program, prioritizing these services (50 Semaglutide, 79 Tirzepatide initial evaluations) with a medical screening questionnaire. Eligible patients proceed to payment for prescription, ineligible patients are directed to Functional Medicine. The latest request is for a streamlined intake funnel: Landing → quick quiz (GLP-1 eligibility) → AI voice intake (dictation) → timezone-aware slot picker → checkout/consent → confirmation + video room. This requires Deepgram for ASR, Emergent LLM Sonnet-4 for medical data extraction, DrChrono calendar link integration, and Twilio/Zoom for video.
+</product_requirements>
+
+<key_technical_concepts>
+-   **Full-stack:** React, FastAPI, MongoDB.
+-   **Frontend:** Shadcn UI, Tailwind CSS, React Router.
+-   **Payment:** Stripe.
+-   **AI:** Deepgram (ASR), Emergent LLM Sonnet-4 (Medical data extraction).
+-   **Communication:** Twilio (Video).
+-   **Scheduling:** DrChrono (external calendar link).
+-   **Deployment:** Docker, Supervisor, Kubernetes ingress.
+</key_technical_concepts>
+
+<code_architecture>
+
+
+
+-   ****: Central routing and layout for the React application, integrating various components. It was updated to include new routes like .
+-   ****: Displays the hero section content, updated to feature GLP-1 program details and new branding imagery.
+-   ****: Renders the service offerings, recently restructured to prioritize GLP-1 programs, displaying both one-off visits and subscription tiers.
+-   ****: Manages the booking process, now including timezone-aware slot selection, an integrated medical questionnaire, address collection for eRx, and initiating the Stripe payment flow.
+-   ****: A newly added component for GLP-1 eligibility screening, with logic to direct eligible users to payment and ineligible users to alternative services.
+-   ****: A new component to confirm successful bookings and payments, incorporating payment polling.
+-   ****: The main FastAPI application, configured with middleware and routers for appointments, subscriptions, and payments.
+-   ****: Defines MongoDB document schemas (Pydantic models) for , , , and now  for patient eRx details.
+-   ****: Handles Stripe checkout sessions and payment intents. This file was recently re-created due to persistent syntax errors.
+-   ****: Manages appointment CRUD operations, now updated to include payment verification and check for slot availability.
+-   ****: Multiple CSS files (, , , , , , etc.) provide component-specific styling following the  design playbook.
+-   ** & **: Example environment variable files generated to guide users on required credentials for each service.
+-   ****: New documentation for securely managing API keys.
+</code_architecture>
+
+<pending_tasks>
+-   Complete implementation of the GLP-1 eligibility quiz component.
+-   Develop the AI voice intake component and integrate Deepgram ASR and Emergent LLM for medical data extraction to MongoDB.
+-   Integrate DrChrono calendar for appointment availability.
+-   Implement Twilio for video consultation rooms.
+</pending_tasks>
+
+<current_work>
+The AI engineer is currently in the initial stages of implementing a major architectural overhaul to introduce a MEDVi-style patient funnel. This includes a streamlined intake form with AI-powered voice dictation for medical history. As part of this, placeholder  files have been created for both the frontend and backend, along with a  document for secure API key management. The  has been retrieved for use with Emergent LLM Sonnet-4. The most immediate work involves setting up mock data for this new flow by creating  and beginning the development of the GLP-1 eligibility quiz component and the AI voice intake component.
+</current_work>
+
+<optional_next_step>
+Create the GLP-1 eligibility quiz and AI voice intake components as per the latest requirements.
+</optional_next_step>
