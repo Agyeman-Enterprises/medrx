@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { format } from 'date-fns';
 import { Calendar } from '../components/ui/calendar';
-import { mockTimezones, getAvailableTimeSlots, mockServices, mockOneOffServices } from '../mock';
+import { MEDRX_SERVICES } from '../mock';
 import MedicalQuestionnaire from './MedicalQuestionnaire';
 import '../styles/Booking.css';
 import '../styles/BookingExtensions.css';
@@ -11,6 +11,25 @@ import axios from 'axios';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
+
+// Timezone configuration
+const mockTimezones = [
+  { value: 'Pacific/Guam', label: 'Guam (ChST)', offset: '+10:00' },
+  { value: 'Pacific/Honolulu', label: 'Hawaii (HST)', offset: '-10:00' },
+  { value: 'America/Los_Angeles', label: 'California (PST/PDT)', offset: '-8:00' }
+];
+
+// Generate time slots (8 AM - 10 PM local)
+const getAvailableTimeSlots = () => {
+  const slots = [];
+  for (let hour = 8; hour <= 21; hour++) {
+    for (let minute = 0; minute < 60; minute += 30) {
+      const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+      slots.push(time);
+    }
+  }
+  return slots;
+};
 
 const Booking = () => {
   const [bookingStep, setBookingStep] = useState('form'); // 'form', 'questionnaire', 'payment', 'processing'
