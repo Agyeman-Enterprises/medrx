@@ -22,7 +22,7 @@ SUPPORTED_REGIONS = {
     }
 }
 
-# Service Lines
+# Service Lines (MedRx Focus: Weight Loss & Hormones)
 SERVICE_LINES = {
     "weight-loss": {
         "name": "Weight Loss & GLP-1 Therapy",
@@ -39,23 +39,17 @@ SERVICE_LINES = {
         "color": "accent-pink",
         "icon": "heart-pulse",
         "services": ["womens-hormone", "mens-testosterone", "thyroid"]
-    },
-    "mens-health": {
-        "name": "Men's Health",
-        "description": "From vitality and performance to hair-loss and metabolic health, we support men at every stage.",
-        "duration_minutes": 30,
-        "color": "accent-blue",
-        "icon": "shield-check",
-        "services": ["vitality", "ed", "metabolic"]
-    },
-    "hair-loss": {
-        "name": "Hair Loss Solutions",
-        "description": "PRP, potent growth protocols & follow-through care for natural-looking results.",
-        "duration_minutes": 30,
-        "color": "accent-green",
-        "icon": "sparkles",
-        "services": ["prp-hair", "topical-protocol", "oral-therapy"]
     }
+}
+
+# External Service Redirects (handled by bookadoc2u.com)
+EXTERNAL_SERVICES = {
+    "acute-care": "https://bookadoc2u.com/acute-care",
+    "functional-medicine": "https://bookadoc2u.com/functional-medicine",
+    "basic-access": "https://bookadoc2u.com/subscriptions/basic",
+    "standard-care": "https://bookadoc2u.com/subscriptions/standard",
+    "mens-health": "https://bookadoc2u.com/mens-health",
+    "hair-loss": "https://bookadoc2u.com/hair-loss"
 }
 
 # GLP-1 Medications
