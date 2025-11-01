@@ -53,8 +53,8 @@ const Booking = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const availableTimeSlots = useMemo(() => {
-    return getAvailableTimeSlots(selectedTimezone);
-  }, [selectedTimezone]);
+    return getAvailableTimeSlots();
+  }, []);
 
   useEffect(() => {
     if (selectedTime && !availableTimeSlots.includes(selectedTime)) {
@@ -62,7 +62,7 @@ const Booking = () => {
     }
   }, [availableTimeSlots, selectedTime]);
 
-  const selectedServiceData = mockServices.find(s => s.id === selectedService);
+  const selectedServiceData = MEDRX_SERVICES.find(s => s.id === selectedService);
   const requiresAddress = selectedServiceData?.requiresAddress || false;
 
   const handleFormSubmit = (e) => {
