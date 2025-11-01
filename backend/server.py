@@ -7,7 +7,7 @@ import logging
 from pathlib import Path
 
 # Import route modules
-from routes import appointments, subscriptions, payments, voice_intake
+from routes import appointments, subscriptions, payments, voice_intake, drchrono
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
