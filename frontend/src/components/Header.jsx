@@ -24,14 +24,10 @@ const Header = () => {
       <div className="container header-content">
         <div className="logo-container">
           <img 
-            src="/logo-medrx-new.png" 
+            src="/logo.png" 
             alt="MedRx" 
             className="logo"
-            style={{ height: '40px', width: 'auto' }}
-            onError={(e) => {
-              console.error('Logo failed to load');
-              e.target.style.display = 'none';
-            }}
+            style={{ height: '50px', width: 'auto' }}
           />
               e.target.onerror = null;
               e.target.src = 'https://customer-assets.emergentagent.com/job_47ed8f55-718c-4942-89cb-56d7d4044384/artifacts/7ig9cj8r_logo-medrx-wordmark.svg';
