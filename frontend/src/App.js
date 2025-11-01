@@ -3,9 +3,9 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import About from './components/About';
 import Services from './components/Services';
 import HowItWorks from './components/HowItWorks';
+import Testimonials from './components/Testimonials';
 import Booking from './components/Booking';
 import BookingSuccess from './components/BookingSuccess';
 import Footer from './components/Footer';
@@ -21,9 +21,9 @@ function App() {
             <>
               <Header />
               <Hero />
-              <About />
               <Services />
               <HowItWorks />
+              <Testimonials />
               <Booking />
               <Footer />
             </>
