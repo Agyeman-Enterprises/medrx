@@ -369,6 +369,18 @@ backend:
           agent: "testing"
           comment: "❌ CRITICAL ISSUE: GLP-1 questionnaire data (652 characters) exceeds Stripe metadata limit (500 characters). Error: 'Metadata values can have up to 500 characters, but you passed in a value that is 652 characters.' This prevents GLP-1 Semaglutide and Tirzepatide bookings from completing payment. Hormone Health works (shorter questionnaire). Backend logs show 500 error from Stripe API. Need to either: 1) Truncate questionnaire data in metadata, 2) Store questionnaire separately and reference by ID, or 3) Compress questionnaire data."
 
+  - task: "Review Request: MedRx booking flow end-to-end testing"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/appointments.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ REVIEW REQUEST TESTING COMPLETED (100% SUCCESS): All requested scenarios tested successfully. Health endpoints (GET /api/health, GET /api/drchrono/health) working correctly. GLP-1 weight loss booking flow complete end-to-end success for 'glp1-weight-loss' service ($175) with tomorrow's date, 2 PM California time, proper patient info and address data. Timezone availability logic verified working correctly across California (2 PM), Hawaii (11 AM), and New York (3 PM) timezones. Duplicate booking prevention working as expected. All backend APIs fully functional for requested booking scenarios."
+
 frontend:
   - task: "GLP-1 Semaglutide Booking with Medical Questionnaire ($150)"
     implemented: true
