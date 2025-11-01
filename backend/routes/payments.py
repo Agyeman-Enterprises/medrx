@@ -147,6 +147,7 @@ async def get_checkout_status(session_id: str, request: Request):
             )
             
             if checkout_status.payment_status == 'paid' and payment.get('appointmentId'):
+                # Update appointment status
                 await db.appointments.update_one(
                     {'_id': payment['appointmentId']},
                     {'$set': {
@@ -155,6 +156,21 @@ async def get_checkout_status(session_id: str, request: Request):
                         'updatedAt': datetime.utcnow()
                     }}
                 )
+                
+                # Send SMS notification
+                appointment = await db.appointments.find_one({'_id': payment['appointmentId']})
+                if appointment:
+                    try:
+                        await sms_service.send_booking_alert({
+                            'patientInfo': appointment.get('patientInfo', {}),
+                            'serviceName': appointment.get('serviceName', 'Unknown Service'),
+                            'date': appointment.get('appointmentDate', 'N/A'),
+                            'time': appointment.get('appointmentTime', 'N/A'),
+                            'timezone': appointment.get('timezone', 'N/A')
+                        })
+                    except Exception as sms_error:
+                        # Log but don't fail the payment
+                        print(f"SMS notification failed: {sms_error}")
         
         return {
             'success': True,
