@@ -19,17 +19,11 @@ db = client[os.environ['DB_NAME']]
 STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY', 'sk_test_emergent')
 sms_service = SMSService()
 
+# Service pricing - Updated for current services
 SERVICE_PACKAGES = {
-    'glp1-sema-initial': 150.00,
-    'glp1-tirz-initial': 279.00,
-    'hormone-health': 150.00,
-    'acute-care': 85.00,
-    'functional-medicine': 175.00,
-    'glp1-sema-monthly': 249.00,
-    'glp1-tirz-monthly': 329.00,
-    'metabolic-coaching': 99.00,
-    'sub-basic': 35.00,
-    'sub-standard': 150.00
+    'glp1-weight-loss': 175.00,
+    'hormone-health': 175.00,
+    'hair-loss': 175.00
 }
 
 @router.post("/checkout/session")
