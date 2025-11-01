@@ -44,6 +44,22 @@
   margin-bottom: 0.75rem;
 }
 
+.footer-link-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  transition: color 0.2s ease;
+}
+
+.footer-link-btn:hover {
+  color: white;
+}
+
 .footer-links a {
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
