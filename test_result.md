@@ -582,6 +582,7 @@ metadata:
 
 test_plan:
   current_focus:
+    - "Review Request: MedRx booking flow end-to-end testing"
     - "Stripe payment metadata size limit issue for GLP-1 questionnaires"
   stuck_tasks:
     - "Stripe payment metadata size limit issue for GLP-1 questionnaires"
