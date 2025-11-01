@@ -6,9 +6,9 @@ import { format, parse } from 'date-fns';
 
 // Timezone mappings
 export const TIMEZONES = {
-  GUAM: 'Pacific/Guam',       // ChST UTC+10
-  HAWAII: 'Pacific/Honolulu',  // HST UTC-10 (20 hours behind Guam)
-  CALIFORNIA: 'America/Los_Angeles'  // PST/PDT UTC-8/-7 (18/17 hours behind Guam)
+  GUAM: 'Pacific/Guam',
+  HAWAII: 'Pacific/Honolulu',
+  CALIFORNIA: 'America/Los_Angeles'
 };
 
 // Provider availability in Guam time
