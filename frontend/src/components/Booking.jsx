@@ -347,7 +347,7 @@ const Booking = () => {
                   className="form-input"
                   required
                 >
-                  {mockTimezones.map((tz) => (
+                  {timezoneOptions.map((tz) => (
                     <option key={tz.value} value={tz.value}>
                       {tz.label}
                     </option>
