@@ -53,7 +53,7 @@ const Booking = () => {
   }, [availableTimeSlots, selectedTime]);
 
   const selectedServiceData = MEDRX_SERVICES.find(s => s.id === selectedService);
-  const requiresAddress = selectedServiceData?.requiresAddress || false;
+  const requiresAddress = selectedService && selectedServiceData?.requiresAddress || false;
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
