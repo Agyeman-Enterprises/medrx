@@ -5,6 +5,13 @@ import { Mail, Phone, MapPin } from 'lucide-react';
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <footer className="footer">
       <div className="container">
@@ -24,11 +31,10 @@ const Footer = () => {
           <div className="footer-column">
             <h4 className="heading-2 footer-title">Quick Links</h4>
             <ul className="footer-links">
-              <li><a href="#about">About</a></li>
-              <li><a href="#services">Services</a></li>
-              <li><a href="#how-it-works">How It Works</a></li>
-              <li><a href="#pricing">Pricing</a></li>
-              <li><a href="#booking">Book Visit</a></li>
+              <li><button onClick={() => scrollToSection('services')} className="footer-link-btn">Services</button></li>
+              <li><button onClick={() => scrollToSection('how-it-works')} className="footer-link-btn">How It Works</button></li>
+              <li><button onClick={() => scrollToSection('testimonials')} className="footer-link-btn">Testimonials</button></li>
+              <li><button onClick={() => scrollToSection('booking')} className="footer-link-btn">Book Visit</button></li>
             </ul>
           </div>
 
@@ -41,7 +47,7 @@ const Footer = () => {
               </li>
               <li>
                 <Phone size={16} />
-                <a href="tel:+16711234567">+1 (671) 123-4567</a>
+                <a href="tel:+16716892993">+1 (671) 689-2993</a>
               </li>
               <li>
                 <MapPin size={16} />
@@ -51,21 +57,24 @@ const Footer = () => {
           </div>
 
           <div className="footer-column">
-            <h4 className="heading-2 footer-title">Service Hours</h4>
-            <p className="body-medium">
-              Timezone-aware scheduling for:
+            <h4 className="heading-2 footer-title">Availability</h4>
+            <p className="body-medium" style={{ marginBottom: '0.5rem' }}>
+              <strong>Tuesday - Sunday</strong>
             </p>
-            <ul className="footer-zones">
-              <li>Hawaii (HST)</li>
-              <li>California (PST/PDT)</li>
-              <li>Guam (ChST)</li>
+            <ul className="footer-hours">
+              <li><strong>California:</strong> 2 PM - 10 PM</li>
+              <li><strong>Hawaii:</strong> 12 PM - 10 PM</li>
+              <li><strong>Guam:</strong> 8 AM - 10 PM ChST</li>
             </ul>
+            <p className="caption" style={{ marginTop: '0.5rem', opacity: 0.7 }}>
+              Closed Mondays
+            </p>
           </div>
         </div>
 
         <div className="footer-bottom">
           <p className="caption">
-            © {currentYear} MedRx. All rights reserved. | Privacy Policy | Terms of Service
+            © {currentYear} MedRx. All rights reserved.
           </p>
         </div>
       </div>
