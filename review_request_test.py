@@ -86,10 +86,11 @@ class ReviewRequestTester:
         test_name = "GLP-1 Weight Loss Booking Flow"
         
         # Calculate a future date to avoid conflicts
-        future_date = datetime.now() + timedelta(days=7)  # Use next week
+        future_date = datetime.now() + timedelta(days=15)  # Use 2+ weeks out
         appointment_date = future_date.strftime("%Y-%m-%d")
-        # Use current time + minutes to make it unique
-        unique_minutes = datetime.now().minute
+        # Use current time + seconds to make it unique
+        unique_seconds = datetime.now().second
+        unique_minutes = (datetime.now().minute + unique_seconds) % 60
         appointment_time = f"2:{unique_minutes:02d} PM"  # 14:XX (2:XX PM California time)
         
         # Generate unique test data
