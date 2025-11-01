@@ -35,6 +35,7 @@ app.include_router(appointments.router)
 app.include_router(subscriptions.router)
 app.include_router(payments.router)
 app.include_router(voice_intake.router)
+app.include_router(drchrono.router)
 
 # Include the base api router
 app.include_router(api_router)
