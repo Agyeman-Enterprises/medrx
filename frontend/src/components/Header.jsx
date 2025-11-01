@@ -29,10 +29,6 @@ const Header = () => {
             className="logo"
             style={{ height: '50px', width: 'auto' }}
           />
-              e.target.onerror = null;
-              e.target.src = 'https://customer-assets.emergentagent.com/job_47ed8f55-718c-4942-89cb-56d7d4044384/artifacts/7ig9cj8r_logo-medrx-wordmark.svg';
-            }}
-          />
         </div>
         <nav className="nav-links">
           <button onClick={() => scrollToSection('about')} className="nav-link">About</button>
