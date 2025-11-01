@@ -369,17 +369,17 @@ backend:
           agent: "testing"
           comment: "❌ CRITICAL ISSUE: GLP-1 questionnaire data (652 characters) exceeds Stripe metadata limit (500 characters). Error: 'Metadata values can have up to 500 characters, but you passed in a value that is 652 characters.' This prevents GLP-1 Semaglutide and Tirzepatide bookings from completing payment. Hormone Health works (shorter questionnaire). Backend logs show 500 error from Stripe API. Need to either: 1) Truncate questionnaire data in metadata, 2) Store questionnaire separately and reference by ID, or 3) Compress questionnaire data."
 
-  - task: "Review Request: MedRx booking flow end-to-end testing"
+  - task: "Review Request: Comprehensive System Test - Full Deployment Readiness Check"
     implemented: true
     working: true
-    file: "/app/backend/routes/appointments.py"
+    file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
     needs_retesting: false
     status_history:
         - working: true
           agent: "testing"
-          comment: "✅ REVIEW REQUEST TESTING COMPLETED (100% SUCCESS): All requested scenarios tested successfully. Health endpoints (GET /api/health, GET /api/drchrono/health) working correctly. GLP-1 weight loss booking flow complete end-to-end success for 'glp1-weight-loss' service ($175) with tomorrow's date, 2 PM California time, proper patient info and address data. Timezone availability logic verified working correctly across California (2 PM), Hawaii (11 AM), and New York (3 PM) timezones. Duplicate booking prevention working as expected. All backend APIs fully functional for requested booking scenarios."
+          comment: "✅ COMPREHENSIVE SYSTEM TEST COMPLETED (100% SUCCESS - 10/10 TESTS PASSED): All critical deployment readiness checks successful. 🏥 HEALTH CHECKS: GET /api/health (backend healthy), GET /api/voice-intake/health (Deepgram & LLM configured), GET /api/drchrono/health (integration configured) all working. 💳 PAYMENT FLOW: POST /api/payments/checkout/session successfully creates valid Stripe checkout URLs for all 3 services (glp1-weight-loss, hormone-health, hair-loss) at correct $175 pricing. Payment status checks working correctly. 🔍 SERVICE DATA VALIDATION: All 3 services properly configured with $175 pricing as specified. 🗄️ DATABASE CONNECTION: MongoDB read/write operations successful - appointment creation and retrieval working. ⚠️ ERROR HANDLING: Invalid service IDs correctly rejected with 400 errors, missing required fields properly validated with 422 errors. Backend logs show clean 200 OK responses for all valid requests. System is fully deployment ready."
 
 frontend:
   - task: "GLP-1 Semaglutide Booking with Medical Questionnaire ($150)"
