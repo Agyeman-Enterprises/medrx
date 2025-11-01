@@ -1,5 +1,5 @@
 import React from 'react';
-import { mockHowItWorks } from '../mock';
+import { HOW_IT_WORKS } from '../mock';
 import '../styles/HowItWorks.css';
 import { Calendar, FileText, Video, CheckCircle, CreditCard } from 'lucide-react';
 
@@ -18,12 +18,12 @@ const HowItWorks = () => {
         <div className="section-header">
           <h2 className="heading-1">How It Works</h2>
           <p className="body-large">
-            Four simple steps from booking to personalized care
+            Simple steps from booking to prescription delivery
           </p>
         </div>
 
         <div className="steps-grid">
-          {mockHowItWorks.map((step, index) => {
+          {HOW_IT_WORKS.map((step, index) => {
             const Icon = iconMap[step.icon];
             return (
               <div key={index} className="step-card hover-lift">
