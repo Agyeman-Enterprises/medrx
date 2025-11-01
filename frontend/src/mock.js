@@ -10,7 +10,7 @@ export const MEDRX_SERVICES = [
     description: 'Semaglutide and Tirzepatide programs with personalized dosing, smart monitoring, and results-driven follow-up.',
     price: 175,
     billingPeriod: '/consultation',
-    duration: '30 min',
+    duration: '15-30 min',
     type: 'consultation',
     includes: [
       'Initial medical evaluation',
@@ -42,7 +42,7 @@ export const MEDRX_SERVICES = [
     description: "Women's health, men's testosterone, thyroid optimization — root-cause treatment, not just symptom suppression.",
     price: 175,
     billingPeriod: '/consultation',
-    duration: '30 min',
+    duration: '15-30 min',
     type: 'consultation',
     includes: [
       'Comprehensive hormone assessment',
@@ -74,7 +74,7 @@ export const MEDRX_SERVICES = [
     description: 'Medical-grade topical and oral therapies for natural-looking hair restoration and growth.',
     price: 175,
     billingPeriod: '/consultation',
-    duration: '30 min',
+    duration: '15-30 min',
     type: 'consultation',
     includes: [
       'Scalp and hair assessment',
