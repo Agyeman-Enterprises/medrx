@@ -34,6 +34,7 @@ async def health_check():
 app.include_router(appointments.router)
 app.include_router(subscriptions.router)
 app.include_router(payments.router)
+app.include_router(voice_intake.router)
 
 # Include the base api router
 app.include_router(api_router)
