@@ -39,6 +39,12 @@ const Booking = () => {
     return getAvailableSlotsForTimezone(selectedDate, selectedTimezone);
   }, [selectedDate, selectedTimezone]);
 
+  const timezoneOptions = [
+    { value: TIMEZONES.CALIFORNIA, label: getTimezoneLabel(TIMEZONES.CALIFORNIA) },
+    { value: TIMEZONES.HAWAII, label: getTimezoneLabel(TIMEZONES.HAWAII) },
+    { value: TIMEZONES.GUAM, label: getTimezoneLabel(TIMEZONES.GUAM) }
+  ];
+
   useEffect(() => {
     if (selectedTime && !availableTimeSlots.includes(selectedTime)) {
       setSelectedTime('');
