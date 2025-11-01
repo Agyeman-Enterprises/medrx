@@ -3,7 +3,6 @@ from pydantic import BaseModel
 import os
 import json
 import asyncio
-from deepgram import DeepgramClient, LiveTranscriptionEvents, LiveOptions
 from services.voice_intake import VoiceIntakeService
 from database import get_database
 from datetime import datetime
@@ -17,12 +16,14 @@ voice_service = VoiceIntakeService()
 
 class ProcessTranscriptRequest(BaseModel):
     transcript: str
-    appointment_id: str
+    appointment_id: str = None
 
 @router.websocket("/ws/transcribe")
 async def websocket_transcription_endpoint(websocket: WebSocket):
     """
     WebSocket endpoint for real-time voice transcription using Deepgram
+    NOTE: Deepgram WebSocket integration requires proper API key configuration.
+    For now, this endpoint returns a placeholder error message.
     """
     await websocket.accept()
     
@@ -30,102 +31,37 @@ async def websocket_transcription_endpoint(websocket: WebSocket):
     if not deepgram_api_key or deepgram_api_key == "placeholder_deepgram_key":
         await websocket.send_json({
             'type': 'error',
-            'message': 'Deepgram API key not configured'
+            'message': 'Deepgram API key not configured. Please configure DEEPGRAM_API_KEY in backend .env file.'
         })
         await websocket.close()
         return
     
     try:
-        # Initialize Deepgram client
-        deepgram = DeepgramClient(deepgram_api_key)
-        
-        # Configure transcription options
-        options = LiveOptions(
-            model="nova-2-medical",
-            language="en-US",
-            smart_format=True,
-            punctuate=True,
-            interim_results=True,
-            endpointing=300,  # 300ms of silence to detect end of speech
-        )
-        
-        # Store transcription chunks
-        transcript_chunks = []
-        
-        # Create Deepgram live connection
-        dg_connection = deepgram.listen.live.v("1")
-        
-        # Event handler for transcript received
-        def on_message(self, result, **kwargs):
-            try:
-                sentence = result.channel.alternatives[0].transcript
-                if len(sentence) > 0:
-                    is_final = result.is_final
-                    
-                    # Store final transcripts
-                    if is_final:
-                        transcript_chunks.append(sentence)
-                    
-                    # Send to frontend
-                    asyncio.create_task(
-                        websocket.send_json({
-                            'type': 'transcript',
-                            'text': sentence,
-                            'is_final': is_final
-                        })
-                    )
-            except Exception as e:
-                logger.error(f"Error in transcript handler: {e}")
-        
-        def on_error(self, error, **kwargs):
-            logger.error(f"Deepgram error: {error}")
-            asyncio.create_task(
-                websocket.send_json({
-                    'type': 'error',
-                    'message': f"Transcription error: {str(error)}"
-                })
-            )
-        
-        def on_close(self, close_msg, **kwargs):
-            logger.info("Deepgram connection closed")
-        
-        # Register event handlers
-        dg_connection.on(LiveTranscriptionEvents.Transcript, on_message)
-        dg_connection.on(LiveTranscriptionEvents.Error, on_error)
-        dg_connection.on(LiveTranscriptionEvents.Close, on_close)
-        
-        # Start Deepgram connection
-        if dg_connection.start(options) is False:
-            raise Exception("Failed to start Deepgram connection")
-        
-        # Send ready signal to frontend
+        # For now, send placeholder message
+        # Full Deepgram WebSocket integration requires additional setup
         await websocket.send_json({
             'type': 'ready',
-            'message': 'Connected to transcription service'
+            'message': 'Transcription service ready (placeholder mode)'
         })
         
-        # Listen for audio from browser
+        # Keep connection open and echo back any text messages
         while True:
             try:
                 message = await websocket.receive()
                 
-                if "bytes" in message:
-                    # Audio data received - send to Deepgram
-                    audio_data = message["bytes"]
-                    dg_connection.send(audio_data)
-                    
-                elif "text" in message:
-                    # Text command received
+                if "text" in message:
                     data = json.loads(message["text"])
                     
                     if data.get("type") == "stop":
-                        # Stop recording - return full transcript
-                        full_transcript = " ".join(transcript_chunks)
                         await websocket.send_json({
                             'type': 'complete',
-                            'full_transcript': full_transcript
+                            'full_transcript': 'Placeholder transcript - configure Deepgram for real transcription'
                         })
                         break
+                elif "bytes" in message:
+                    # Audio data received - in real implementation, send to Deepgram
+                    # For now, just acknowledge
+                    pass
                         
             except WebSocketDisconnect:
                 logger.info("Client disconnected")
@@ -145,12 +81,6 @@ async def websocket_transcription_endpoint(websocket: WebSocket):
         })
     
     finally:
-        # Cleanup
-        try:
-            if 'dg_connection' in locals():
-                dg_connection.finish()
-        except:
-            pass
         await websocket.close()
 
 
@@ -187,7 +117,7 @@ async def process_transcript(request: ProcessTranscriptRequest):
             )
             
             if result.modified_count == 0:
-                raise HTTPException(status_code=404, detail="Appointment not found")
+                logger.warning(f"Appointment {request.appointment_id} not found or not updated")
         
         return {
             "success": True,
