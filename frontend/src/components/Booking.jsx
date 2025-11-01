@@ -46,7 +46,8 @@ const Booking = () => {
   ];
 
   useEffect(() => {
-    if (selectedTime && !availableTimeSlots.includes(selectedTime)) {
+    // Clear selected time if it's not in the new available slots
+    if (selectedTime && !availableTimeSlots.find(slot => slot.time === selectedTime)) {
       setSelectedTime('');
     }
   }, [availableTimeSlots, selectedTime]);
