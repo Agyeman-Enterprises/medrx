@@ -8,6 +8,7 @@ import json
 from emergentintegrations.payments.stripe.checkout import StripeCheckout, CheckoutSessionResponse, CheckoutStatusResponse, CheckoutSessionRequest
 from models import PaymentTransaction
 from services_data import ONE_OFF_SERVICES, SUBSCRIPTION_PLANS
+from services.sms_service import SMSService
 
 router = APIRouter(prefix="/api/payments", tags=["payments"])
 
@@ -16,6 +17,7 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY', 'sk_test_emergent')
+sms_service = SMSService()
 
 SERVICE_PACKAGES = {
     'glp1-sema-initial': 150.00,
