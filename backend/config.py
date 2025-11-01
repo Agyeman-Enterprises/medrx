@@ -224,7 +224,7 @@ FOLLOWUP_SCHEDULES = {
 }
 
 # SMS Alert Number
-SMS_ALERT_NUMBER = "+16716892993"
+SMS_ALERT_NUMBER = os.getenv("SMS_ALERT_NUMBER", "+16716892993")
 
 # DrChrono Calendar Link
-DRCHRONO_CALENDAR_LINK = "https://calendar.drchrono.com/medrx"
+DRCHRONO_CALENDAR_LINK = os.getenv("DRCHRONO_CALENDAR_LINK", "https://calendar.drchrono.com/medrx")
