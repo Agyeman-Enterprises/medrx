@@ -136,23 +136,21 @@ export const getTimezoneLabel = (timezone) => {
  * Check if a specific datetime is available
  */
 export const isTimeSlotAvailable = (datetime, timezone) => {
-  const hour = datetime.getHours();
-  const dayOfWeek = datetime.getDay();
-  const window = TIMEZONE_WINDOWS[timezone];
+  if (!datetime || !timezone) return false;
   
-  if (!window) return false;
+  const dayOfWeek = datetime.getDay();
+  const hour = datetime.getHours();
   
   // Check if day is available (Monday closed)
-  if (!PROVIDER_AVAILABILITY.daysOfWeek.includes(dayOfWeek)) {
+  if (!AVAILABLE_DAYS.includes(dayOfWeek)) {
     return false;
   }
   
-  // Check if hour is within the timezone's available window
-  if (hour < window.localStartHour || hour >= window.localEndHour) {
-    return false;
-  }
+  const window = TIMEZONE_WINDOWS[timezone];
+  if (!window) return false;
   
-  return true;
+  // Check if hour is within available window
+  return hour >= window.startHour && hour < window.endHour;
 };
 
 export default {
