@@ -81,7 +81,7 @@ const Booking = () => {
       }
     }
 
-    const service = mockServices.find(s => s.id === selectedService);
+    const service = MEDRX_SERVICES.find(s => s.id === selectedService);
     
     if (service && service.requiresQuestionnaire) {
       setBookingStep('questionnaire');
@@ -104,7 +104,7 @@ const Booking = () => {
     setIsSubmitting(true);
     setBookingStep('processing');
     
-    const service = mockServices.find(s => s.id === selectedService);
+    const service = MEDRX_SERVICES.find(s => s.id === selectedService);
     
     try {
       // Create checkout session
@@ -169,7 +169,7 @@ const Booking = () => {
 
   // Show questionnaire step
   if (bookingStep === 'questionnaire') {
-    const service = mockServices.find(s => s.id === selectedService);
+    const service = MEDRX_SERVICES.find(s => s.id === selectedService);
     return (
       <section id="booking" className="booking-section">
         <MedicalQuestionnaire 
