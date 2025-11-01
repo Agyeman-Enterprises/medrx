@@ -88,7 +88,20 @@ INTAKE_SCHEMA = {
     },
     "medications": {
         "fields": ["name", "dosage", "frequency", "prescriber", "indication"],
-        "supports_photo": True
+        "supports_photo": True,
+        "photo_types": ["medication_bottle", "medication_label"]
+    },
+    "insurance": {
+        "fields": ["carrier", "policy_number", "group_number", "subscriber_name", "subscriber_dob"],
+        "supports_photo": True,
+        "photo_types": ["insurance_front", "insurance_back"],
+        "required": True
+    },
+    "identification": {
+        "fields": ["id_type", "id_number", "id_state", "id_expiration"],
+        "supports_photo": True,
+        "photo_types": ["id_front", "id_back"],
+        "required": True
     },
     "allergies": {
         "fields": ["allergen", "reaction", "severity"]
