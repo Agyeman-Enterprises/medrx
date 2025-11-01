@@ -219,4 +219,38 @@ export const FAQ_ITEMS = [
   }
 ];
 
+// How It Works Steps
+export const HOW_IT_WORKS = [
+  {
+    step: '01',
+    icon: 'Calendar',
+    title: 'Book Online',
+    description: 'Choose your service and select a convenient time slot. All consultations are $175.'
+  },
+  {
+    step: '02',
+    icon: 'FileText',
+    title: 'Medical Screening',
+    description: 'Complete a brief health questionnaire. For GLP-1, we assess eligibility criteria.'
+  },
+  {
+    step: '03',
+    icon: 'CreditCard',
+    title: 'Secure Payment',
+    description: 'Pay the $175 consultation fee. Medications and labs billed separately.'
+  },
+  {
+    step: '04',
+    icon: 'Video',
+    title: 'Video Consultation',
+    description: 'Meet with your licensed provider via secure video. Get your prescription if appropriate.'
+  },
+  {
+    step: '05',
+    icon: 'CheckCircle',
+    title: 'Prescription Delivery',
+    description: 'Your prescription is sent to your pharmacy or our partner pharmacy for home delivery.'
+  }
+];
+
 export default MEDRX_SERVICES;
