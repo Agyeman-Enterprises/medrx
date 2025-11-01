@@ -101,8 +101,6 @@ async def process_transcript(request: ProcessTranscriptRequest):
         
         # Store in database if appointment_id provided
         if request.appointment_id:
-            db = await get_database()
-            
             # Update appointment with medical history
             result = await db.appointments.update_one(
                 {"id": request.appointment_id},
