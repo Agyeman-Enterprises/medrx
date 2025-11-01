@@ -85,10 +85,12 @@ class ReviewRequestTester:
         """Test complete booking flow for glp1-weight-loss service"""
         test_name = "GLP-1 Weight Loss Booking Flow"
         
-        # Calculate tomorrow's date
-        tomorrow = datetime.now() + timedelta(days=1)
-        appointment_date = tomorrow.strftime("%Y-%m-%d")
-        appointment_time = "2:00 PM"  # 14:00 (2 PM California time)
+        # Calculate a future date to avoid conflicts
+        future_date = datetime.now() + timedelta(days=7)  # Use next week
+        appointment_date = future_date.strftime("%Y-%m-%d")
+        # Use current time + minutes to make it unique
+        unique_minutes = datetime.now().minute
+        appointment_time = f"2:{unique_minutes:02d} PM"  # 14:XX (2:XX PM California time)
         
         # Generate unique test data
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
