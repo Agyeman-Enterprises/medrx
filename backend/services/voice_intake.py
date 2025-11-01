@@ -1,6 +1,6 @@
 import os
 import json
-from emergentintegrations import Anthropic
+from anthropic import Anthropic
 from typing import Dict, Any
 
 class VoiceIntakeService:
