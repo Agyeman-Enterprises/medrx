@@ -407,9 +407,9 @@ const Booking = () => {
             {selectedService && selectedDate && selectedTime && (
               <div className="summary-details">
                 <p className="body-medium">
-                  <strong>Selected:</strong> {mockServices.find(s => s.id === selectedService)?.title} 
+                  <strong>Selected:</strong> {MEDRX_SERVICES.find(s => s.id === selectedService)?.name} 
                   {' '}- {format(selectedDate, 'MMMM d, yyyy')} at {selectedTime}
-                  {' '}({mockTimezones.find(tz => tz.value === selectedTimezone)?.label})
+                  {' '}({timezoneOptions.find(tz => tz.value === selectedTimezone)?.label})
                 </p>
               </div>
             )}
