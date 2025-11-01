@@ -88,16 +88,11 @@ export const getAvailableSlotsForTimezone = (date, patientTimezone) => {
 };
 
 /**
- * Get timezone label with booking window info
+ * Get timezone label with availability window
  */
 export const getTimezoneLabel = (timezone) => {
   const window = TIMEZONE_WINDOWS[timezone];
-  if (!window) return timezone;
-  
-  const startTime = format(parse(`${window.localStartHour}:00`, 'HH:mm', new Date()), 'h a');
-  const endTime = format(parse(`${window.localEndHour}:00`, 'HH:mm', new Date()), 'h a');
-  
-  return `${window.label} (Available: ${startTime} - ${endTime})`;
+  return window ? window.label : timezone;
 };
 
 /**
