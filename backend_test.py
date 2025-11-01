@@ -1029,4 +1029,4 @@ async def run_review_request_tests():
         return passed, failed
 
 if __name__ == "__main__":
-    asyncio.run(run_comprehensive_glp1_tests())
+    asyncio.run(run_review_request_tests())
