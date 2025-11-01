@@ -1,44 +1,46 @@
 :root {
+  /* Brand Colors - Matching Logo */
+  --brand-blue: #1e3a8a;
+  --brand-blue-light: #3b82f6;
+  --brand-blue-dark: #1e40af;
+  --brand-green: #10b981;
+  --brand-green-light: #34d399;
+  --brand-green-dark: #059669;
+  
   /* Backgrounds */
-  --bg-page: #FFF9F2;
+  --bg-page: #f8fafc;
   --bg-card: #FFFFFF;
-  --bg-section: rgba(255, 244, 232, 0.6);
+  --bg-section: rgba(241, 245, 249, 0.6);
   --bg-overlay: rgba(255, 255, 255, 0.95);
   
   /* Text */
-  --text-primary: #232323;
-  --text-secondary: #353535;
-  --text-muted: #353535;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
   
   /* Borders */
-  --border-primary: #999999;
-  --border-input: #999999;
-  --border-input-focus: #4D4D4D;
-  --border-light: rgba(153, 153, 153, 0.3);
+  --border-primary: #cbd5e1;
+  --border-input: #cbd5e1;
+  --border-input-focus: var(--brand-blue);
+  --border-light: rgba(203, 213, 225, 0.3);
   
-  /* Accent Colors */
-  --accent-purple-400: #987D9C;
-  --accent-purple-200: #F9E8FA;
-  --accent-blue-400: #768597;
-  --accent-blue-200: #E4EDF8;
-  --accent-orange-400: #BCA182;
-  --accent-orange-200: #FEEFDC;
-  --accent-pink-200: #FCC9C7;
-  --accent-green-200: #b8d1ba;
-  --accent-grey-200: #E9E1E1;
+  /* Accent Colors - Updated to match logo */
+  --accent-purple-400: var(--brand-blue);
+  --accent-purple-200: #dbeafe;
+  --accent-blue-400: var(--brand-blue-light);
+  --accent-blue-200: #dbeafe;
+  --accent-green-400: var(--brand-green);
+  --accent-green-200: #d1fae5;
+  --accent-pink-200: #fce7f3;
+  --accent-grey-200: #e2e8f0;
   
   /* Glass Effect */
   --glass-bg: rgba(255, 255, 255, 0.2);
   --glass-border: rgba(0, 0, 0, 0.1);
   
-  /* Gradients */
-  --gradient-hero-warm: linear-gradient(
-    rgba(252, 202, 199, 1) 0%,
-    rgba(253, 215, 197, 0.8) 25%,
-    rgba(254, 241, 229, 0.6) 50%,
-    rgba(255, 250, 243, 0.8) 75%,
-    rgba(252, 202, 199, 1) 100%
-  );
+  /* Gradients - Updated to blue/green theme */
+  --gradient-hero: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #10b981 100%);
+  --gradient-card: linear-gradient(135deg, rgba(30, 58, 138, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
 }
 
 * {
