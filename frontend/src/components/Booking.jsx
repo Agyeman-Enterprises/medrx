@@ -382,15 +382,26 @@ const Booking = () => {
                 <Clock size={20} />
                 Select Time
               </h3>
+              {!selectedDate && (
+                <p className="caption" style={{color: 'var(--text-muted)', marginBottom: '1rem'}}>
+                  Please select a date first
+                </p>
+              )}
+              {selectedDate && availableTimeSlots.length === 0 && (
+                <p className="caption" style={{color: 'var(--text-muted)', marginBottom: '1rem'}}>
+                  No available slots on this day (Provider closed Mondays)
+                </p>
+              )}
               <div className="time-slots">
-                {availableTimeSlots.map((time) => (
+                {availableTimeSlots.map((slot) => (
                   <button
-                    key={time}
+                    key={slot.time}
                     type="button"
-                    onClick={() => setSelectedTime(time)}
-                    className={`time-slot ${selectedTime === time ? 'selected' : ''}`}
+                    onClick={() => setSelectedTime(slot.time)}
+                    className={`time-slot ${selectedTime === slot.time ? 'selected' : ''}`}
+                    title={`Corresponds to ${slot.guamTime} in Guam`}
                   >
-                    {time}
+                    {slot.display}
                   </button>
                 ))}
               </div>
