@@ -211,7 +211,7 @@ class ReviewRequestTester:
             "phone": f"+1-555-{hash(timezone) % 9000 + 1000}",
             "serviceId": "glp1-weight-loss",
             "serviceType": "oneoff",
-            "date": (datetime.now() + timedelta(days=10 + hash(timezone) % 5)).strftime("%Y-%m-%d"),
+            "date": (datetime.now() + timedelta(days=20 + abs(hash(timezone)) % 10)).strftime("%Y-%m-%d"),
             "time": time_slot,
             "timezone": timezone,
             "address": {
