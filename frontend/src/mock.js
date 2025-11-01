@@ -1,314 +1,222 @@
-// GLP-1 Weight Loss Services - Initial Evaluations (One-time)
-export const glp1InitialServices = [
+// MedRx Services - Weight Loss, Hormones, Hair Loss ONLY
+// All consultations are $175 (labs and medications paid separately)
+
+export const MEDRX_SERVICES = [
   {
-    id: 'glp1-sema-initial',
-    title: 'GLP-1 Semaglutide - Initial Evaluation',
-    price: 150.00,
-    billingPeriod: '/visit',
-    duration: '15-30 min',
-    type: 'oneoff',
+    id: 'glp1-weight-loss',
+    name: 'GLP-1 Weight Loss',
+    title: 'GLP-1 Weight Loss Program',
     category: 'weight-loss',
-    medication: 'Semaglutide',
-    description: '15-30 minute telemedicine visit, medical screening, eligibility review, prescription if appropriate, home-delivery coordination.',
-    features: [
-      '15-30 minute telemedicine visit',
-      'Medical screening questionnaire',
-      'Eligibility review',
-      'Semaglutide prescription (if appropriate)',
-      'Home-delivery coordination'
+    description: 'Semaglutide and Tirzepatide programs with personalized dosing, smart monitoring, and results-driven follow-up.',
+    price: 175,
+    billingPeriod: '/consultation',
+    duration: '30 min',
+    type: 'consultation',
+    includes: [
+      'Initial medical evaluation',
+      'GLP-1 eligibility screening',
+      'Personalized treatment plan',
+      'Prescription (if medically appropriate)',
+      'Follow-up care coordination'
     ],
-    note: 'Medication billed separately by pharmacy',
+    features: [
+      '30-minute video consultation',
+      'Comprehensive medical screening',
+      'Weight loss goal planning',
+      'GLP-1 prescription (Semaglutide or Tirzepatide)',
+      'Medication titration protocol',
+      'Ongoing monitoring guidance'
+    ],
+    note: 'Medications and lab work billed separately',
+    icon: '💊',
     color: 'accent-purple',
     requiresQuestionnaire: true,
     requiresPayment: true,
     requiresAddress: true
   },
-  {
-    id: 'glp1-tirz-initial',
-    title: 'GLP-1 Tirzepatide - Initial Evaluation',
-    price: 279.00,
-    billingPeriod: '/visit',
-    duration: '15-30 min',
-    type: 'oneoff',
-    category: 'weight-loss',
-    medication: 'Tirzepatide',
-    description: '15-30 minute telemedicine visit, medical screening, eligibility review, prescription if appropriate, home-delivery coordination.',
-    features: [
-      '15-30 minute telemedicine visit',
-      'Medical screening questionnaire',
-      'Eligibility review',
-      'Tirzepatide prescription (if appropriate)',
-      'Home-delivery coordination'
-    ],
-    note: 'Medication billed separately by pharmacy',
-    color: 'accent-purple',
-    requiresQuestionnaire: true,
-    requiresPayment: true,
-    requiresAddress: true
-  }
-];
-
-// GLP-1 Monthly Management Subscriptions
-export const glp1Subscriptions = [
-  {
-    id: 'glp1-sema-monthly',
-    title: 'GLP-1 Semaglutide - Monthly Management',
-    price: 249.00,
-    billingPeriod: '/month',
-    type: 'subscription',
-    category: 'weight-loss-management',
-    medication: 'Semaglutide',
-    description: 'Ongoing physician supervision, dose adjustments, secure messaging, side-effect support, monthly follow-up, lab monitoring.',
-    features: [
-      'Ongoing physician supervision',
-      'Dose adjustments',
-      'Secure messaging with care team',
-      'Side-effect support',
-      'Monthly follow-up visits',
-      'Lab monitoring coordination'
-    ],
-    note: 'Medication typically $349-$499/mo via pharmacy',
-    color: 'accent-purple',
-    tier: 'glp1-management'
-  },
-  {
-    id: 'glp1-tirz-monthly',
-    title: 'GLP-1 Tirzepatide - Monthly Management',
-    price: 329.00,
-    billingPeriod: '/month',
-    type: 'subscription',
-    category: 'weight-loss-management',
-    medication: 'Tirzepatide',
-    description: 'Ongoing physician supervision, dose adjustments, secure messaging, side-effect support, monthly follow-up, lab monitoring.',
-    features: [
-      'Ongoing physician supervision',
-      'Dose adjustments',
-      'Secure messaging with care team',
-      'Side-effect support',
-      'Monthly follow-up visits',
-      'Lab monitoring coordination'
-    ],
-    note: 'Medication typically $349-$499/mo via pharmacy',
-    color: 'accent-purple',
-    tier: 'glp1-management'
-  },
-  {
-    id: 'metabolic-coaching',
-    title: 'Metabolic Coaching Add-On',
-    price: 99.00,
-    billingPeriod: '/month',
-    type: 'subscription',
-    category: 'coaching',
-    description: '2x/month health coach check-ins for diet, exercise, motivation.',
-    features: [
-      '2 health coach sessions per month',
-      'Diet guidance',
-      'Exercise planning',
-      'Motivation support'
-    ],
-    color: 'accent-green-200',
-    tier: 'coaching',
-    addon: true
-  }
-];
-
-// Other Pay-Per-Visit Services
-export const otherServices = [
   {
     id: 'hormone-health',
-    title: 'Hormone Health & Rx',
-    price: 150.00,
-    billingPeriod: '/visit',
-    duration: '15-30 min',
-    type: 'oneoff',
-    category: 'hormone',
-    description: 'Brief consultation for hormone therapy prescriptions. Includes screening, lab review, and Rx for hormone optimization.',
-    features: [
-      '15-30 minute consultation',
-      'Medical screening questionnaire',
-      'Hormone therapy prescription',
-      'Lab interpretation',
-      'Treatment plan'
+    name: 'Hormone Health',
+    title: 'Hormone Optimization',
+    category: 'hormones',
+    description: "Women's health, men's testosterone, thyroid optimization — root-cause treatment, not just symptom suppression.",
+    price: 175,
+    billingPeriod: '/consultation',
+    duration: '30 min',
+    type: 'consultation',
+    includes: [
+      'Comprehensive hormone assessment',
+      'Symptom evaluation',
+      'Lab review & interpretation',
+      'Prescription (if medically appropriate)',
+      'Ongoing monitoring protocol'
     ],
-    color: 'accent-blue',
+    features: [
+      '30-minute video consultation',
+      'Hormone symptom assessment',
+      'Lab test recommendations',
+      'Bioidentical hormone therapy options',
+      'Personalized treatment protocol',
+      'Follow-up monitoring plan'
+    ],
+    note: 'Lab work and medications billed separately',
+    icon: '🔬',
+    color: 'accent-pink',
     requiresQuestionnaire: true,
-    requiresPayment: true
+    requiresPayment: true,
+    requiresAddress: true
   },
   {
-    id: 'acute-care',
-    title: 'Acute Care Visit',
-    price: 85.00,
-    billingPeriod: '/visit',
-    duration: '15-30 min',
-    type: 'oneoff',
-    category: 'general',
-    description: 'Same-day virtual visits for urgent concerns: infections, minor injuries, medication refills, and symptom evaluation.',
-    features: [
-      '15-30 minute consultation',
-      'Medical screening questionnaire',
-      'Video or phone consultation',
-      'E-prescriptions sent directly',
-      'Clear follow-up plan'
+    id: 'hair-loss',
+    name: 'Hair Loss Solutions',
+    title: 'Medical Hair Restoration',
+    category: 'hair-loss',
+    description: 'Medical-grade topical and oral therapies for natural-looking hair restoration and growth.',
+    price: 175,
+    billingPeriod: '/consultation',
+    duration: '30 min',
+    type: 'consultation',
+    includes: [
+      'Scalp and hair assessment',
+      'Treatment options review',
+      'Customized protocol design',
+      'Prescription (if medically appropriate)',
+      'Progress tracking plan'
     ],
-    color: 'accent-blue',
-    requiresQuestionnaire: true,
-    requiresPayment: true
-  },
-  {
-    id: 'functional-medicine',
-    title: 'Functional Medicine Visit',
-    price: 175.00,
-    billingPeriod: '/visit',
-    duration: '15-30 min',
-    type: 'oneoff',
-    category: 'functional',
-    description: 'Comprehensive metabolic health and preventive care consultation with personalized treatment approach.',
     features: [
-      '15-30 minute consultation',
-      'Medical screening questionnaire',
-      'Metabolic health assessment',
-      'Lab coordination & interpretation',
-      'Personalized treatment plans'
+      '30-minute video consultation',
+      'Hair loss pattern assessment',
+      'Medical-grade treatment options',
+      'Prescription therapies (Finasteride, Minoxidil, compounds)',
+      'Topical and oral protocols',
+      '3-6 month progress evaluation'
     ],
-    color: 'accent-orange-200',
+    note: 'Treatments and medications billed separately',
+    icon: '💆',
+    color: 'accent-green',
     requiresQuestionnaire: true,
-    requiresPayment: true
+    requiresPayment: true,
+    requiresAddress: true
   }
 ];
 
-// Standard subscription plans
-export const standardSubscriptions = [
-  {
-    id: 'sub-basic',
-    title: 'Basic Access',
-    price: 35.00,
-    priceRange: '$25–$50',
-    billingPeriod: '/month',
-    type: 'subscription',
-    description: 'Essential telemedicine access for occasional healthcare needs with cost-effective virtual care.',
-    features: [
-      'Limited urgent visits (1–2/month)',
-      'Chat messaging with RN/MA',
-      'Discounted labs & prescriptions',
-      'Standard appointment booking'
-    ],
-    color: 'accent-grey-200',
-    tier: 'basic'
-  },
-  {
-    id: 'sub-standard',
-    title: 'Standard Care',
-    price: 150.00,
-    priceRange: '$100–$200',
-    billingPeriod: '/month',
-    type: 'subscription',
-    description: 'Comprehensive primary care coverage with unlimited consultations and priority access to your care team.',
-    features: [
-      'Unlimited general medicine consults',
-      'Priority appointment booking',
-      'Care coordination & follow-ups',
-      'Physician messaging access',
-      'Preventive care planning'
-    ],
-    color: 'accent-blue',
-    tier: 'standard'
-  }
-];
+// For backward compatibility
+export const ONE_OFF_SERVICES = MEDRX_SERVICES;
 
-// Combined for display
-export const mockOneOffServices = [...glp1InitialServices, ...otherServices];
-export const mockSubscriptions = [...glp1Subscriptions, ...standardSubscriptions];
-export const mockServices = [...mockOneOffServices, ...mockSubscriptions];
+export const CONSULTATION_FEE = 175;
 
-export const mockTimezones = [
-  { value: 'Pacific/Honolulu', label: 'Hawaii (HST)', offset: -10 },
-  { value: 'America/Los_Angeles', label: 'California (PST/PDT)', offset: -8 },
-  { value: 'Pacific/Guam', label: 'Guam (ChST)', offset: 10 }
-];
-
-// Guam operating hours: 8am-9pm ChST
-export const getAvailableTimeSlots = (selectedTimezone) => {
-  const allSlots = [];
-  
-  for (let hour = 8; hour <= 21; hour++) {
-    const period = hour < 12 ? 'AM' : 'PM';
-    const displayHour = hour <= 12 ? hour : hour - 12;
-    const timeString = `${displayHour.toString().padStart(2, '0')}:00 ${period}`;
-    allSlots.push({
-      guamTime: hour,
-      display: timeString,
-      value: timeString
-    });
-  }
-  
-  if (!selectedTimezone) return allSlots.map(s => s.value);
-  
-  const tz = mockTimezones.find(t => t.value === selectedTimezone);
-  if (!tz) return allSlots.map(s => s.value);
-  
-  const guamOffset = 10;
-  const timeDiff = tz.offset - guamOffset;
-  
-  return allSlots.filter(slot => {
-    const localHour = slot.guamTime + timeDiff;
-    const adjustedHour = localHour < 0 ? localHour + 24 : localHour >= 24 ? localHour - 24 : localHour;
-    return adjustedHour >= 8 && adjustedHour <= 22;
-  }).map(s => s.value);
+export const PAYMENT_NOTES = {
+  consultation: '$175 consultation fee (paid at booking)',
+  medications: 'Prescriptions filled at your pharmacy or through our partner pharmacy (billed separately)',
+  labs: 'Lab work ordered as needed (billed separately through lab provider)'
 };
 
-export const mockTimeSlots = [
-  '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
-  '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM',
-  '06:00 PM', '07:00 PM', '08:00 PM', '09:00 PM'
-];
+// Service details for each category
+export const SERVICE_DETAILS = {
+  'glp1-weight-loss': {
+    medications: ['Semaglutide', 'Tirzepatide'],
+    typical_medication_cost: '$200-400/month',
+    lab_requirements: 'Baseline labs, periodic monitoring',
+    prescription_only: true,
+    subspecialties: [
+      { name: 'Semaglutide', starting_dose: '0.25mg weekly', max_dose: '2.4mg weekly' },
+      { name: 'Tirzepatide', starting_dose: '2.5mg weekly', max_dose: '15mg weekly' }
+    ]
+  },
+  'hormone-health': {
+    medications: ['Bioidentical hormones', 'Testosterone', 'Thyroid medications', 'Estrogen/Progesterone'],
+    typical_medication_cost: '$100-300/month',
+    lab_requirements: 'Comprehensive hormone panel, follow-up labs every 3-6 months',
+    prescription_only: true,
+    subspecialties: [
+      { name: "Women's Hormone Therapy", includes: ['Estrogen', 'Progesterone', 'Thyroid'] },
+      { name: "Men's Testosterone Therapy", includes: ['Testosterone injections', 'Testosterone cream'] },
+      { name: 'Thyroid Optimization', includes: ['Levothyroxine', 'Liothyronine', 'NDT'] }
+    ]
+  },
+  'hair-loss': {
+    medications: ['Finasteride', 'Minoxidil', 'Topical compounds', 'Dutasteride'],
+    typical_medication_cost: '$50-200/month',
+    lab_requirements: 'Baseline labs as indicated (hormones, iron studies)',
+    prescription_only: true,
+    subspecialties: [
+      { name: 'Oral Therapy', medications: ['Finasteride 1mg daily', 'Dutasteride'] },
+      { name: 'Topical Therapy', medications: ['Minoxidil 5%', 'Compound formulas'] },
+      { name: 'Combination Protocol', medications: ['Oral + Topical'] }
+    ]
+  }
+};
 
-export const mockHowItWorks = [
+// Testimonials
+export const TESTIMONIALS = [
   {
-    step: '01',
-    title: 'Book Your Visit',
-    description: 'Choose your service and select a time that works for your timezone—Hawaii, California, or Guam.',
-    icon: 'Calendar'
+    id: 1,
+    initials: 'S.K.',
+    service: 'GLP-1 Weight Loss',
+    text: "Lost 35 pounds in 4 months with Tirzepatide. The virtual visits made it so easy to stay on track, and my provider was incredibly supportive throughout the journey.",
+    rating: 5,
+    location: 'Guam'
   },
   {
-    step: '02',
-    title: 'Complete Medical Screening',
-    description: 'Answer our comprehensive questionnaire to ensure the treatment is safe and appropriate for you.',
-    icon: 'FileText'
+    id: 2,
+    initials: 'M.T.',
+    service: 'Hormone Health',
+    text: "After years of feeling exhausted and foggy, hormone optimization changed my life. My provider really listened and found the right balance for me.",
+    rating: 5,
+    location: 'Hawaii'
   },
   {
-    step: '03',
-    title: 'Secure Payment',
-    description: 'Complete payment securely via Stripe before your appointment is confirmed.',
-    icon: 'CreditCard'
+    id: 3,
+    initials: 'J.R.',
+    service: 'Hair Loss',
+    text: "Six months on the hair restoration protocol and I'm seeing real results. Convenient telemedicine appointments and prescriptions delivered to my door.",
+    rating: 5,
+    location: 'California'
   },
   {
-    step: '04',
-    title: 'Meet Your Physician',
-    description: 'Video or phone visit focused on your health goals, with prescription sent to your pharmacy if appropriate.',
-    icon: 'Video'
+    id: 4,
+    initials: 'L.M.',
+    service: 'GLP-1 Weight Loss',
+    text: "The medical screening was thorough, and I felt confident starting Semaglutide. Down 28 pounds and feeling better than I have in years!",
+    rating: 5,
+    location: 'Guam'
+  },
+  {
+    id: 5,
+    initials: 'D.W.',
+    service: 'Hormone Health',
+    text: "Testosterone therapy has been a game-changer. Energy is back, workouts are productive, and the whole process was seamless through MedRx.",
+    rating: 5,
+    location: 'Hawaii'
   }
 ];
 
-export const mockTestimonials = [
+// FAQ
+export const FAQ_ITEMS = [
   {
-    id: '1',
-    name: 'Sarah M.',
-    location: 'Honolulu, HI',
-    text: 'The GLP-1 program changed my life. Lost 35 lbs in 4 months with Dr. Chen\'s guidance.',
-    rating: 5
+    question: 'How much does a consultation cost?',
+    answer: 'All consultations are $175. This includes your video visit with a licensed provider, medical evaluation, and prescription (if medically appropriate). Medications and lab work are billed separately.'
   },
   {
-    id: '2',
-    name: 'James K.',
-    location: 'San Diego, CA',
-    text: 'Transparent pricing, easy scheduling, and genuine care. Best telemedicine experience.',
-    rating: 5
+    question: 'Are medications included in the consultation fee?',
+    answer: 'No, medications are billed separately. Your prescription will be sent to your preferred pharmacy or our partner pharmacy. Typical medication costs: GLP-1 $200-400/month, Hormones $100-300/month, Hair Loss $50-200/month.'
   },
   {
-    id: '3',
-    name: 'Linda T.',
-    location: 'Guam',
-    text: 'The hormone therapy consultation was incredibly detailed. I left with a clear plan and real answers.',
-    rating: 5
+    question: 'Do I need lab work?',
+    answer: 'Lab work requirements vary by service. Your provider will recommend appropriate labs during your consultation. Labs are billed separately through the lab provider.'
+  },
+  {
+    question: 'What areas do you serve?',
+    answer: 'We serve patients in Guam, Hawaii, and California with timezone-appropriate scheduling.'
+  },
+  {
+    question: 'How quickly can I get an appointment?',
+    answer: 'Most appointments are available within 1-3 days. After booking, you\'ll receive confirmation and a link to join your video consultation.'
+  },
+  {
+    question: 'Will I get a prescription?',
+    answer: 'If medically appropriate after your evaluation, your provider will send a prescription to your pharmacy. Not all consultations result in prescriptions - this is determined by your provider based on medical necessity.'
   }
 ];
+
+export default MEDRX_SERVICES;
