@@ -206,7 +206,7 @@ class ReviewRequestTester:
         
         appointment_data = {
             "name": f"{location_name} Test Patient",
-            "email": f"{location_name.lower()}.timezone.test.{timestamp}@medicaltesting.com",
+            "email": f"{location_name.lower().replace(' ', '')}.timezone.test.{timestamp}@medicaltesting.com",
             "phone": f"+1-555-{hash(timezone) % 9000 + 1000}",
             "serviceId": "glp1-weight-loss",
             "serviceType": "oneoff",
