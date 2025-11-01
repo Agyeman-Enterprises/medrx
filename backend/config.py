@@ -44,12 +44,12 @@ SERVICE_LINES = {
 
 # External Service Redirects (handled by bookadoc2u.com)
 EXTERNAL_SERVICES = {
-    "acute-care": "https://bookadoc2u.com/acute-care",
-    "functional-medicine": "https://bookadoc2u.com/functional-medicine",
-    "basic-access": "https://bookadoc2u.com/subscriptions/basic",
-    "standard-care": "https://bookadoc2u.com/subscriptions/standard",
-    "mens-health": "https://bookadoc2u.com/mens-health",
-    "hair-loss": "https://bookadoc2u.com/hair-loss"
+    "acute-care": os.getenv("EXTERNAL_SERVICE_URL_ACUTE_CARE", "https://bookadoc2u.com/acute-care"),
+    "functional-medicine": os.getenv("EXTERNAL_SERVICE_URL_FUNCTIONAL", "https://bookadoc2u.com/functional-medicine"),
+    "basic-access": os.getenv("EXTERNAL_SERVICE_URL_BASIC", "https://bookadoc2u.com/subscriptions/basic"),
+    "standard-care": os.getenv("EXTERNAL_SERVICE_URL_STANDARD", "https://bookadoc2u.com/subscriptions/standard"),
+    "mens-health": os.getenv("EXTERNAL_SERVICE_URL_MENS", "https://bookadoc2u.com/mens-health"),
+    "hair-loss": os.getenv("EXTERNAL_SERVICE_URL_HAIR", "https://bookadoc2u.com/hair-loss")
 }
 
 # GLP-1 Medications
