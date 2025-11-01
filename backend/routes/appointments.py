@@ -4,11 +4,15 @@ from typing import List
 
 from models import Appointment, AppointmentCreate, AppointmentUpdate, PatientInfo, Address
 from services_data import ONE_OFF_SERVICES, SUBSCRIPTION_PLANS, get_service_info
+from services.sms_service import SMSService
 
 router = APIRouter(prefix="/api/appointments", tags=["appointments"])
 
 # MongoDB connection
 from database import db
+
+# SMS service
+sms_service = SMSService()
 
 @router.post("/", response_model=dict)
 async def create_appointment(appointment_data: AppointmentCreate):
