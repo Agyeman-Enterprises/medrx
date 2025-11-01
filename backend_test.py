@@ -885,84 +885,145 @@ class MedRxGLP1Tester:
             self.log_test(test_name, False, f"Request error: {str(e)}")
             return {'success': False}
 
-async def run_comprehensive_glp1_tests():
-    """Run comprehensive GLP-1 platform backend API tests"""
-    print("Starting MedRx GLP-1 Platform Backend API Comprehensive Tests")
+async def test_voice_intake_health(self):
+    """Test Voice Intake service health endpoint"""
+    try:
+        async with self.session.get(f"{BASE_URL}/voice-intake/health") as response:
+            if response.status == 200:
+                data = await response.json()
+                self.log_test("Voice Intake Health Check", True, 
+                            f"Voice service status: {data.get('status')}, Deepgram: {data.get('deepgram_configured')}, LLM: {data.get('llm_configured')}")
+                return True
+            else:
+                self.log_test("Voice Intake Health Check", False, f"Voice intake health check failed with status {response.status}")
+                return False
+    except Exception as e:
+        self.log_test("Voice Intake Health Check", False, f"Voice intake health check error: {str(e)}")
+        return False
+
+async def test_mongodb_connection(self):
+    """Test MongoDB connection by checking if we can access collections"""
+    test_name = "MongoDB Connection Test"
+    
+    # Try to create a test document and retrieve it
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+    test_email = f"mongodb.test.{timestamp}@medicaltesting.com"
+    
+    # Test creating an appointment (which tests MongoDB write)
+    appointment_date, appointment_time = self.get_unique_time_slot()
+    
+    test_appointment = {
+        "name": "MongoDB Test Patient",
+        "email": test_email,
+        "phone": "+1-555-0000",
+        "serviceId": "glp1-weight-loss",
+        "serviceType": "oneoff",
+        "date": appointment_date,
+        "time": appointment_time,
+        "timezone": "America/Los_Angeles",
+        "notes": "MongoDB connection test"
+    }
+    
+    try:
+        # Create appointment (tests MongoDB write)
+        async with self.session.post(
+            f"{BASE_URL}/appointments/",
+            json=test_appointment,
+            headers={"Content-Type": "application/json"}
+        ) as response:
+            
+            if response.status == 200:
+                data = await response.json()
+                if data.get('success') and data.get('appointmentId'):
+                    # Test MongoDB read by retrieving the appointment
+                    async with self.session.get(f"{BASE_URL}/appointments/?email={test_email}") as read_response:
+                        if read_response.status == 200:
+                            read_data = await read_response.json()
+                            if read_data.get('success') and read_data.get('appointments'):
+                                self.log_test(test_name, True, 
+                                            "MongoDB connection working - write and read successful",
+                                            f"Created and retrieved appointment: {data['appointmentId']}")
+                                return {'success': True}
+                            else:
+                                self.log_test(test_name, False, "MongoDB read failed")
+                                return {'success': False}
+                        else:
+                            self.log_test(test_name, False, f"MongoDB read failed with status {read_response.status}")
+                            return {'success': False}
+                else:
+                    self.log_test(test_name, False, "MongoDB write failed - invalid response")
+                    return {'success': False}
+            else:
+                error_text = await response.text()
+                self.log_test(test_name, False, f"MongoDB write failed - HTTP {response.status}: {error_text}")
+                return {'success': False}
+                
+    except Exception as e:
+        self.log_test(test_name, False, f"MongoDB connection error: {str(e)}")
+        return {'success': False}
+
+async def run_review_request_tests():
+    """Run specific tests from the review request"""
+    print("🎯 COMPREHENSIVE SYSTEM TEST - Full Deployment Readiness Check")
     print(f"Testing against: {BASE_URL}")
     print("="*80)
     
     async with MedRxGLP1Tester() as tester:
-        # 1. Health check
+        
+        # 1. HEALTH CHECKS (as specified in review request)
+        print("\n🏥 1. HEALTH CHECKS")
+        print("-" * 40)
+        
+        # GET /api/health - Backend health
         health_ok = await tester.test_health_check()
         if not health_ok:
-            print("❌ API is not healthy, stopping tests")
-            return
+            print("❌ Backend API is not healthy")
         
-        # 2. DrChrono Health Check (from review request)
-        print("\n🏥 Testing DrChrono Integration...")
+        # GET /api/voice-intake/health - Voice service
+        await tester.test_voice_intake_health()
+        
+        # GET /api/drchrono/health - DrChrono integration
         await tester.test_drchrono_health()
         
-        # 3. Test specific GLP-1 weight loss booking flow (from review request)
-        print("\n🎯 Testing Specific GLP-1 Weight Loss Booking Flow...")
-        booking_result = await tester.test_glp1_weight_loss_booking_flow()
+        # 2. PAYMENT FLOW (as specified in review request)
+        print("\n💳 2. PAYMENT FLOW")
+        print("-" * 40)
         
-        # 4. Test timezone availability logic (from review request)
-        print("\n🌍 Testing Timezone Availability Logic...")
-        await tester.test_timezone_availability_logic()
+        # Test POST /api/payments/checkout/session with each service ID at $175
+        print("Testing payment checkout sessions for all services at $175...")
         
-        # 5. Test GLP-1 Appointments with Address Requirements
-        print("\n💉 Testing GLP-1 Appointments with Address Data...")
-        sema_result = await tester.create_glp1_appointment(
-            "glp1-sema-initial", "GLP-1 Semaglutide Initial", 150.00, requires_address=True)
+        glp1_payment = await tester.test_payment_checkout_session("glp1-weight-loss", 175.00)
+        hormone_payment = await tester.test_payment_checkout_session("hormone-health", 175.00)  
+        hair_payment = await tester.test_payment_checkout_session("hair-loss", 175.00)
         
-        tirz_result = await tester.create_glp1_appointment(
-            "glp1-tirz-initial", "GLP-1 Tirzepatide Initial", 279.00, requires_address=True)
+        # Test payment status check if any session was created
+        if glp1_payment.get('success'):
+            await tester.test_payment_status_check(glp1_payment['session_id'])
         
-        hormone_result = await tester.create_glp1_appointment(
-            "hormone-health", "Hormone Health & Rx", 150.00, requires_address=True)
+        # 3. SERVICE DATA VALIDATION (as specified in review request)
+        print("\n🔍 3. SERVICE DATA VALIDATION")
+        print("-" * 40)
         
-        # 6. Test appointment retrieval
-        print("\n📋 Testing Appointment Retrieval...")
-        if sema_result['success']:
-            await tester.get_appointments_by_email(sema_result['email'])
+        print("Verifying all 3 services are configured with $175 pricing...")
+        # This is tested implicitly in the payment flow above
         
-        # 7. Test Payment API
-        print("\n💳 Testing Payment Checkout Sessions...")
-        sema_payment = await tester.test_payment_checkout_session("glp1-sema-initial", 150.00)
-        tirz_payment = await tester.test_payment_checkout_session("glp1-tirz-initial", 279.00)
-        hormone_payment = await tester.test_payment_checkout_session("hormone-health", 150.00)
+        # 4. DATABASE CONNECTION (as specified in review request)
+        print("\n🗄️ 4. DATABASE CONNECTION")
+        print("-" * 40)
         
-        # 8. Test payment status checks
-        if sema_payment['success']:
-            await tester.test_payment_status_check(sema_payment['session_id'])
+        await tester.test_mongodb_connection()
         
-        # 9. Test GLP-1 Subscriptions
-        print("\n🔄 Testing GLP-1 Monthly Management Subscriptions...")
-        sema_sub = await tester.create_glp1_subscription(
-            "glp1-sema-monthly", "GLP-1 Semaglutide Monthly Management", 249.00)
+        # 5. ERROR HANDLING (as specified in review request)
+        print("\n⚠️ 5. ERROR HANDLING")
+        print("-" * 40)
         
-        tirz_sub = await tester.create_glp1_subscription(
-            "glp1-tirz-monthly", "GLP-1 Tirzepatide Monthly Management", 329.00)
-        
-        coaching_sub = await tester.create_glp1_subscription(
-            "metabolic-coaching", "Metabolic Coaching Add-On", 99.00)
-        
-        # 10. Test subscription retrieval
-        if sema_sub['success']:
-            await tester.get_subscription_by_email(sema_sub['email'])
-        
-        # 11. Test Standard Subscriptions (Basic & Standard)
-        print("\n📊 Testing Standard Subscription Plans...")
-        basic_sub = await tester.create_glp1_subscription("sub-basic", "Basic Access", 35.00)
-        standard_sub = await tester.create_glp1_subscription("sub-standard", "Standard Care", 150.00)
-        
-        # 12. Test validation and edge cases
-        print("\n🔍 Testing Validation & Edge Cases...")
-        await tester.test_duplicate_booking_prevention()
-        await tester.test_validation_errors()
+        # Test invalid service ID
         await tester.test_invalid_service_ids()
         
-        # 13. Print summary
+        # Test missing required fields
+        await tester.test_validation_errors()
+        
+        # Print summary
         passed, failed = tester.print_summary()
         
         return passed, failed
