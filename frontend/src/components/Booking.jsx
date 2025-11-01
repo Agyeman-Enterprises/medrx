@@ -326,7 +326,7 @@ const Booking = () => {
             <div className="booking-card">
               <h3 className="heading-2">Select Service</h3>
               <div className="service-options">
-                {mockServices.map((service) => (
+                {MEDRX_SERVICES.map((service) => (
                   <label key={service.id} className="service-option">
                     <input
                       type="radio"
@@ -338,7 +338,7 @@ const Booking = () => {
                     />
                     <div className="service-option-content">
                       <div className="service-option-header">
-                        <span className="body-medium">{service.title}</span>
+                        <span className="body-medium">{service.name}</span>
                         <span className="price-badge">${service.price}</span>
                       </div>
                       <p className="caption">{service.description}</p>
