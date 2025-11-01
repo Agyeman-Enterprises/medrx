@@ -4,7 +4,7 @@ import os
 import json
 import asyncio
 from services.voice_intake import VoiceIntakeService
-from database import get_database
+from database import db
 from datetime import datetime
 import logging
 
