@@ -94,7 +94,7 @@ export const MEDRX_SERVICES = [
     note: 'Treatments and medications billed separately',
     icon: '💆',
     color: 'accent-green',
-    requiresQuestionnaire: true,
+    requiresQuestionnaire: false,
     requiresPayment: true,
     requiresAddress: true
   }
