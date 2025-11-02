@@ -14,7 +14,8 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 const Booking = () => {
-  const [bookingStep, setBookingStep] = useState('form'); // 'form', 'questionnaire', 'payment', 'processing'
+  // Step flow: 'service' → 'questionnaire' → 'demographics' → 'processing'
+  const [bookingStep, setBookingStep] = useState('service');
   const [selectedService, setSelectedService] = useState('');
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState('');
