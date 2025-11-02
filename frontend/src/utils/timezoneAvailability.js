@@ -17,32 +17,40 @@ export const TIMEZONES = {
 export const AVAILABLE_DAYS = [2, 3, 4, 5, 6]; // Tuesday-Saturday in Guam
 
 // Timezone-specific booking windows
-// These are the INTERSECTION of Guam 8AM-10PM and patient's local 10AM-10PM
+// Guam hours: 9 AM - 4 PM Tuesday-Saturday (with 12-1 PM lunch break)
 export const TIMEZONE_WINDOWS = {
   [TIMEZONES.CALIFORNIA]: {
     // CA is ~18 hours behind Guam
-    // Guam 8 AM = CA 2 PM previous day
-    // Guam 4 PM = CA 10 PM (CA cutoff)
-    startHour: 14, // 2 PM CA time
-    endHour: 22,   // 10 PM CA time
-    label: 'California (Available 2 PM - 10 PM)',
-    guamEquivalent: 'Guam 8 AM - 4 PM'
+    // Guam 9 AM Tue = CA 3 PM Mon
+    // Guam 4 PM = CA 10 PM
+    // Note: 12-1 PM Guam = 6-7 PM CA (lunch blocked)
+    startHour: 15, // 3 PM CA time (Guam 9 AM)
+    endHour: 22,   // 10 PM CA time (Guam 4 PM)
+    lunchStartHour: 18, // 6 PM CA (Guam 12 PM)
+    lunchEndHour: 19,   // 7 PM CA (Guam 1 PM)
+    label: 'California (Available 3 PM - 10 PM)',
+    guamEquivalent: 'Guam 9 AM - 4 PM (lunch 12-1 PM)'
   },
   [TIMEZONES.HAWAII]: {
     // HI is 20 hours behind Guam
-    // Guam 8 AM = HI 12 PM noon previous day
-    // Guam 6 PM = HI 10 PM (HI cutoff)
-    startHour: 12, // 12 PM HI time
-    endHour: 22,   // 10 PM HI time
-    label: 'Hawaii (Available 12 PM - 10 PM)',
-    guamEquivalent: 'Guam 8 AM - 6 PM'
+    // Guam 9 AM Tue = HI 1 PM Mon
+    // Guam 4 PM = HI 8 PM
+    // Note: 12-1 PM Guam = 4-5 PM HI (lunch blocked)
+    startHour: 13, // 1 PM HI time (Guam 9 AM)
+    endHour: 20,   // 8 PM HI time (Guam 4 PM)
+    lunchStartHour: 16, // 4 PM HI (Guam 12 PM)
+    lunchEndHour: 17,   // 5 PM HI (Guam 1 PM)
+    label: 'Hawaii (Available 1 PM - 8 PM)',
+    guamEquivalent: 'Guam 9 AM - 4 PM (lunch 12-1 PM)'
   },
   [TIMEZONES.GUAM]: {
-    // Guam patients see full availability
-    startHour: 8,  // 8 AM Guam time
-    endHour: 22,   // 10 PM Guam time
-    label: 'Guam (Available 8 AM - 10 PM)',
-    guamEquivalent: 'Full availability'
+    // Guam patients see 9 AM - 4 PM with lunch break
+    startHour: 9,  // 9 AM Guam time
+    endHour: 16,   // 4 PM Guam time
+    lunchStartHour: 12, // 12 PM Guam
+    lunchEndHour: 13,   // 1 PM Guam
+    label: 'Guam (Available 9 AM - 4 PM)',
+    guamEquivalent: 'Full availability (lunch 12-1 PM)'
   }
 };
 
