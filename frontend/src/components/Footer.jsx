@@ -59,15 +59,15 @@ const Footer = () => {
           <div className="footer-column">
             <h4 className="heading-2 footer-title">Availability</h4>
             <p className="body-medium" style={{ marginBottom: '0.5rem' }}>
-              <strong>Tuesday - Sunday</strong>
+              <strong>Tuesday - Saturday (Guam)</strong>
             </p>
             <ul className="footer-hours">
-              <li><strong>California:</strong> 2 PM - 10 PM</li>
-              <li><strong>Hawaii:</strong> 12 PM - 10 PM</li>
-              <li><strong>Guam:</strong> 8 AM - 10 PM ChST</li>
+              <li><strong>California:</strong> 3 PM - 10 PM (Mon-Fri)</li>
+              <li><strong>Hawaii:</strong> 1 PM - 8 PM (Mon-Fri)</li>
+              <li><strong>Guam:</strong> 9 AM - 4 PM ChST (Tue-Sat)</li>
             </ul>
             <p className="caption" style={{ marginTop: '0.5rem', opacity: 0.7 }}>
-              Closed Mondays
+              Lunch break: 12-1 PM (Guam time)
             </p>
           </div>
         </div>
