@@ -63,7 +63,7 @@ export const getAvailableSlotsForTimezone = (date, patientTimezone) => {
   const slots = [];
   const dayOfWeek = date.getDay();
   
-  // Check if this day is available (Monday closed)
+  // Check if this day is available (Tuesday-Saturday in Guam)
   if (!AVAILABLE_DAYS.includes(dayOfWeek)) {
     return [];
   }
@@ -74,8 +74,13 @@ export const getAvailableSlotsForTimezone = (date, patientTimezone) => {
     return [];
   }
   
-  // Generate 30-minute slots within the available window
+  // Generate 30-minute slots within the available window, excluding lunch break
   for (let hour = window.startHour; hour < window.endHour; hour++) {
+    // Skip lunch hour (12-1 PM in respective timezone)
+    if (hour >= window.lunchStartHour && hour < window.lunchEndHour) {
+      continue;
+    }
+    
     for (let minute of [0, 30]) {
       const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
       
