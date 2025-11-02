@@ -62,7 +62,7 @@ export const MEDRX_SERVICES = [
     note: 'Lab work and medications billed separately',
     icon: '🔬',
     color: 'accent-pink',
-    requiresQuestionnaire: true,
+    requiresQuestionnaire: false,
     requiresPayment: true,
     requiresAddress: true
   },
