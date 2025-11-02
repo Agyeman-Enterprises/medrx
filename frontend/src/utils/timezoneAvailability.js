@@ -1,6 +1,7 @@
-// Timezone Availability Logic - SIMPLIFIED
-// Provider is in Guam (ChST UTC+10), Available: Tuesday-Sunday, 8 AM - 10 PM ChST
-// Patients can only book 10 AM - 10 PM THEIR local time
+// Timezone Availability Logic - UPDATED
+// Provider is in Guam (ChST UTC+10), Available: Tuesday-Saturday, 9 AM - 4 PM ChST
+// Lunch break: 12 PM - 1 PM ChST (blocked)
+// This translates to Monday-Friday in Hawaii/California markets
 
 import { format, parse } from 'date-fns';
 
@@ -12,7 +13,8 @@ export const TIMEZONES = {
 };
 
 // Provider availability days (0=Sunday, 1=Monday, etc.)
-export const AVAILABLE_DAYS = [0, 2, 3, 4, 5, 6]; // Tuesday-Sunday (Monday=1 is excluded)
+// Tuesday-Saturday in Guam = Monday-Friday in HI/CA (due to timezone difference)
+export const AVAILABLE_DAYS = [2, 3, 4, 5, 6]; // Tuesday-Saturday in Guam
 
 // Timezone-specific booking windows
 // These are the INTERSECTION of Guam 8AM-10PM and patient's local 10AM-10PM
