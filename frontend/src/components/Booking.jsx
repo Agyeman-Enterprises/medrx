@@ -56,15 +56,37 @@ const Booking = () => {
   const selectedServiceData = MEDRX_SERVICES.find(s => s.id === selectedService);
   const requiresAddress = selectedService && selectedServiceData?.requiresAddress || false;
 
+  // Handle service selection - move to questionnaire or demographics
+  const handleServiceSelect = (serviceId) => {
+    setSelectedService(serviceId);
+    const service = MEDRX_SERVICES.find(s => s.id === serviceId);
+    
+    // If service requires questionnaire, show it next
+    if (service && service.requiresQuestionnaire) {
+      setBookingStep('questionnaire');
+    } else {
+      // Otherwise go straight to demographics
+      setBookingStep('demographics');
+    }
+  };
+
+  // Handle questionnaire completion
+  const handleQuestionnaireComplete = (answers) => {
+    setQuestionnaireAnswers(answers);
+    // After questionnaire, show demographics form
+    setBookingStep('demographics');
+  };
+
+  const handleQuestionnaireCancel = () => {
+    // Go back to service selection
+    setSelectedService('');
+    setBookingStep('service');
+  };
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
     
     // Basic validation
-    if (!selectedService) {
-      toast.error('Please select a service');
-      return;
-    }
-    
     if (!selectedDate) {
       toast.error('Please select a date');
       return;
@@ -88,23 +110,8 @@ const Booking = () => {
       }
     }
 
-    const service = MEDRX_SERVICES.find(s => s.id === selectedService);
-    
-    if (service && service.requiresQuestionnaire) {
-      setBookingStep('questionnaire');
-    } else {
-      submitBooking();
-    }
-  };
-
-  const handleQuestionnaireComplete = (answers) => {
-    setQuestionnaireAnswers(answers);
-    // After questionnaire, proceed to payment
-    initiatePayment(answers);
-  };
-
-  const handleQuestionnaireCancel = () => {
-    setBookingStep('form');
+    // Proceed to payment
+    initiatePayment();
   };
 
   const initiatePayment = async (questionnaire = questionnaireAnswers) => {
