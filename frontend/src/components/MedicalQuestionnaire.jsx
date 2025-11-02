@@ -104,8 +104,8 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
     const newAnswers = { ...answers, [currentQuestion.id]: value };
     setAnswers(newAnswers);
 
-    // Check if answer disqualifies patient
-    if (currentQuestion.disqualifyIf && value === currentQuestion.disqualifyIf) {
+    // Check if answer disqualifies patient - ONLY for GLP-1 (weight-loss category)
+    if (serviceCategory === 'weight-loss' && currentQuestion.disqualifyIf && value === currentQuestion.disqualifyIf) {
       setIsEligible(false);
     }
   };
