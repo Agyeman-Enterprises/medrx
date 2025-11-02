@@ -114,7 +114,7 @@ const Booking = () => {
     initiatePayment();
   };
 
-  const initiatePayment = async (questionnaire = questionnaireAnswers) => {
+  const initiatePayment = async () => {
     setIsSubmitting(true);
     setBookingStep('processing');
     
@@ -134,7 +134,7 @@ const Booking = () => {
           date: format(selectedDate, 'yyyy-MM-dd'),
           time: selectedTime,
           timezone: selectedTimezone,
-          notes: questionnaire ? JSON.stringify(questionnaire) : ''
+          notes: questionnaireAnswers ? JSON.stringify(questionnaireAnswers) : ''
         }
       };
 
@@ -164,7 +164,7 @@ const Booking = () => {
       const errorMessage = error.response?.data?.detail || error.message || 'Payment initialization failed';
       toast.error(errorMessage);
       console.error('Payment error:', error);
-      setBookingStep('form');
+      setBookingStep('demographics');
     } finally {
       setIsSubmitting(false);
     }
