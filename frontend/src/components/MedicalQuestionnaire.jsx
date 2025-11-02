@@ -136,7 +136,8 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
     }
   };
 
-  if (!isEligible && answers[currentQuestion.id] === currentQuestion.disqualifyIf) {
+  // Show disqualification ONLY for GLP-1 (weight-loss) services
+  if (serviceCategory === 'weight-loss' && !isEligible && answers[currentQuestion.id] === currentQuestion.disqualifyIf) {
     return (
       <div className="questionnaire-container">
         <div className="questionnaire-card disqualification">
@@ -153,12 +154,12 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
               Alternative Option Available
             </h3>
             <p className="body-medium">
-              Consider a <strong>Functional Medicine consultation</strong> to explore other physician-supervised weight loss alternatives and metabolic health optimization.
+              Consider a <strong>Hormone Health or Hair Loss consultation</strong> to explore other physician-supervised treatment options.
             </p>
             <div className="alternative-details">
-              <div className="price-highlight">$175 / visit</div>
+              <div className="price-highlight">$175 / consultation</div>
               <ul style={{ textAlign: 'left', marginTop: '1rem' }}>
-                <li>Comprehensive metabolic assessment</li>
+                <li>Comprehensive medical assessment</li>
                 <li>Personalized treatment plan</li>
                 <li>Lab coordination</li>
                 <li>Alternative therapies discussion</li>
@@ -168,19 +169,15 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
           <div className="questionnaire-actions">
             <button 
               onClick={() => {
-                // Redirect to booking with Functional Medicine pre-selected
-                window.location.href = '/#booking';
-                setTimeout(() => {
-                  const funcMedRadio = document.querySelector('input[value="functional-medicine"]');
-                  if (funcMedRadio) funcMedRadio.click();
-                }, 500);
+                // Redirect back to services
+                window.location.href = '/#services';
               }} 
               className="btn-primary"
             >
-              Book Functional Medicine Visit
+              View Other Services
             </button>
             <button onClick={onCancel} className="btn-secondary">
-              Return to Services
+              Return to Booking
             </button>
           </div>
         </div>
