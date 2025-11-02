@@ -119,13 +119,18 @@ export const isTimeSlotAvailable = (datetime, timezone) => {
   const dayOfWeek = datetime.getDay();
   const hour = datetime.getHours();
   
-  // Check if day is available (Monday closed)
+  // Check if day is available (Tuesday-Saturday in Guam)
   if (!AVAILABLE_DAYS.includes(dayOfWeek)) {
     return false;
   }
   
   const window = TIMEZONE_WINDOWS[timezone];
   if (!window) return false;
+  
+  // Check if hour is within lunch break
+  if (hour >= window.lunchStartHour && hour < window.lunchEndHour) {
+    return false;
+  }
   
   // Check if hour is within available window
   return hour >= window.startHour && hour < window.endHour;
