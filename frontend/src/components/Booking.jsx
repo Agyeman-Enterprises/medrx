@@ -189,6 +189,53 @@ const Booking = () => {
     }
   };
 
+  // Show service selection step
+  if (bookingStep === 'service') {
+    return (
+      <section id="booking" className="booking-section">
+        <div className="container">
+          <div className="section-header">
+            <h2 className="heading-1">Book Your Visit</h2>
+            <p className="body-large">
+              Select your service to begin
+            </p>
+          </div>
+
+          <div className="booking-card" style={{ maxWidth: '800px', margin: '0 auto' }}>
+            <h3 className="heading-2">Select Service</h3>
+            <div className="service-options">
+              {MEDRX_SERVICES.map((service) => (
+                <label 
+                  key={service.id} 
+                  className="service-option"
+                  style={{ cursor: 'pointer' }}
+                >
+                  <input
+                    type="radio"
+                    name="service"
+                    value={service.id}
+                    checked={selectedService === service.id}
+                    onChange={(e) => handleServiceSelect(e.target.value)}
+                  />
+                  <div className="service-option-content">
+                    <div className="service-option-header">
+                      <span className="body-medium">{service.name}</span>
+                      <span className="price-badge">${service.price}</span>
+                    </div>
+                    <p className="caption">{service.description}</p>
+                    <p className="caption" style={{ marginTop: '0.5rem', color: 'var(--accent-purple)' }}>
+                      {service.duration} consultation • {service.note}
+                    </p>
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   // Show questionnaire step
   if (bookingStep === 'questionnaire') {
     const service = MEDRX_SERVICES.find(s => s.id === selectedService);
@@ -217,14 +264,28 @@ const Booking = () => {
     );
   }
 
+  // Show demographics/booking form (bookingStep === 'demographics')
+  const service = MEDRX_SERVICES.find(s => s.id === selectedService);
+  
   return (
     <section id="booking" className="booking-section">
       <div className="container">
         <div className="section-header">
-          <h2 className="heading-1">Book Your Visit</h2>
+          <h2 className="heading-1">Complete Your Booking</h2>
           <p className="body-large">
-            Select your service, choose a convenient time, and complete the medical screening
+            {service?.name} - ${service?.price} consultation
           </p>
+          <button 
+            onClick={() => {
+              setSelectedService('');
+              setQuestionnaireAnswers(null);
+              setBookingStep('service');
+            }}
+            className="btn-secondary"
+            style={{ marginTop: '1rem' }}
+          >
+            Change Service
+          </button>
         </div>
 
         <form onSubmit={handleFormSubmit} className="booking-form">
@@ -278,7 +339,7 @@ const Booking = () => {
                 />
               </div>
 
-              {/* Address fields for GLP-1 services (eRx requirement) */}
+              {/* Address fields for services that require it */}
               {requiresAddress && (
                 <>
                   <div className="form-group">
@@ -344,31 +405,9 @@ const Booking = () => {
               )}
             </div>
 
-            {/* Service Selection */}
+            {/* Timezone Selection */}
             <div className="booking-card">
-              <h3 className="heading-2">Select Service</h3>
-              <div className="service-options">
-                {MEDRX_SERVICES.map((service) => (
-                  <label key={service.id} className="service-option">
-                    <input
-                      type="radio"
-                      name="service"
-                      value={service.id}
-                      checked={selectedService === service.id}
-                      onChange={(e) => setSelectedService(e.target.value)}
-                      required
-                    />
-                    <div className="service-option-content">
-                      <div className="service-option-header">
-                        <span className="body-medium">{service.name}</span>
-                        <span className="price-badge">${service.price}</span>
-                      </div>
-                      <p className="caption">{service.description}</p>
-                    </div>
-                  </label>
-                ))}
-              </div>
-
+              <h3 className="heading-2">Appointment Details</h3>
               <div className="form-group">
                 <label className="form-label">
                   <MapPin size={16} />
@@ -448,17 +487,17 @@ const Booking = () => {
 
           {/* Submit Button */}
           <div className="booking-summary">
-            {selectedService && selectedDate && selectedTime && (
+            {selectedDate && selectedTime && (
               <div className="summary-details">
                 <p className="body-medium">
-                  <strong>Selected:</strong> {MEDRX_SERVICES.find(s => s.id === selectedService)?.name} 
+                  <strong>Selected:</strong> {service?.name} 
                   {' '}- {format(selectedDate, 'MMMM d, yyyy')} at {selectedTime}
                   {' '}({timezoneOptions.find(tz => tz.value === selectedTimezone)?.label})
                 </p>
               </div>
             )}
             <button type="submit" className="btn-primary submit-btn" disabled={isSubmitting}>
-              {isSubmitting ? 'Booking...' : 'Confirm Appointment'}
+              {isSubmitting ? 'Processing...' : 'Proceed to Payment'}
             </button>
           </div>
         </form>
