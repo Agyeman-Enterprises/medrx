@@ -16,7 +16,7 @@
 | Nginx Proxy | ✅ RUNNING | Port 80/443, PID 28, Uptime: 1h 6m |
 
 ### 🌐 Public Endpoint Health
-- **URL:** https://medrx-ai.preview.emergentagent.com
+- **URL:** https://voice-intake-ai.preview.emergentagent.com
 - **Status:** ✅ HEALTHY
 - **Response Time:** < 100ms
 - **API Health:** {"status":"healthy","service":"MedRx Telemedicine API"}
@@ -35,7 +35,7 @@
 - DEEPGRAM_API_KEY: ⚠️ Placeholder (needs real key)
 
 ✅ **Frontend .env** - Properly configured
-- REACT_APP_BACKEND_URL: ✅ https://medrx-ai.preview.emergentagent.com
+- REACT_APP_BACKEND_URL: ✅ https://voice-intake-ai.preview.emergentagent.com
 - All URLs use environment variables
 
 ### Code Quality
@@ -146,7 +146,7 @@ Before going live, add real API keys for:
 CORS_ORIGINS="*"
 
 # Recommended (production):
-CORS_ORIGINS="https://medrx-ai.preview.emergentagent.com,https://yourdomain.com"
+CORS_ORIGINS="https://voice-intake-ai.preview.emergentagent.com,https://yourdomain.com"
 ```
 
 ### Priority 3: Stripe Production Keys

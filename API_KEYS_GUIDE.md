@@ -104,7 +104,7 @@ TWILIO_AUTH_TOKEN=xxxxxxxxxxxxx  # ⚠️ UPDATE THIS
 TWILIO_PHONE_NUMBER=+1xxxxxxxxxx  # ⚠️ UPDATE THIS
 TWILIO_API_KEY_SID=SKxxxxxxxxxx  # ⚠️ UPDATE THIS
 TWILIO_API_KEY_SECRET=xxxxxxxxxx  # ⚠️ UPDATE THIS
-TWILIO_STATUS_CALLBACK_URL=https://medrx-ai.preview.emergentagent.com/api/video/callback
+TWILIO_STATUS_CALLBACK_URL=https://voice-intake-ai.preview.emergentagent.com/api/video/callback
 SMS_ALERT_NUMBER=+16716892993
 
 # Calendar
