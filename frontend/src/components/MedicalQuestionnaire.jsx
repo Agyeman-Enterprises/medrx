@@ -151,31 +151,39 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
           </p>
           <div className="alternative-offer">
             <h3 className="heading-2" style={{ marginTop: '2rem', marginBottom: '1rem' }}>
-              Alternative Option Available
+              Next Steps
             </h3>
-            <p className="body-medium">
-              Consider a <strong>Hormone Health or Hair Loss consultation</strong> to explore other physician-supervised treatment options.
+            <p className="body-medium" style={{ marginBottom: '1.5rem' }}>
+              We recommend speaking with our clinic directly to discuss alternative treatment options.
             </p>
             <div className="alternative-details">
-              <div className="price-highlight">$175 / consultation</div>
-              <ul style={{ textAlign: 'left', marginTop: '1rem' }}>
-                <li>Comprehensive medical assessment</li>
-                <li>Personalized treatment plan</li>
-                <li>Lab coordination</li>
-                <li>Alternative therapies discussion</li>
-              </ul>
+              <div style={{ marginBottom: '1.5rem' }}>
+                <p className="body-medium" style={{ marginBottom: '0.5rem' }}>
+                  <strong>📞 Call our clinic:</strong>
+                </p>
+                <a 
+                  href="tel:+16716892993" 
+                  className="price-highlight" 
+                  style={{ display: 'inline-block', textDecoration: 'none', cursor: 'pointer' }}
+                >
+                  +1 (671) 689-2993
+                </a>
+              </div>
+              <p className="body-medium">
+                <strong>Or book a regular appointment online:</strong>
+              </p>
             </div>
           </div>
           <div className="questionnaire-actions">
-            <button 
-              onClick={() => {
-                // Redirect back to services
-                window.location.href = '/#services';
-              }} 
+            <a 
+              href="https://bookadoc2u.com" 
+              target="_blank"
+              rel="noopener noreferrer"
               className="btn-primary"
+              style={{ textDecoration: 'none', display: 'inline-block' }}
             >
-              View Other Services
-            </button>
+              BOOK at BookADoc2U
+            </a>
             <button onClick={onCancel} className="btn-secondary">
               Return to Booking
             </button>
