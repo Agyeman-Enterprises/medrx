@@ -31,8 +31,8 @@ const Hero = () => {
           Physician-supervised GLP-1 therapy using Semaglutide (Ozempic®, Wegovy®) and Tirzepatide (Mounjaro®, Zepbound®) for sustainable, science-based weight management. Personalized, private, and convenient telemedicine care.
         </p>
         <div className="hero-cta">
-          <button onClick={scrollToBooking} className="btn-primary">Book GLP-1 Evaluation</button>
-          <button onClick={() => document.getElementById('services').scrollIntoView({ behavior: 'smooth' })} className="btn-secondary">View Pricing</button>
+          <button onClick={scrollToBooking} className="btn-primary">Book Appointment</button>
+          <button onClick={() => document.getElementById('services').scrollIntoView({ behavior: 'smooth' })} className="btn-secondary">View Services</button>
         </div>
         <p className="caption hero-note" style={{ marginTop: '1.5rem', opacity: 0.9 }}>
           Initial evaluation: Semaglutide $150 • Tirzepatide $279 • Medication billed separately by pharmacy

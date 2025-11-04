@@ -55,9 +55,9 @@ function App() {
               <Header />
               <Hero />
               <Services />
+              <Booking />
               <HowItWorks />
               <Testimonials />
-              <Booking />
               <Footer />
             </>
           } />

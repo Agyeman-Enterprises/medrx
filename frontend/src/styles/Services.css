@@ -62,6 +62,41 @@
   height: 100%;
 }
 
+.service-card.clickable-card {
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.service-card.clickable-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: var(--accent-purple, #8b5cf6);
+}
+
+.service-card.clickable-card:active {
+  transform: translateY(-2px);
+}
+
+.service-card.clickable-card:focus {
+  outline: 2px solid var(--accent-purple, #8b5cf6);
+  outline-offset: 2px;
+}
+
+.service-card-footer {
+  margin-top: auto;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.service-cta-text {
+  color: var(--accent-purple, #8b5cf6);
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
 .service-type-badge {
   position: absolute;
   top: 1rem;
