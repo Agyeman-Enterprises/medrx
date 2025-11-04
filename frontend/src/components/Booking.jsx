@@ -15,15 +15,35 @@ const API = `${BACKEND_URL}/api`;
 const Booking = () => {
   // Step flow: 'service' → 'questionnaire' → 'booking' → 'confirming' → 'payment'
   const [bookingStep, setBookingStep] = useState('service');
-  const [selectedService, setSelectedService] = useState(() => {
-    // Check for service from sessionStorage or URL
-    const stored = sessionStorage.getItem('selectedService');
-    if (stored) {
-      sessionStorage.removeItem('selectedService');
-      return stored;
+  const [selectedService, setSelectedService] = useState('');
+  
+  // Handle service selection - move to questionnaire or booking
+  const handleServiceSelect = useCallback((serviceId) => {
+    setSelectedService(serviceId);
+    const service = MEDRX_SERVICES.find(s => s.id === serviceId);
+    
+    // If service requires questionnaire, show it next
+    if (service && service.requiresQuestionnaire) {
+      setBookingStep('questionnaire');
+    } else {
+      // Otherwise go straight to booking
+      setBookingStep('booking');
     }
-    return '';
-  });
+  }, []);
+  
+  // Check for service from sessionStorage on mount
+  useEffect(() => {
+    try {
+      const stored = sessionStorage.getItem('selectedService');
+      if (stored) {
+        sessionStorage.removeItem('selectedService');
+        handleServiceSelect(stored);
+      }
+    } catch (e) {
+      // Ignore sessionStorage errors
+      console.warn('sessionStorage not available:', e);
+    }
+  }, [handleServiceSelect]);
   
   // Listen for service selection from Services component
   useEffect(() => {
@@ -37,13 +57,6 @@ const Booking = () => {
     window.addEventListener('serviceSelected', handleServiceSelected);
     return () => window.removeEventListener('serviceSelected', handleServiceSelected);
   }, [handleServiceSelect]);
-  
-  // Auto-select service if one was stored
-  useEffect(() => {
-    if (selectedService && bookingStep === 'service') {
-      handleServiceSelect(selectedService);
-    }
-  }, [selectedService, bookingStep, handleServiceSelect]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedTimezone, setSelectedTimezone] = useState(TIMEZONES.CALIFORNIA);
@@ -82,20 +95,6 @@ const Booking = () => {
 
   const selectedServiceData = MEDRX_SERVICES.find(s => s.id === selectedService);
   const requiresAddress = selectedService && selectedServiceData?.requiresAddress || false;
-
-  // Handle service selection - move to questionnaire or booking
-  const handleServiceSelect = useCallback((serviceId) => {
-    setSelectedService(serviceId);
-    const service = MEDRX_SERVICES.find(s => s.id === serviceId);
-    
-    // If service requires questionnaire, show it next
-    if (service && service.requiresQuestionnaire) {
-      setBookingStep('questionnaire');
-    } else {
-      // Otherwise go straight to booking
-      setBookingStep('booking');
-    }
-  }, []);
 
   // Handle questionnaire completion
   const handleQuestionnaireComplete = (answers) => {
