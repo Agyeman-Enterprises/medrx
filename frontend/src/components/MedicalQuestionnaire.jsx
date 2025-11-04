@@ -189,9 +189,31 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
   
   const handleTextBlur = (e) => {
     const value = e.target.value.trim();
-    if (value && !answers[currentQuestion.id]) {
+    if (value) {
       handleAnswer(value);
+      // Auto-advance after a short delay
+      setTimeout(() => {
+        if (currentStep < questions.length - 1) {
+          setCurrentStep(currentStep + 1);
+        } else {
+          onComplete({ ...answers, [currentQuestion.id]: value });
+        }
+      }, 500);
     }
+  };
+
+  // Quick action buttons for allergies and medications
+  const handleQuickAction = (action, questionId) => {
+    const value = action === 'NKDA' ? 'NKDA (No Known Drug Allergies)' : 'None';
+    handleAnswer(value);
+    // Auto-advance after a short delay
+    setTimeout(() => {
+      if (currentStep < questions.length - 1) {
+        setCurrentStep(currentStep + 1);
+      } else {
+        onComplete({ ...answers, [questionId]: value });
+      }
+    }, 500);
   };
 
   // Auto-redirect to BookADoc2U if ineligible
@@ -269,6 +291,32 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
         )}
 
         <div className="answer-section">
+          {/* Quick action buttons for allergies */}
+          {currentQuestion.id === 'allergies' && (
+            <div className="quick-actions" style={{ marginBottom: '1rem' }}>
+              <button
+                type="button"
+                className="btn-quick-action"
+                onClick={() => handleQuickAction('NKDA', 'allergies')}
+              >
+                <CheckCircle size={16} /> NKDA
+              </button>
+            </div>
+          )}
+
+          {/* Quick action buttons for medications */}
+          {currentQuestion.id === 'medications' && (
+            <div className="quick-actions" style={{ marginBottom: '1rem' }}>
+              <button
+                type="button"
+                className="btn-quick-action"
+                onClick={() => handleQuickAction('None', 'medications')}
+              >
+                <CheckCircle size={16} /> None
+              </button>
+            </div>
+          )}
+
           {currentQuestion.type === 'yesno' && (
             <div className="yesno-buttons">
               <button
@@ -330,7 +378,6 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
             </div>
           )}
 
-
           {currentQuestion.type === 'text' && (
             <input
               type="text"
@@ -350,26 +397,9 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
               rows={4}
               value={answers[currentQuestion.id] || ''}
               onChange={(e) => handleAnswer(e.target.value)}
-              onKeyPress={(e) => {
-                if (e.key === 'Enter' && e.ctrlKey && e.target.value.trim()) {
-                  e.preventDefault();
-                  const value = e.target.value.trim();
-                  handleAnswer(value);
-                  setTimeout(() => {
-                    if (currentStep < questions.length - 1) {
-                      setCurrentStep(currentStep + 1);
-                    } else {
-                      onComplete({ ...answers, [currentQuestion.id]: value });
-                    }
-                  }, 300);
-                }
-              }}
+              onKeyPress={handleTextSubmit}
+              onBlur={handleTextBlur}
             />
-          )}
-          {currentQuestion.type === 'textarea' && (
-            <p className="caption" style={{ marginTop: '0.5rem', color: 'var(--text-muted)' }}>
-              Press Ctrl+Enter to submit and continue
-            </p>
           )}
         </div>
 
