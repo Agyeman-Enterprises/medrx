@@ -152,8 +152,64 @@
 .questionnaire-actions {
   display: flex;
   gap: 1rem;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   flex-wrap: wrap;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color, #e5e7eb);
+}
+
+.questionnaire-actions-left {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.questionnaire-actions-right {
+  display: flex;
+  gap: 1rem;
+}
+
+.questionnaire-actions .btn-primary {
+  background: var(--accent-purple, #8b5cf6);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+.questionnaire-actions .btn-primary:hover:not(:disabled) {
+  background: var(--accent-purple-dark, #7c3aed);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.questionnaire-actions .btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.questionnaire-actions .btn-secondary {
+  background: var(--bg-section, #f9fafb);
+  color: var(--text-primary, #111827);
+  border: 1px solid var(--border-color, #e5e7eb);
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+.questionnaire-actions .btn-secondary:hover {
+  background: var(--bg-card, #ffffff);
+  border-color: var(--text-primary, #111827);
 }
 
 @media (max-width: 768px) {

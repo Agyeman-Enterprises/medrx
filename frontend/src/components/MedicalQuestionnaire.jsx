@@ -124,20 +124,26 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
     // Check if answer disqualifies patient - ONLY for GLP-1 (weight-loss category)
     if (serviceCategory === 'weight-loss' && currentQuestion.disqualifyIf && value === currentQuestion.disqualifyIf) {
       setIsEligible(false);
+    } else {
+      // Reset eligibility if they change to an eligible answer
+      setIsEligible(true);
     }
   };
 
   const handleNext = () => {
-    if (!answers[currentQuestion.id] || answers[currentQuestion.id] === '') {
+    // Validate answer
+    if (!answers[currentQuestion.id] || answers[currentQuestion.id].trim() === '') {
       alert('Please answer the question before continuing');
       return;
     }
 
-    if (!isEligible) {
-      // Show disqualification message
-      return;
+    // If ineligible, show disqualification (but don't block navigation if they want to continue)
+    // Actually, we should show the disqualification screen, so return early
+    if (!isEligible && serviceCategory === 'weight-loss') {
+      return; // The disqualification screen will be shown
     }
 
+    // Move to next question or complete
     if (currentStep < questions.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
@@ -149,8 +155,25 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
   const handlePrevious = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
-      setIsEligible(true); // Reset eligibility when going back
+      // Reset eligibility when going back - check the previous question's answer
+      const prevQuestion = questions[currentStep - 1];
+      if (prevQuestion && prevQuestion.disqualifyIf) {
+        const prevAnswer = answers[prevQuestion.id];
+        if (prevAnswer === prevQuestion.disqualifyIf) {
+          setIsEligible(false);
+        } else {
+          setIsEligible(true);
+        }
+      } else {
+        setIsEligible(true);
+      }
     }
+  };
+
+  // Auto-advance for yes/no questions after selection (optional - can be disabled)
+  const handleYesNoAnswer = (value) => {
+    handleAnswer(value);
+    // Don't auto-advance - let user review and click Next
   };
 
   // Show disqualification ONLY for GLP-1 (weight-loss) services
@@ -229,24 +252,43 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
 
         <h2 className="heading-2 question-title">{currentQuestion.question}</h2>
 
+        {currentQuestion.required && (
+          <p className="caption" style={{ color: 'var(--text-muted)', marginBottom: '1rem' }}>
+            * Required
+          </p>
+        )}
+
         <div className="answer-section">
           {currentQuestion.type === 'yesno' && (
             <div className="yesno-buttons">
               <button
+                type="button"
                 className={`yesno-btn ${answers[currentQuestion.id] === 'yes' ? 'active' : ''}`}
-                onClick={() => handleAnswer('yes')}
+                onClick={() => handleYesNoAnswer('yes')}
               >
                 <CheckCircle size={20} />
                 Yes
               </button>
               <button
+                type="button"
                 className={`yesno-btn ${answers[currentQuestion.id] === 'no' ? 'active' : ''}`}
-                onClick={() => handleAnswer('no')}
+                onClick={() => handleYesNoAnswer('no')}
               >
                 <CheckCircle size={20} />
                 No
               </button>
             </div>
+          )}
+
+          {currentQuestion.type === 'yesno' && answers[currentQuestion.id] && (
+            <p className="caption" style={{ 
+              color: 'var(--accent-purple)', 
+              marginTop: '1rem', 
+              fontWeight: 500,
+              textAlign: 'center'
+            }}>
+              ✓ Answer selected: {answers[currentQuestion.id] === 'yes' ? 'Yes' : 'No'}
+            </p>
           )}
 
           {currentQuestion.type === 'text' && (
@@ -271,17 +313,34 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
         </div>
 
         <div className="questionnaire-actions">
-          {currentStep > 0 && (
-            <button onClick={handlePrevious} className="btn-secondary">
-              Previous
+          <div className="questionnaire-actions-left">
+            {currentStep > 0 && (
+              <button 
+                type="button"
+                onClick={handlePrevious} 
+                className="btn-secondary"
+              >
+                ← Previous
+              </button>
+            )}
+            <button 
+              type="button"
+              onClick={onCancel} 
+              className="btn-secondary"
+            >
+              Cancel
             </button>
-          )}
-          <button onClick={handleNext} className="btn-primary">
-            {currentStep < questions.length - 1 ? 'Next' : 'Complete'}
-          </button>
-          <button onClick={onCancel} className="btn-secondary">
-            Cancel
-          </button>
+          </div>
+          <div className="questionnaire-actions-right">
+            <button 
+              type="button"
+              onClick={handleNext} 
+              className="btn-primary"
+              disabled={!answers[currentQuestion.id] || (typeof answers[currentQuestion.id] === 'string' && answers[currentQuestion.id].trim() === '')}
+            >
+              {currentStep < questions.length - 1 ? 'Next →' : 'Complete ✓'}
+            </button>
+          </div>
         </div>
       </div>
     </div>
