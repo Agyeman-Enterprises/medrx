@@ -176,6 +176,19 @@
   border-color: var(--border-input-focus);
 }
 
+.form-input.error,
+.form-textarea.error {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.validation-error {
+  color: #dc2626;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  display: block;
+}
+
 .questionnaire-actions {
   display: flex;
   gap: 1rem;

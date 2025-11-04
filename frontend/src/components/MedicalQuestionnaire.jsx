@@ -6,6 +6,7 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
   const [answers, setAnswers] = useState({});
   const [currentStep, setCurrentStep] = useState(0);
   const [isEligible, setIsEligible] = useState(true);
+  const [validationError, setValidationError] = useState('');
   const redirectRef = useRef(false);
 
   // Base medical questions for all services
@@ -118,9 +119,139 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
 
   const currentQuestion = questions[currentStep];
 
+  // Validation functions
+  const validateAnswer = (questionId, value) => {
+    if (!value || value.trim() === '') {
+      return 'This field is required';
+    }
+
+    const trimmedValue = value.trim().toLowerCase();
+
+    // Special validation for BMI/weight-height field
+    if (questionId === 'bmi') {
+      // Check if it looks like a valid weight/height entry
+      // Should contain numbers and units (lbs, kg, ft, in, cm, etc.)
+      const hasNumber = /\d/.test(value);
+      const hasUnit = /(lbs?|kg|pounds?|ft|in|feet|inches?|cm|meters?)/i.test(value);
+      
+      if (!hasNumber) {
+        return 'Please include your weight (e.g., 180 lbs)';
+      }
+      if (!hasUnit && value.length < 10) {
+        return 'Please include units (e.g., 180 lbs, 5 ft 6 in)';
+      }
+      // Check for reasonable weight range (50-1000 lbs or 20-450 kg)
+      const weightMatch = value.match(/(\d+(?:\.\d+)?)\s*(lbs?|kg|pounds?)/i);
+      if (weightMatch) {
+        const weight = parseFloat(weightMatch[1]);
+        const unit = weightMatch[2].toLowerCase();
+        if (unit.includes('kg')) {
+          if (weight < 20 || weight > 450) {
+            return 'Please enter a valid weight between 20-450 kg';
+          }
+        } else {
+          if (weight < 50 || weight > 1000) {
+            return 'Please enter a valid weight between 50-1000 lbs';
+          }
+        }
+      }
+      // Check for reasonable height range
+      const heightMatch = value.match(/(\d+(?:\.\d+)?)\s*(ft|feet|in|inches?|cm|meters?)/i);
+      if (heightMatch) {
+        const height = parseFloat(heightMatch[1]);
+        const unit = heightMatch[2].toLowerCase();
+        if (unit.includes('cm')) {
+          if (height < 100 || height > 250) {
+            return 'Please enter a valid height between 100-250 cm';
+          }
+        } else if (unit.includes('meter')) {
+          if (height < 1 || height > 2.5) {
+            return 'Please enter a valid height between 1-2.5 meters';
+          }
+        } else if (unit.includes('ft') || unit.includes('feet')) {
+          if (height < 3 || height > 8) {
+            return 'Please enter a valid height between 3-8 feet';
+          }
+        }
+      }
+      if (value.length < 8) {
+        return 'Please provide both weight and height (e.g., 180 lbs, 5 ft 6 in)';
+      }
+    }
+
+    // Validation for medications field
+    if (questionId === 'medications') {
+      // Allow "None" but require minimum length for actual medications
+      if (trimmedValue !== 'none' && trimmedValue.length < 3) {
+        return 'Please provide at least 3 characters, or click "None" if you are not taking any medications';
+      }
+      // Check for meaningful content (not just single letters or gibberish)
+      if (trimmedValue !== 'none' && trimmedValue.length < 5 && !/^[a-z]\s*$/.test(trimmedValue) === false) {
+        // If it's very short and doesn't look like a medication name, warn
+        if (value.length < 5 && !/\b(aspirin|tylenol|ibuprofen|vitamin|medication|drug|pill|tablet|capsule)\b/i.test(value)) {
+          return 'Please provide specific medication names or click "None"';
+        }
+      }
+    }
+
+    // Validation for allergies field
+    if (questionId === 'allergies') {
+      // Allow "NKDA" or "None" but require minimum length for actual allergies
+      if (trimmedValue !== 'nkda' && trimmedValue !== 'none' && !trimmedValue.includes('no known drug allergies') && trimmedValue.length < 3) {
+        return 'Please provide at least 3 characters, or click "NKDA" if you have no known drug allergies';
+      }
+      if (trimmedValue !== 'nkda' && trimmedValue !== 'none' && !trimmedValue.includes('no known drug allergies') && trimmedValue.length < 5) {
+        // Check for meaningful content
+        if (!/\b(penicillin|sulfa|aspirin|latex|food|drug|allergy|allergic)\b/i.test(value)) {
+          return 'Please provide specific allergy information or click "NKDA"';
+        }
+      }
+    }
+
+    // Validation for chronic conditions
+    if (questionId === 'chronic_conditions') {
+      if (trimmedValue !== 'none' && trimmedValue.length < 3) {
+        return 'Please provide at least 3 characters, or write "None" if you have no chronic conditions';
+      }
+      if (trimmedValue !== 'none' && trimmedValue.length < 5) {
+        // Check for meaningful medical terms
+        if (!/\b(diabetes|hypertension|thyroid|asthma|copd|heart|kidney|liver|arthritis|condition|disease)\b/i.test(value)) {
+          return 'Please provide specific condition names or write "None"';
+        }
+      }
+    }
+
+    // Validation for weight loss goal
+    if (questionId === 'weight_loss_goal') {
+      if (trimmedValue.length < 10) {
+        return 'Please provide a more detailed response (at least 10 characters)';
+      }
+      // Check for meaningful content
+      if (value.length < 15 && !/\b(weight|pound|kg|lbs|goal|lose|losing|health|diet|exercise|fit)\b/i.test(value)) {
+        return 'Please provide more details about your weight loss goals';
+      }
+    }
+
+    // General validation for other text/textarea fields - minimum meaningful length
+    if (currentQuestion.type === 'text' && questionId !== 'bmi') {
+      if (trimmedValue.length < 3) {
+        return 'Please provide a more complete answer (at least 3 characters)';
+      }
+    }
+
+    if (currentQuestion.type === 'textarea' && !['medications', 'allergies', 'chronic_conditions', 'weight_loss_goal'].includes(questionId)) {
+      if (trimmedValue.length < 10) {
+        return 'Please provide a more detailed response (at least 10 characters)';
+      }
+    }
+
+    return null; // No validation error
+  };
+
   const handleAnswer = (value) => {
     const newAnswers = { ...answers, [currentQuestion.id]: value };
     setAnswers(newAnswers);
+    setValidationError(''); // Clear validation error when user types
 
     // Check if answer disqualifies patient - ONLY for GLP-1 (weight-loss category)
     if (serviceCategory === 'weight-loss' && currentQuestion.disqualifyIf && value === currentQuestion.disqualifyIf) {
@@ -177,7 +308,13 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
     if (e.key === 'Enter' && e.target.value.trim()) {
       e.preventDefault();
       const value = e.target.value.trim();
+      const error = validateAnswer(currentQuestion.id, value);
+      if (error) {
+        setValidationError(error);
+        return;
+      }
       handleAnswer(value);
+      setValidationError('');
       setTimeout(() => {
         if (currentStep < questions.length - 1) {
           setCurrentStep(currentStep + 1);
@@ -191,7 +328,13 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
   const handleTextBlur = (e) => {
     const value = e.target.value.trim();
     if (value) {
+      const error = validateAnswer(currentQuestion.id, value);
+      if (error) {
+        setValidationError(error);
+        return;
+      }
       handleAnswer(value);
+      setValidationError('');
       // Auto-advance after a short delay
       setTimeout(() => {
         if (currentStep < questions.length - 1) {
@@ -206,7 +349,13 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
   // Quick action buttons for allergies and medications
   const handleQuickAction = (action, questionId) => {
     const value = action === 'NKDA' ? 'NKDA (No Known Drug Allergies)' : 'None';
+    const error = validateAnswer(questionId, value);
+    if (error) {
+      setValidationError(error);
+      return;
+    }
     handleAnswer(value);
+    setValidationError('');
     // Auto-advance after a short delay
     setTimeout(() => {
       if (currentStep < questions.length - 1) {
@@ -397,27 +546,41 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
           )}
 
           {currentQuestion.type === 'text' && (
-            <input
-              type="text"
-              className="form-input"
-              placeholder={currentQuestion.placeholder}
-              value={answers[currentQuestion.id] || ''}
-              onChange={(e) => handleAnswer(e.target.value)}
-              onKeyPress={handleTextSubmit}
-              onBlur={handleTextBlur}
-            />
+            <>
+              <input
+                type="text"
+                className={`form-input ${validationError ? 'error' : ''}`}
+                placeholder={currentQuestion.placeholder}
+                value={answers[currentQuestion.id] || ''}
+                onChange={(e) => handleAnswer(e.target.value)}
+                onKeyPress={handleTextSubmit}
+                onBlur={handleTextBlur}
+              />
+              {validationError && (
+                <p className="validation-error" style={{ color: '#dc2626', marginTop: '0.5rem', fontSize: '0.875rem' }}>
+                  {validationError}
+                </p>
+              )}
+            </>
           )}
 
           {currentQuestion.type === 'textarea' && (
-            <textarea
-              className="form-textarea"
-              placeholder={currentQuestion.placeholder}
-              rows={4}
-              value={answers[currentQuestion.id] || ''}
-              onChange={(e) => handleAnswer(e.target.value)}
-              onKeyPress={handleTextSubmit}
-              onBlur={handleTextBlur}
-            />
+            <>
+              <textarea
+                className={`form-textarea ${validationError ? 'error' : ''}`}
+                placeholder={currentQuestion.placeholder}
+                rows={4}
+                value={answers[currentQuestion.id] || ''}
+                onChange={(e) => handleAnswer(e.target.value)}
+                onKeyPress={handleTextSubmit}
+                onBlur={handleTextBlur}
+              />
+              {validationError && (
+                <p className="validation-error" style={{ color: '#dc2626', marginTop: '0.5rem', fontSize: '0.875rem' }}>
+                  {validationError}
+                </p>
+              )}
+            </>
           )}
         </div>
 
