@@ -80,6 +80,12 @@ class ConfirmationEmailRequest(BaseModel):
     sessionId: str
     email: str
 
+class CheckoutSessionCreate(BaseModel):
+    serviceId: str
+    originUrl: str
+    email: str
+    appointmentData: Optional[dict] = None
+
 # Payment Models
 class PaymentTransaction(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))

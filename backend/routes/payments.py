@@ -7,7 +7,7 @@ import json
 import logging
 
 from emergentintegrations.payments.stripe.checkout import StripeCheckout, CheckoutSessionResponse, CheckoutStatusResponse, CheckoutSessionRequest
-from models import PaymentTransaction
+from models import PaymentTransaction, CheckoutSessionCreate
 from services_data import ONE_OFF_SERVICES
 from services.sms_service import SMSService
 
@@ -35,18 +35,16 @@ async def checkout_session_options():
     return {"message": "OK"}
 
 @router.post("/checkout/session")
-async def create_checkout_session(request: Request):
+async def create_checkout_session(data: CheckoutSessionCreate, request: Request):
     """Create Stripe checkout session"""
     try:
         logger.info(f"Received payment request: {request.method} {request.url}")
-        logger.info(f"Request headers: {dict(request.headers)}")
-        body = await request.json()
-        logger.info(f"Request body: {body}")
+        logger.info(f"Request body: {data.dict()}")
         
-        service_id = body.get('serviceId')
-        origin_url = body.get('originUrl')
-        email = body.get('email')
-        appointment_data = body.get('appointmentData', {})
+        service_id = data.serviceId
+        origin_url = data.originUrl
+        email = data.email
+        appointment_data = data.appointmentData or {}
         
         if not service_id or not origin_url or not email:
             raise HTTPException(
