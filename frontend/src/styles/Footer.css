@@ -17,10 +17,13 @@
 }
 
 .footer-logo {
-  height: 2rem;
+  height: 2.5rem;
   width: auto;
+  max-width: 200px;
   margin-bottom: 1rem;
   filter: brightness(0) invert(1);
+  object-fit: contain;
+  object-position: left;
 }
 
 .footer-tagline {

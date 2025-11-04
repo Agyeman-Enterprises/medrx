@@ -21,7 +21,6 @@ const Footer = () => {
               src="/logo.png" 
               alt="MedRx" 
               className="footer-logo"
-              style={{ height: '40px', width: 'auto' }}
             />
             <p className="body-medium footer-tagline">
               Medicine that listens, technology that serves.
