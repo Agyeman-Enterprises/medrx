@@ -272,6 +272,10 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
               href="https://bookadoc2u.com" 
               className="btn-primary"
               style={{ textDecoration: 'none', display: 'inline-block' }}
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.href = 'https://bookadoc2u.com';
+              }}
             >
               Book Appointment at BookADoc2U
             </a>
