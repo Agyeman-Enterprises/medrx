@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { format } from 'date-fns';
 import { Calendar } from '../components/ui/calendar';
 import { MEDRX_SERVICES } from '../mock';
