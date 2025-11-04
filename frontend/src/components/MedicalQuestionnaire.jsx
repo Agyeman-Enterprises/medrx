@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/Questionnaire.css';
 import { AlertCircle, CheckCircle } from 'lucide-react';
 
@@ -194,17 +194,12 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
     }
   };
 
-  // Show disqualification ONLY for GLP-1 (weight-loss) services - redirect to booking
+  // Show disqualification ONLY for GLP-1 (weight-loss) services - redirect to BookADoc2U
   if (serviceCategory === 'weight-loss' && !isEligible && answers[currentQuestion.id] === currentQuestion.disqualifyIf) {
-    // Redirect to booking page after a short delay
-    setTimeout(() => {
-      const bookingElement = document.getElementById('booking');
-      if (bookingElement) {
-        bookingElement.scrollIntoView({ behavior: 'smooth' });
-        // Also open BookADoc2U in new tab
-        window.open('https://bookadoc2u.com', '_blank');
-      }
-    }, 2000);
+    // Auto-redirect to BookADoc2U immediately
+    useEffect(() => {
+      window.location.href = 'https://bookadoc2u.com';
+    }, []);
     
     return (
       <div className="questionnaire-container">
@@ -227,14 +222,12 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
               alternative treatment approaches that may be suitable for your situation.
             </p>
             <p className="body-medium" style={{ marginBottom: '1.5rem', color: 'var(--accent-purple)' }}>
-              Redirecting you to book a medical appointment...
+              Redirecting you to BookADoc2U to schedule a medical appointment...
             </p>
           </div>
           <div className="questionnaire-actions">
             <a 
               href="https://bookadoc2u.com" 
-              target="_blank"
-              rel="noopener noreferrer"
               className="btn-primary"
               style={{ textDecoration: 'none', display: 'inline-block' }}
             >
