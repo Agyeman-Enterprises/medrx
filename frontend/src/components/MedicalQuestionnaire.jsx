@@ -194,13 +194,16 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
     }
   };
 
+  // Auto-redirect to BookADoc2U if ineligible
+  useEffect(() => {
+    if (serviceCategory === 'weight-loss' && !isEligible && answers[currentQuestion.id] === currentQuestion.disqualifyIf) {
+      // Redirect immediately to BookADoc2U
+      window.location.href = 'https://bookadoc2u.com';
+    }
+  }, [serviceCategory, isEligible, answers, currentQuestion]);
+
   // Show disqualification ONLY for GLP-1 (weight-loss) services - redirect to BookADoc2U
   if (serviceCategory === 'weight-loss' && !isEligible && answers[currentQuestion.id] === currentQuestion.disqualifyIf) {
-    // Auto-redirect to BookADoc2U immediately
-    useEffect(() => {
-      window.location.href = 'https://bookadoc2u.com';
-    }, []);
-    
     return (
       <div className="questionnaire-container">
         <div className="questionnaire-card disqualification">
