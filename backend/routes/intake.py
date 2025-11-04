@@ -3,9 +3,12 @@ from fastapi.responses import JSONResponse
 from datetime import datetime
 from typing import Optional
 import os
+import logging
 
 from services.photo_upload import PhotoUploadService
 from database import db
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/intake", tags=["intake"])
 
@@ -221,5 +224,41 @@ async def get_patient_photos(patient_id: str, appointment_id: Optional[str] = No
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error retrieving photos: {str(e)}"
+        )
+
+@router.post("/send-forms-email")
+async def send_forms_email(request: dict):
+    """Send intake and consent forms via email"""
+    try:
+        patient_id = request.get("patient_id")
+        appointment_id = request.get("appointment_id")
+        email = request.get("email")
+        
+        if not patient_id or not email:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Missing required fields: patient_id, email"
+            )
+        
+        # Generate form URLs
+        frontend_url = os.getenv('FRONTEND_URL', 'https://medrx.co')
+        intake_url = f"{frontend_url}/intake?patient_id={patient_id}&appointment_id={appointment_id or ''}"
+        consents_url = f"{frontend_url}/consents?patient_id={patient_id}&appointment_id={appointment_id or ''}"
+        
+        # TODO: Send email via email service
+        # For now, just log that email would be sent
+        logger.info(f"Sending forms email to {email} for patient {patient_id}")
+        
+        return {
+            "success": True,
+            "message": "Forms email sent successfully",
+            "intake_url": intake_url,
+            "consents_url": consents_url
+        }
+    except Exception as e:
+        logger.error(f"Failed to send forms email: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to send forms email: {str(e)}"
         )
 

@@ -17,10 +17,17 @@ const Services = () => {
     }
   };
 
-  const scrollToBooking = () => {
+  const scrollToBooking = (serviceId) => {
+    // Store the selected service ID in sessionStorage
+    if (serviceId) {
+      sessionStorage.setItem('selectedService', serviceId);
+    }
+    
     const element = document.getElementById('booking');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
+      // Trigger a custom event to notify Booking component
+      window.dispatchEvent(new CustomEvent('serviceSelected', { detail: { serviceId } }));
     }
   };
 
@@ -62,7 +69,7 @@ const Services = () => {
                 <p className="service-note caption">{service.note}</p>
                 <button 
                   className="btn-primary"
-                  onClick={scrollToBooking}
+                  onClick={() => scrollToBooking(service.id)}
                 >
                   Book Consultation
                 </button>

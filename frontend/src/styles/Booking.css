@@ -8,6 +8,13 @@
   margin: 0 auto;
 }
 
+.booking-form-two-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
 .booking-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -178,9 +185,200 @@
   }
 }
 
+/* Demographics Card */
+.demographics-card {
+  min-height: 500px;
+}
+
+.form-grid-demographics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.form-grid-demographics .form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+/* Appointment Card */
+.appointment-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.timezone-selector {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+}
+
+.timezone-select {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+
+.date-time-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.date-selection,
+.time-selection {
+  display: flex;
+  flex-direction: column;
+}
+
+.date-selection h3,
+.time-selection h3 {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.calendar-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.time-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.time-slots-grid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.time-slots-grid::-webkit-scrollbar-track {
+  background: var(--bg-section, #f9fafb);
+  border-radius: 3px;
+}
+
+.time-slots-grid::-webkit-scrollbar-thumb {
+  background: var(--border-color, #e5e7eb);
+  border-radius: 3px;
+}
+
+.time-slots-grid::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted, #6b7280);
+}
+
+/* Bottom Banner */
+.booking-banner {
+  position: sticky;
+  bottom: 0;
+  background: var(--bg-card, #ffffff);
+  border-top: 2px solid var(--border-color, #e5e7eb);
+  padding: 1.5rem 2rem;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  z-index: 100;
+  margin-top: 2rem;
+  border-radius: 0.75rem 0.75rem 0 0;
+}
+
+.banner-content {
+  flex: 1;
+}
+
+.banner-selection {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.selection-text {
+  font-size: 1rem;
+  color: var(--text-primary, #111827);
+}
+
+.timezone-label {
+  color: var(--text-muted, #6b7280);
+  font-weight: normal;
+}
+
+.banner-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.btn-banner-exit {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--bg-section, #f9fafb);
+  color: var(--text-primary, #111827);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-banner-exit:hover {
+  background: var(--bg-card, #ffffff);
+  border-color: var(--text-primary, #111827);
+}
+
+.btn-banner-confirm {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem;
+  background: var(--accent-purple, #8b5cf6);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+}
+
+.btn-banner-confirm:hover:not(:disabled) {
+  background: var(--accent-purple-dark, #7c3aed);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+}
+
+.btn-banner-confirm:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (max-width: 1024px) {
+  .booking-form-two-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .date-time-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 768px) {
   .booking-section {
     padding: 3rem 0;
+  }
+
+  .booking-form-two-cards {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 
   .booking-grid {
@@ -192,8 +390,29 @@
     padding: 1.5rem;
   }
 
-  .time-slots {
-    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  .form-grid-demographics {
+    grid-template-columns: 1fr;
+  }
+
+  .time-slots-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .booking-banner {
+    flex-direction: column;
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+
+  .banner-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .btn-banner-exit,
+  .btn-banner-confirm {
+    flex: 1;
+    justify-content: center;
   }
 
   .submit-btn {

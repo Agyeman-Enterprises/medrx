@@ -73,6 +73,12 @@ class AppointmentUpdate(BaseModel):
     time: Optional[str] = None
     notes: Optional[str] = None
     paymentStatus: Optional[str] = None
+    paymentSessionId: Optional[str] = None
+
+class ConfirmationEmailRequest(BaseModel):
+    appointmentId: str
+    sessionId: str
+    email: str
 
 # Payment Models
 class PaymentTransaction(BaseModel):

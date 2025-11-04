@@ -170,14 +170,42 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
     }
   };
 
-  // Auto-advance for yes/no questions after selection (optional - can be disabled)
-  const handleYesNoAnswer = (value) => {
-    handleAnswer(value);
-    // Don't auto-advance - let user review and click Next
+  
+  // Auto-advance for text/textarea when Enter is pressed or on blur if filled
+  const handleTextSubmit = (e) => {
+    if (e.key === 'Enter' && e.target.value.trim()) {
+      e.preventDefault();
+      const value = e.target.value.trim();
+      handleAnswer(value);
+      setTimeout(() => {
+        if (currentStep < questions.length - 1) {
+          setCurrentStep(currentStep + 1);
+        } else {
+          onComplete({ ...answers, [currentQuestion.id]: value });
+        }
+      }, 300);
+    }
+  };
+  
+  const handleTextBlur = (e) => {
+    const value = e.target.value.trim();
+    if (value && !answers[currentQuestion.id]) {
+      handleAnswer(value);
+    }
   };
 
-  // Show disqualification ONLY for GLP-1 (weight-loss) services
+  // Show disqualification ONLY for GLP-1 (weight-loss) services - redirect to booking
   if (serviceCategory === 'weight-loss' && !isEligible && answers[currentQuestion.id] === currentQuestion.disqualifyIf) {
+    // Redirect to booking page after a short delay
+    setTimeout(() => {
+      const bookingElement = document.getElementById('booking');
+      if (bookingElement) {
+        bookingElement.scrollIntoView({ behavior: 'smooth' });
+        // Also open BookADoc2U in new tab
+        window.open('https://bookadoc2u.com', '_blank');
+      }
+    }, 2000);
+    
     return (
       <div className="questionnaire-container">
         <div className="questionnaire-card disqualification">
@@ -198,23 +226,9 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
               However, you should book an appointment with our doctor to discuss your options further and explore 
               alternative treatment approaches that may be suitable for your situation.
             </p>
-            <div className="alternative-details">
-              <div style={{ marginBottom: '1.5rem' }}>
-                <p className="body-medium" style={{ marginBottom: '0.5rem' }}>
-                  <strong>📞 Call our clinic:</strong>
-                </p>
-                <a 
-                  href="tel:+16716892993" 
-                  className="price-highlight" 
-                  style={{ display: 'inline-block', textDecoration: 'none', cursor: 'pointer' }}
-                >
-                  +1 (671) 689-2993
-                </a>
-              </div>
-              <p className="body-medium" style={{ marginBottom: '1rem' }}>
-                <strong>Or book a medical appointment online:</strong>
-              </p>
-            </div>
+            <p className="body-medium" style={{ marginBottom: '1.5rem', color: 'var(--accent-purple)' }}>
+              Redirecting you to book a medical appointment...
+            </p>
           </div>
           <div className="questionnaire-actions">
             <a 
@@ -264,7 +278,27 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
               <button
                 type="button"
                 className={`yesno-btn ${answers[currentQuestion.id] === 'yes' ? 'active' : ''}`}
-                onClick={() => handleYesNoAnswer('yes')}
+                onClick={() => {
+                  const value = 'yes';
+                  handleAnswer(value);
+                  
+                  // Auto-advance after a short delay to show selection
+                  setTimeout(() => {
+                    // Check if answer disqualifies - if so, show disqualification screen
+                    if (serviceCategory === 'weight-loss' && currentQuestion.disqualifyIf && value === currentQuestion.disqualifyIf) {
+                      // Don't advance - disqualification screen will show
+                      return;
+                    }
+                    
+                    // Validate and advance
+                    if (currentStep < questions.length - 1) {
+                      setCurrentStep(currentStep + 1);
+                    } else {
+                      // Complete questionnaire
+                      onComplete({ ...answers, [currentQuestion.id]: value });
+                    }
+                  }, 500);
+                }}
               >
                 <CheckCircle size={20} />
                 Yes
@@ -272,7 +306,27 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
               <button
                 type="button"
                 className={`yesno-btn ${answers[currentQuestion.id] === 'no' ? 'active' : ''}`}
-                onClick={() => handleYesNoAnswer('no')}
+                onClick={() => {
+                  const value = 'no';
+                  handleAnswer(value);
+                  
+                  // Auto-advance after a short delay to show selection
+                  setTimeout(() => {
+                    // Check if answer disqualifies - if so, show disqualification screen
+                    if (serviceCategory === 'weight-loss' && currentQuestion.disqualifyIf && value === currentQuestion.disqualifyIf) {
+                      // Don't advance - disqualification screen will show
+                      return;
+                    }
+                    
+                    // Validate and advance
+                    if (currentStep < questions.length - 1) {
+                      setCurrentStep(currentStep + 1);
+                    } else {
+                      // Complete questionnaire
+                      onComplete({ ...answers, [currentQuestion.id]: value });
+                    }
+                  }, 500);
+                }}
               >
                 <CheckCircle size={20} />
                 No
@@ -280,16 +334,6 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
             </div>
           )}
 
-          {currentQuestion.type === 'yesno' && answers[currentQuestion.id] && (
-            <p className="caption" style={{ 
-              color: 'var(--accent-purple)', 
-              marginTop: '1rem', 
-              fontWeight: 500,
-              textAlign: 'center'
-            }}>
-              ✓ Answer selected: {answers[currentQuestion.id] === 'yes' ? 'Yes' : 'No'}
-            </p>
-          )}
 
           {currentQuestion.type === 'text' && (
             <input
@@ -298,6 +342,8 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
               placeholder={currentQuestion.placeholder}
               value={answers[currentQuestion.id] || ''}
               onChange={(e) => handleAnswer(e.target.value)}
+              onKeyPress={handleTextSubmit}
+              onBlur={handleTextBlur}
             />
           )}
 
@@ -308,39 +354,46 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
               rows={4}
               value={answers[currentQuestion.id] || ''}
               onChange={(e) => handleAnswer(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter' && e.ctrlKey && e.target.value.trim()) {
+                  e.preventDefault();
+                  const value = e.target.value.trim();
+                  handleAnswer(value);
+                  setTimeout(() => {
+                    if (currentStep < questions.length - 1) {
+                      setCurrentStep(currentStep + 1);
+                    } else {
+                      onComplete({ ...answers, [currentQuestion.id]: value });
+                    }
+                  }, 300);
+                }
+              }}
             />
+          )}
+          {currentQuestion.type === 'textarea' && (
+            <p className="caption" style={{ marginTop: '0.5rem', color: 'var(--text-muted)' }}>
+              Press Ctrl+Enter to submit and continue
+            </p>
           )}
         </div>
 
         <div className="questionnaire-actions">
-          <div className="questionnaire-actions-left">
-            {currentStep > 0 && (
-              <button 
-                type="button"
-                onClick={handlePrevious} 
-                className="btn-secondary"
-              >
-                ← Previous
-              </button>
-            )}
+          {currentStep > 0 && (
             <button 
               type="button"
-              onClick={onCancel} 
+              onClick={handlePrevious} 
               className="btn-secondary"
             >
-              Cancel
+              ← Previous
             </button>
-          </div>
-          <div className="questionnaire-actions-right">
-            <button 
-              type="button"
-              onClick={handleNext} 
-              className="btn-primary"
-              disabled={!answers[currentQuestion.id] || (typeof answers[currentQuestion.id] === 'string' && answers[currentQuestion.id].trim() === '')}
-            >
-              {currentStep < questions.length - 1 ? 'Next →' : 'Complete ✓'}
-            </button>
-          </div>
+          )}
+          <button 
+            type="button"
+            onClick={onCancel} 
+            className="btn-secondary"
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>

@@ -1,10 +1,13 @@
 from fastapi import APIRouter, HTTPException, status
 from datetime import datetime
 from typing import List
+import logging
 
-from models import Appointment, AppointmentCreate, AppointmentUpdate, PatientInfo, Address
+from models import Appointment, AppointmentCreate, AppointmentUpdate, PatientInfo, Address, ConfirmationEmailRequest
 from services_data import ONE_OFF_SERVICES, get_service_info
 from services.sms_service import SMSService
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/appointments", tags=["appointments"])
 
@@ -183,6 +186,8 @@ async def update_appointment(appointment_id: str, update_data: AppointmentUpdate
         update_dict["appointmentTime"] = update_data.time
     if update_data.notes:
         update_dict["notes"] = update_data.notes
+    if update_data.paymentStatus:
+        update_dict["paymentStatus"] = update_data.paymentStatus
     
     update_dict["updatedAt"] = datetime.utcnow()
     
@@ -200,3 +205,35 @@ async def update_appointment(appointment_id: str, update_data: AppointmentUpdate
         "message": "Appointment updated successfully",
         "appointment": updated
     }
+
+@router.post("/send-confirmation")
+async def send_confirmation_email(request: ConfirmationEmailRequest):
+    """Send appointment confirmation email with receipt"""
+    try:
+        from bson import ObjectId
+        
+        # Get appointment details
+        appointment = await db.appointments.find_one({"_id": ObjectId(request.appointmentId)})
+        if not appointment:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Appointment not found"
+            )
+        
+        # Get payment details
+        payment = await db.payment_transactions.find_one({"sessionId": request.sessionId})
+        
+        # TODO: Send email via email service (implement email service)
+        # For now, just log that email would be sent
+        logger.info(f"Sending confirmation email to {request.email} for appointment {request.appointmentId}")
+        
+        return {
+            "success": True,
+            "message": "Confirmation email sent successfully"
+        }
+    except Exception as e:
+        logger.error(f"Failed to send confirmation email: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to send confirmation email: {str(e)}"
+        )

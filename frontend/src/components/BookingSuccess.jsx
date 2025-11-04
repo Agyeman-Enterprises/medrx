@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/BookingSuccess.css';
+import { toast } from 'sonner';
 import { CheckCircle, Loader, XCircle } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -13,6 +14,7 @@ const BookingSuccess = () => {
   const [paymentStatus, setPaymentStatus] = useState('checking'); // 'checking', 'success', 'failed'
   const [appointmentData, setAppointmentData] = useState(null);
   const [pollAttempts, setPollAttempts] = useState(0);
+  const [sendingEmail, setSendingEmail] = useState(false);
 
   const sessionId = searchParams.get('session_id');
 
@@ -68,23 +70,69 @@ const BookingSuccess = () => {
     try {
       const data = JSON.parse(sessionStorage.getItem('pendingAppointment'));
       
-      const bookingData = {
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        address: data.address,
-        serviceId: data.serviceId,
-        serviceType: data.serviceType,
-        date: data.date,
-        time: data.time,
-        timezone: data.timezone,
-        notes: data.notes,
-        paymentSessionId: sessionId
-      };
+      // Update appointment with payment confirmation
+      if (data.appointmentId) {
+        await axios.patch(`${API}/appointments/${data.appointmentId}`, {
+          paymentStatus: 'paid',
+          status: 'scheduled',
+          paymentSessionId: sessionId
+        });
+      } else {
+        // Fallback: create new appointment
+        const bookingData = {
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          address: data.address,
+          serviceId: data.serviceId,
+          serviceType: data.serviceType || 'oneoff',
+          date: data.date,
+          time: data.time,
+          timezone: data.timezone,
+          notes: data.notes,
+          paymentSessionId: sessionId
+        };
 
-      await axios.post(`${API}/appointments/`, bookingData);
+        await axios.post(`${API}/appointments/`, bookingData);
+      }
+
+      // Send confirmation email with receipt
+      try {
+        await axios.post(`${API}/appointments/send-confirmation`, {
+          appointmentId: data.appointmentId,
+          sessionId: sessionId,
+          email: data.email
+        });
+      } catch (emailError) {
+        console.warn('Confirmation email failed:', emailError);
+        // Don't fail the whole flow if email fails
+      }
     } catch (error) {
       console.error('Appointment creation error:', error);
+    }
+  };
+
+  const handleSendFormsEmail = async () => {
+    if (!appointmentData) return;
+    
+    setSendingEmail(true);
+    try {
+      const response = await axios.post(`${API}/intake/send-forms-email`, {
+        patient_id: appointmentData.email,
+        appointment_id: sessionId,
+        email: appointmentData.email
+      });
+
+      if (response.data.success) {
+        toast.success('Forms sent to your email!');
+      } else {
+        throw new Error('Failed to send email');
+      }
+    } catch (error) {
+      toast.error('Failed to send forms email. Please try again or complete online.');
+      console.error('Email send error:', error);
+    } finally {
+      setSendingEmail(false);
     }
   };
 
@@ -142,27 +190,47 @@ const BookingSuccess = () => {
               <div className="forms-section">
                 <h3 className="heading-2">Complete Your Forms</h3>
                 <p className="body-medium">
-                  Please complete your medical intake form and consent forms before your appointment. 
-                  You can complete them now or later using the links below.
+                  Before your appointment, please complete your medical intake form and consent forms. 
+                  You can complete them online now or receive them via email to complete later.
                 </p>
-                <div className="form-links">
-                  <a 
-                    href={`/intake?patient_id=${appointmentData.email}&appointment_id=${sessionId}`}
-                    className="btn-primary"
-                    style={{ textDecoration: 'none', display: 'inline-block', marginRight: '1rem' }}
-                  >
-                    Complete Intake Form
-                  </a>
-                  <a 
-                    href={`/consents?patient_id=${appointmentData.email}&appointment_id=${sessionId}`}
-                    className="btn-secondary"
-                    style={{ textDecoration: 'none', display: 'inline-block' }}
-                  >
-                    Sign Consent Forms
-                  </a>
+                <div className="form-options">
+                  <div className="form-option-card">
+                    <h4 className="heading-3">Complete Online</h4>
+                    <p className="body-medium" style={{ marginBottom: '1rem' }}>
+                      Fill out your forms now using our secure online system.
+                    </p>
+                    <div className="form-links">
+                      <a 
+                        href={`/intake?patient_id=${appointmentData.email}&appointment_id=${sessionId}`}
+                        className="btn-primary"
+                        style={{ textDecoration: 'none', display: 'inline-block', marginRight: '1rem' }}
+                      >
+                        Start Intake Form
+                      </a>
+                      <a 
+                        href={`/consents?patient_id=${appointmentData.email}&appointment_id=${sessionId}`}
+                        className="btn-secondary"
+                        style={{ textDecoration: 'none', display: 'inline-block' }}
+                      >
+                        Sign Consent Forms
+                      </a>
+                    </div>
+                  </div>
+                  <div className="form-option-card">
+                    <h4 className="heading-3">Receive via Email</h4>
+                    <p className="body-medium" style={{ marginBottom: '1rem' }}>
+                      We'll send you the forms via email so you can complete them at your convenience.
+                    </p>
+                    <button
+                      onClick={handleSendFormsEmail}
+                      className="btn-secondary"
+                    >
+                      Send Forms to Email
+                    </button>
+                  </div>
                 </div>
                 <p className="caption" style={{ marginTop: '1rem', color: 'var(--text-muted)' }}>
-                  Links will also be sent to your email: {appointmentData.email}
+                  Forms must be completed before your appointment. You can access them anytime using the links sent to: {appointmentData.email}
                 </p>
               </div>
             </>
