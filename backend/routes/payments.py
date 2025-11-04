@@ -29,11 +29,17 @@ SERVICE_PACKAGES = {
     'hair-loss': 175.00
 }
 
+@router.options("/checkout/session")
+async def checkout_session_options():
+    """Handle OPTIONS preflight for checkout session"""
+    return {"message": "OK"}
+
 @router.post("/checkout/session")
 async def create_checkout_session(request: Request):
     """Create Stripe checkout session"""
     try:
         logger.info(f"Received payment request: {request.method} {request.url}")
+        logger.info(f"Request headers: {dict(request.headers)}")
         body = await request.json()
         logger.info(f"Request body: {body}")
         
