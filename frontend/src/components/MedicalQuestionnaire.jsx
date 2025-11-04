@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../styles/Questionnaire.css';
 import { AlertCircle, CheckCircle } from 'lucide-react';
 
@@ -6,6 +6,7 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
   const [answers, setAnswers] = useState({});
   const [currentStep, setCurrentStep] = useState(0);
   const [isEligible, setIsEligible] = useState(true);
+  const redirectRef = useRef(false);
 
   // Base medical questions for all services
   const baseQuestions = [
@@ -222,14 +223,15 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
   // Auto-redirect to BookADoc2U if ineligible - only redirect when user explicitly answers a disqualifying question
   // Don't redirect on hover or other interactions
   useEffect(() => {
-    // Only redirect if we have a clear disqualifying answer AND we're showing the disqualification screen
+    // Only redirect if we have a clear disqualifying answer AND we haven't redirected yet
     // This prevents redirect on hover or other unintended triggers
-    if (serviceCategory === 'weight-loss' && 
+    if (!redirectRef.current &&
+        serviceCategory === 'weight-loss' && 
         !isEligible && 
         currentQuestion && 
         currentQuestion.disqualifyIf &&
-        answers[currentQuestion.id] === currentQuestion.disqualifyIf &&
-        currentStep === questions.findIndex(q => q.id === currentQuestion.id)) {
+        answers[currentQuestion.id] === currentQuestion.disqualifyIf) {
+      redirectRef.current = true;
       // Small delay to show the disqualification message first
       const redirectTimer = setTimeout(() => {
         window.location.href = 'https://bookadoc2u.com';
@@ -237,7 +239,7 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
       
       return () => clearTimeout(redirectTimer);
     }
-  }, [serviceCategory, isEligible, answers, currentQuestion?.id, currentStep, questions]);
+  }, [serviceCategory, isEligible, answers, currentQuestion?.id]);
 
   // Show disqualification ONLY for GLP-1 (weight-loss) services - redirect to BookADoc2U
   if (serviceCategory === 'weight-loss' && !isEligible && answers[currentQuestion.id] === currentQuestion.disqualifyIf) {
