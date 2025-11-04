@@ -1,9 +1,11 @@
 from fastapi import APIRouter, HTTPException, status, Request
+from fastapi.requests import Request
 from motor.motor_asyncio import AsyncIOMotorClient
 from datetime import datetime
 from typing import Optional
 import os
 import json
+import logging
 
 from emergentintegrations.payments.stripe.checkout import StripeCheckout, CheckoutSessionResponse, CheckoutStatusResponse, CheckoutSessionRequest
 from models import PaymentTransaction
@@ -11,6 +13,7 @@ from services_data import ONE_OFF_SERVICES
 from services.sms_service import SMSService
 
 router = APIRouter(prefix="/api/payments", tags=["payments"])
+logger = logging.getLogger(__name__)
 
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
@@ -29,8 +32,12 @@ SERVICE_PACKAGES = {
 
 @router.post("/checkout/session")
 async def create_checkout_session(request: Request):
+    """Create Stripe checkout session"""
     try:
+        logger.info(f"Received payment request: {request.method} {request.url}")
         body = await request.json()
+        logger.info(f"Request body: {body}")
+        
         service_id = body.get('serviceId')
         origin_url = body.get('originUrl')
         email = body.get('email')
