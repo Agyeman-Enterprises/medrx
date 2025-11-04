@@ -39,7 +39,7 @@ class RefreshTokenRequest(BaseModel):
 class CheckAvailabilityRequest(BaseModel):
     datetime: str
     timezone: str
-    duration: int = 30
+    duration: int = 15
 
 @router.get("/auth/authorize")
 async def authorize_drchrono(state: Optional[str] = None):
@@ -134,7 +134,7 @@ async def check_availability(request: CheckAvailabilityRequest):
                     if 'T' in dt_str:
                         event_start = datetime.strptime(dt_str[:15], '%Y%m%dT%H%M%S')
                         # Check if there's overlap
-                        event_end = event_start + timedelta(minutes=30)  # Assume 30 min
+                        event_end = event_start + timedelta(minutes=15)  # 15 min appointments
                         
                         if (event_start < appointment_end and event_end > requested_time):
                             conflicts.append({

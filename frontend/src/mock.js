@@ -3,27 +3,61 @@
 
 export const MEDRX_SERVICES = [
   {
-    id: 'glp1-weight-loss',
-    name: 'GLP-1 Weight Loss',
-    title: 'GLP-1 Weight Loss Program',
+    id: 'glp-semaglutide',
+    name: 'GLP-1 Semaglutide',
+    title: 'GLP-1 Semaglutide',
     category: 'weight-loss',
-    description: 'Semaglutide and Tirzepatide programs with personalized dosing, smart monitoring, and results-driven follow-up.',
+    description: 'Semaglutide (Wegovy/Ozempic) weight loss program with personalized dosing, smart monitoring, and results-driven follow-up.',
     price: 175,
     billingPeriod: '/consultation',
-    duration: '15-30 min',
+    duration: '15 min',
     type: 'consultation',
+    medication: 'Semaglutide',
     includes: [
       'Initial medical evaluation',
       'GLP-1 eligibility screening',
       'Personalized treatment plan',
-      'Prescription (if medically appropriate)',
+      'Semaglutide prescription (if medically appropriate)',
       'Follow-up care coordination'
     ],
     features: [
-      '30-minute video consultation',
+      '15-minute video consultation',
       'Comprehensive medical screening',
       'Weight loss goal planning',
-      'GLP-1 prescription (Semaglutide or Tirzepatide)',
+      'Semaglutide prescription',
+      'Medication titration protocol',
+      'Ongoing monitoring guidance'
+    ],
+    note: 'Medications and lab work billed separately',
+    icon: '💊',
+    color: 'accent-purple',
+    requiresQuestionnaire: true,
+    requiresPayment: true,
+    requiresAddress: true
+  },
+  {
+    id: 'glp-tirzepatide',
+    name: 'GLP-1 Tirzepatide',
+    title: 'GLP-1 Tirzepatide',
+    category: 'weight-loss',
+    description: 'Tirzepatide (Mounjaro/Zepbound) weight loss program with personalized dosing, smart monitoring, and results-driven follow-up.',
+    price: 249,
+    billingPeriod: '/consultation',
+    duration: '15 min',
+    type: 'consultation',
+    medication: 'Tirzepatide',
+    includes: [
+      'Initial medical evaluation',
+      'GLP-1 eligibility screening',
+      'Personalized treatment plan',
+      'Tirzepatide prescription (if medically appropriate)',
+      'Follow-up care coordination'
+    ],
+    features: [
+      '15-minute video consultation',
+      'Comprehensive medical screening',
+      'Weight loss goal planning',
+      'Tirzepatide prescription',
       'Medication titration protocol',
       'Ongoing monitoring guidance'
     ],
@@ -42,7 +76,7 @@ export const MEDRX_SERVICES = [
     description: "Women's health, men's testosterone, thyroid optimization — root-cause treatment, not just symptom suppression.",
     price: 175,
     billingPeriod: '/consultation',
-    duration: '15-30 min',
+    duration: '15 min',
     type: 'consultation',
     includes: [
       'Comprehensive hormone assessment',
@@ -52,7 +86,7 @@ export const MEDRX_SERVICES = [
       'Ongoing monitoring protocol'
     ],
     features: [
-      '30-minute video consultation',
+      '15-minute video consultation',
       'Hormone symptom assessment',
       'Lab test recommendations',
       'Bioidentical hormone therapy options',
@@ -74,7 +108,7 @@ export const MEDRX_SERVICES = [
     description: 'Medical-grade topical and oral therapies for natural-looking hair restoration and growth.',
     price: 175,
     billingPeriod: '/consultation',
-    duration: '15-30 min',
+    duration: '15 min',
     type: 'consultation',
     includes: [
       'Scalp and hair assessment',
@@ -84,7 +118,7 @@ export const MEDRX_SERVICES = [
       'Progress tracking plan'
     ],
     features: [
-      '30-minute video consultation',
+      '15-minute video consultation',
       'Hair loss pattern assessment',
       'Medical-grade treatment options',
       'Prescription therapies (Finasteride, Minoxidil, compounds)',
@@ -113,13 +147,21 @@ export const PAYMENT_NOTES = {
 
 // Service details for each category
 export const SERVICE_DETAILS = {
-  'glp1-weight-loss': {
-    medications: ['Semaglutide', 'Tirzepatide'],
+  'glp-semaglutide': {
+    medications: ['Semaglutide'],
     typical_medication_cost: '$200-400/month',
     lab_requirements: 'Baseline labs, periodic monitoring',
     prescription_only: true,
     subspecialties: [
-      { name: 'Semaglutide', starting_dose: '0.25mg weekly', max_dose: '2.4mg weekly' },
+      { name: 'Semaglutide', starting_dose: '0.25mg weekly', max_dose: '2.4mg weekly' }
+    ]
+  },
+  'glp-tirzepatide': {
+    medications: ['Tirzepatide'],
+    typical_medication_cost: '$200-400/month',
+    lab_requirements: 'Baseline labs, periodic monitoring',
+    prescription_only: true,
+    subspecialties: [
       { name: 'Tirzepatide', starting_dose: '2.5mg weekly', max_dose: '15mg weekly' }
     ]
   },

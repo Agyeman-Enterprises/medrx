@@ -41,7 +41,7 @@ class AppointmentCreate(BaseModel):
     email: EmailStr
     phone: str
     serviceId: str
-    serviceType: str  # 'oneoff' or 'subscription'
+    serviceType: str  # 'oneoff' - all MedRx appointments are one-off consultations
     date: str  # YYYY-MM-DD
     time: str  # '08:00 AM'
     timezone: str
@@ -53,7 +53,7 @@ class Appointment(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     userId: str
     serviceId: str
-    serviceType: str
+    serviceType: str  # 'oneoff' - all MedRx appointments are one-off consultations
     serviceName: str
     appointmentDate: str
     appointmentTime: str

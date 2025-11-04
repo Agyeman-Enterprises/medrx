@@ -7,7 +7,7 @@ import json
 
 from emergentintegrations.payments.stripe.checkout import StripeCheckout, CheckoutSessionResponse, CheckoutStatusResponse, CheckoutSessionRequest
 from models import PaymentTransaction
-from services_data import ONE_OFF_SERVICES, SUBSCRIPTION_PLANS
+from services_data import ONE_OFF_SERVICES
 from services.sms_service import SMSService
 
 router = APIRouter(prefix="/api/payments", tags=["payments"])
@@ -21,7 +21,8 @@ sms_service = SMSService()
 
 # Service pricing - Updated for current services
 SERVICE_PACKAGES = {
-    'glp1-weight-loss': 175.00,
+    'glp-semaglutide': 175.00,
+    'glp-tirzepatide': 249.00,
     'hormone-health': 175.00,
     'hair-loss': 175.00
 }
@@ -48,7 +49,7 @@ async def create_checkout_session(request: Request):
                 detail="Invalid service ID"
             )
         
-        service = ONE_OFF_SERVICES.get(service_id) or SUBSCRIPTION_PLANS.get(service_id)
+        service = ONE_OFF_SERVICES.get(service_id)
         if not service:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,

@@ -3,7 +3,8 @@ from datetime import datetime, timedelta
 from typing import List
 
 from models import Subscription, SubscriptionCreate, SubscriptionUpdate
-from services_data import SUBSCRIPTION_PLANS
+# SUBSCRIPTION_PLANS = {}  # No subscriptions - all MedRx services are one-off consultations
+SUBSCRIPTION_PLANS = {}
 
 router = APIRouter(prefix="/api/subscriptions", tags=["subscriptions"])
 

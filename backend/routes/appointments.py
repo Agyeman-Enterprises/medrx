@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import List
 
 from models import Appointment, AppointmentCreate, AppointmentUpdate, PatientInfo, Address
-from services_data import ONE_OFF_SERVICES, SUBSCRIPTION_PLANS, get_service_info
+from services_data import ONE_OFF_SERVICES, get_service_info
 from services.sms_service import SMSService
 
 router = APIRouter(prefix="/api/appointments", tags=["appointments"])
@@ -64,39 +64,11 @@ async def create_appointment(appointment_data: AppointmentCreate):
                 {"$set": {"address": appointment_data.address.dict(), "updatedAt": datetime.utcnow()}}
             )
     
-    # Check for subscription appointments
-    if appointment_data.serviceType == "subscription":
-        # Verify user has active subscription
-        subscription = await db.subscriptions.find_one({
-            "userId": user_id,
-            "status": "active"
-        })
-        
-        if not subscription:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="No active subscription found. Please subscribe first."
-            )
-        
-        # Check visit limits for Basic tier
-        plan = SUBSCRIPTION_PLANS.get(subscription['planId'])
-        if plan and plan.get('visitLimit'):
-            if subscription['appointmentsThisMonth'] >= plan['visitLimit']:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=f"Monthly visit limit reached ({plan['visitLimit']} visits/month)"
-                )
-        
-        price = 0  # Subscription appointments are covered
-        service_name = plan['title']
-        payment_status = 'paid'  # Subscriptions are already paid
-        appointment_status = 'scheduled'
-    else:
-        # One-off appointment - requires payment
-        price = service['price']
-        service_name = service['title']
-        payment_status = 'pending'
-        appointment_status = 'pending_payment'
+    # All appointments are one-off consultations - require payment
+    price = service['price']
+    service_name = service['title']
+    payment_status = 'pending'
+    appointment_status = 'pending_payment'
     
     # Create appointment
     appointment = {
@@ -125,13 +97,6 @@ async def create_appointment(appointment_data: AppointmentCreate):
     result = await db.appointments.insert_one(appointment)
     appointment["id"] = str(result.inserted_id)
     appointment["_id"] = str(result.inserted_id)
-    
-    # Update subscription usage if applicable
-    if appointment_data.serviceType == "subscription":
-        await db.subscriptions.update_one(
-            {"userId": user_id, "status": "active"},
-            {"$inc": {"appointmentsThisMonth": 1}}
-        )
     
     return {
         "success": True,

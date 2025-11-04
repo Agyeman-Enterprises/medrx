@@ -150,7 +150,7 @@ const Booking = () => {
           sessionId: response.data.sessionId,
           ...paymentData.appointmentData,
           serviceId: selectedService,
-          serviceType: service.type
+          serviceType: 'oneoff'  // All MedRx appointments are one-off consultations
         }));
         
         console.log('Redirecting to Stripe:', response.data.url);

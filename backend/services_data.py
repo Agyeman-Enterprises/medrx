@@ -1,14 +1,27 @@
 # MedRx Services - Weight Loss, Hormones, Hair Loss ONLY
 # All consultations: $175 (labs and meds billed separately)
+# GLP-Tirzepatide: $249
 
 ONE_OFF_SERVICES = {
-    'glp1-weight-loss': {
-        'id': 'glp1-weight-loss',
-        'title': 'GLP-1 Weight Loss Program',
+    'glp-semaglutide': {
+        'id': 'glp-semaglutide',
+        'title': 'GLP-1 Semaglutide',
         'price': 175.00,
         'type': 'consultation',
         'category': 'weight-loss',
-        'description': 'Semaglutide and Tirzepatide programs'
+        'description': 'Semaglutide (Wegovy/Ozempic) weight loss program',
+        'medication': 'Semaglutide',
+        'requiresQuestionnaire': True
+    },
+    'glp-tirzepatide': {
+        'id': 'glp-tirzepatide',
+        'title': 'GLP-1 Tirzepatide',
+        'price': 249.00,
+        'type': 'consultation',
+        'category': 'weight-loss',
+        'description': 'Tirzepatide (Mounjaro/Zepbound) weight loss program',
+        'medication': 'Tirzepatide',
+        'requiresQuestionnaire': True
     },
     'hormone-health': {
         'id': 'hormone-health',
@@ -16,7 +29,8 @@ ONE_OFF_SERVICES = {
         'price': 175.00,
         'type': 'consultation',
         'category': 'hormones',
-        'description': 'Comprehensive hormone health consultation'
+        'description': 'Comprehensive hormone health consultation',
+        'requiresQuestionnaire': False
     },
     'hair-loss': {
         'id': 'hair-loss',
@@ -24,7 +38,8 @@ ONE_OFF_SERVICES = {
         'price': 175.00,
         'type': 'consultation',
         'category': 'hair-loss',
-        'description': 'Hair loss treatment consultation'
+        'description': 'Hair loss treatment consultation',
+        'requiresQuestionnaire': False
     }
 }
 

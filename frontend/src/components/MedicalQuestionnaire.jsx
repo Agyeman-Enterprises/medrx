@@ -76,7 +76,24 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
       question: 'Do you have a history of severe gastrointestinal disease or gastroparesis?',
       type: 'yesno',
       required: true,
-      disqualifyIf: 'yes'
+      disqualifyIf: 'yes',
+      explanation: 'Severe GI disease or gastroparesis is a contraindication for GLP-1 therapy'
+    },
+    {
+      id: 'type1_diabetes',
+      question: 'Do you have Type 1 Diabetes?',
+      type: 'yesno',
+      required: true,
+      disqualifyIf: 'yes',
+      explanation: 'GLP-1 medications are not approved for Type 1 Diabetes'
+    },
+    {
+      id: 'allergic_reaction',
+      question: 'Have you ever had a severe allergic reaction to semaglutide, tirzepatide, or any GLP-1 medication?',
+      type: 'yesno',
+      required: true,
+      disqualifyIf: 'yes',
+      explanation: 'Previous severe allergic reactions to GLP-1 medications are a contraindication'
     },
     {
       id: 'bmi',
@@ -154,7 +171,9 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
               Next Steps
             </h3>
             <p className="body-medium" style={{ marginBottom: '1.5rem' }}>
-              We recommend speaking with our clinic directly to discuss alternative treatment options.
+              Based on your medical history, GLP-1 medications may not be appropriate for you at this time. 
+              However, you should book an appointment with our doctor to discuss your options further and explore 
+              alternative treatment approaches that may be suitable for your situation.
             </p>
             <div className="alternative-details">
               <div style={{ marginBottom: '1.5rem' }}>
@@ -169,8 +188,8 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
                   +1 (671) 689-2993
                 </a>
               </div>
-              <p className="body-medium">
-                <strong>Or book a regular appointment online:</strong>
+              <p className="body-medium" style={{ marginBottom: '1rem' }}>
+                <strong>Or book a medical appointment online:</strong>
               </p>
             </div>
           </div>
@@ -182,10 +201,10 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
               className="btn-primary"
               style={{ textDecoration: 'none', display: 'inline-block' }}
             >
-              BOOK at BookADoc2U
+              Book Appointment at BookADoc2U
             </a>
             <button onClick={onCancel} className="btn-secondary">
-              Return to Booking
+              Return to Service Selection
             </button>
           </div>
         </div>

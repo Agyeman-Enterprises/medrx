@@ -7,7 +7,7 @@ import logging
 from pathlib import Path
 
 # Import route modules
-from routes import appointments, subscriptions, payments, voice_intake, drchrono
+from routes import appointments, subscriptions, payments, voice_intake, drchrono, intake
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -36,6 +36,7 @@ app.include_router(subscriptions.router)
 app.include_router(payments.router)
 app.include_router(voice_intake.router)
 app.include_router(drchrono.router)
+app.include_router(intake.router)
 
 # Include the base api router
 app.include_router(api_router)

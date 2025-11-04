@@ -252,7 +252,7 @@ class DrChronoService:
                 "doctor": doctor_id,
                 "office": office_id,
                 "scheduled_time": appointment_data.get("scheduled_time"),
-                "duration": appointment_data.get("duration", 30),
+                "duration": appointment_data.get("duration", 15),
                 "exam_room": appointment_data.get("exam_room", 1),
                 "reason": appointment_data.get("reason", "Telemedicine Consultation"),
                 "status": "Scheduled",

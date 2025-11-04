@@ -1,7 +1,7 @@
 // Timezone Availability Logic - UPDATED
-// Provider is in Guam (ChST UTC+10), Available: Tuesday-Saturday, 9 AM - 4 PM ChST
-// Lunch break: 12 PM - 1 PM ChST (blocked)
-// This translates to Monday-Friday in Hawaii/California markets
+// Provider is in Guam (ChST UTC+10), Available: 10 AM - 6 PM ChST
+// Maximum booking time: 11 PM (2300h) in user's local timezone
+// Available days: Tuesday-Saturday in Guam
 
 import { format, parse } from 'date-fns';
 
@@ -13,44 +13,41 @@ export const TIMEZONES = {
 };
 
 // Provider availability days (0=Sunday, 1=Monday, etc.)
-// Tuesday-Saturday in Guam = Monday-Friday in HI/CA (due to timezone difference)
+// Tuesday-Saturday in Guam
 export const AVAILABLE_DAYS = [2, 3, 4, 5, 6]; // Tuesday-Saturday in Guam
 
 // Timezone-specific booking windows
-// Guam hours: 9 AM - 4 PM Tuesday-Saturday (with 12-1 PM lunch break)
+// Guam hours: 10 AM - 6 PM ChST
+// Maximum user time: 11 PM (2300h) in their timezone
 export const TIMEZONE_WINDOWS = {
   [TIMEZONES.CALIFORNIA]: {
-    // CA is ~18 hours behind Guam
-    // Guam 9 AM Tue = CA 3 PM Mon
-    // Guam 4 PM = CA 10 PM
-    // Note: 12-1 PM Guam = 6-7 PM CA (lunch blocked)
-    startHour: 15, // 3 PM CA time (Guam 9 AM)
-    endHour: 22,   // 10 PM CA time (Guam 4 PM)
-    lunchStartHour: 18, // 6 PM CA (Guam 12 PM)
-    lunchEndHour: 19,   // 7 PM CA (Guam 1 PM)
-    label: 'California (Available 3 PM - 10 PM)',
-    guamEquivalent: 'Guam 9 AM - 4 PM (lunch 12-1 PM)'
+    // CA is 18 hours behind Guam (or 6 hours ahead, depending on DST)
+    // Guam 10 AM ChST = CA 4 PM PDT / 5 PM PST
+    // Guam 6 PM ChST = CA 12 AM PDT / 1 AM PST (next day)
+    // But we cap at 11 PM (23:00) user time
+    startHour: 16, // 4 PM CA time (Guam 10 AM), but adjust for DST
+    endHour: 23,   // 11 PM CA time (max allowed, Guam would be 5 PM)
+    maxUserHour: 23, // Maximum 11 PM user time
+    label: 'California (Available 4 PM - 11 PM)',
+    guamEquivalent: 'Guam 10 AM - 6 PM ChST'
   },
   [TIMEZONES.HAWAII]: {
     // HI is 20 hours behind Guam
-    // Guam 9 AM Tue = HI 1 PM Mon
-    // Guam 4 PM = HI 8 PM
-    // Note: 12-1 PM Guam = 4-5 PM HI (lunch blocked)
-    startHour: 13, // 1 PM HI time (Guam 9 AM)
-    endHour: 20,   // 8 PM HI time (Guam 4 PM)
-    lunchStartHour: 16, // 4 PM HI (Guam 12 PM)
-    lunchEndHour: 17,   // 5 PM HI (Guam 1 PM)
-    label: 'Hawaii (Available 1 PM - 8 PM)',
-    guamEquivalent: 'Guam 9 AM - 4 PM (lunch 12-1 PM)'
+    // Guam 10 AM ChST = HI 2 PM HST
+    // Guam 6 PM ChST = HI 10 PM HST
+    startHour: 14, // 2 PM HI time (Guam 10 AM)
+    endHour: 23,   // 11 PM HI time (max allowed, Guam would be 5 PM)
+    maxUserHour: 23, // Maximum 11 PM user time
+    label: 'Hawaii (Available 2 PM - 11 PM)',
+    guamEquivalent: 'Guam 10 AM - 6 PM ChST'
   },
   [TIMEZONES.GUAM]: {
-    // Guam patients see 9 AM - 4 PM with lunch break
-    startHour: 9,  // 9 AM Guam time
-    endHour: 16,   // 4 PM Guam time
-    lunchStartHour: 12, // 12 PM Guam
-    lunchEndHour: 13,   // 1 PM Guam
-    label: 'Guam (Available 9 AM - 4 PM)',
-    guamEquivalent: 'Full availability (lunch 12-1 PM)'
+    // Guam patients see 10 AM - 6 PM ChST
+    startHour: 10,  // 10 AM Guam time
+    endHour: 18,    // 6 PM Guam time
+    maxUserHour: 18, // 6 PM is within max
+    label: 'Guam (Available 10 AM - 6 PM)',
+    guamEquivalent: 'Full availability (10 AM - 6 PM ChST)'
   }
 };
 
@@ -74,14 +71,22 @@ export const getAvailableSlotsForTimezone = (date, patientTimezone) => {
     return [];
   }
   
-  // Generate 30-minute slots within the available window, excluding lunch break
-  for (let hour = window.startHour; hour < window.endHour; hour++) {
-    // Skip lunch hour (12-1 PM in respective timezone)
-    if (hour >= window.lunchStartHour && hour < window.lunchEndHour) {
-      continue;
+  // Generate 15-minute slots within the available window
+  // Cap at maxUserHour (11 PM / 2300h) for user timezone
+  const maxHour = Math.min(window.endHour, window.maxUserHour || 23);
+  
+  for (let hour = window.startHour; hour < maxHour; hour++) {
+    // Don't go past 11 PM (23:00) in user timezone
+    if (hour >= 23) {
+      break;
     }
     
-    for (let minute of [0, 30]) {
+    for (let minute of [0, 15, 30, 45]) {
+      // Don't create slots past 11 PM
+      if (hour === 23 && minute > 0) {
+        break;
+      }
+      
       const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
       
       try {

@@ -118,26 +118,61 @@ const BookingSuccess = () => {
           </p>
           
           {appointmentData && (
-            <div className="appointment-summary">
-              <h3 className="heading-2">Appointment Details</h3>
-              <div className="summary-item">
-                <span className="label">Date:</span>
-                <span className="value">{appointmentData.date}</span>
+            <>
+              <div className="appointment-summary">
+                <h3 className="heading-2">Appointment Details</h3>
+                <div className="summary-item">
+                  <span className="label">Service:</span>
+                  <span className="value">{appointmentData.serviceId}</span>
+                </div>
+                <div className="summary-item">
+                  <span className="label">Date:</span>
+                  <span className="value">{appointmentData.date}</span>
+                </div>
+                <div className="summary-item">
+                  <span className="label">Time:</span>
+                  <span className="value">{appointmentData.time}</span>
+                </div>
+                <div className="summary-item">
+                  <span className="label">Timezone:</span>
+                  <span className="value">{appointmentData.timezone}</span>
+                </div>
               </div>
-              <div className="summary-item">
-                <span className="label">Time:</span>
-                <span className="value">{appointmentData.time}</span>
+
+              <div className="forms-section">
+                <h3 className="heading-2">Complete Your Forms</h3>
+                <p className="body-medium">
+                  Please complete your medical intake form and consent forms before your appointment. 
+                  You can complete them now or later using the links below.
+                </p>
+                <div className="form-links">
+                  <a 
+                    href={`/intake?patient_id=${appointmentData.email}&appointment_id=${sessionId}`}
+                    className="btn-primary"
+                    style={{ textDecoration: 'none', display: 'inline-block', marginRight: '1rem' }}
+                  >
+                    Complete Intake Form
+                  </a>
+                  <a 
+                    href={`/consents?patient_id=${appointmentData.email}&appointment_id=${sessionId}`}
+                    className="btn-secondary"
+                    style={{ textDecoration: 'none', display: 'inline-block' }}
+                  >
+                    Sign Consent Forms
+                  </a>
+                </div>
+                <p className="caption" style={{ marginTop: '1rem', color: 'var(--text-muted)' }}>
+                  Links will also be sent to your email: {appointmentData.email}
+                </p>
               </div>
-              <div className="summary-item">
-                <span className="label">Timezone:</span>
-                <span className="value">{appointmentData.timezone}</span>
-              </div>
-            </div>
+            </>
           )}
 
-          <button onClick={() => navigate('/')} className="btn-primary">
-            Return to Home
-          </button>
+          <div className="action-buttons">
+            <button onClick={() => navigate('/')} className="btn-primary">
+              Return to Home
+            </button>
+          </div>
         </div>
       </div>
     );

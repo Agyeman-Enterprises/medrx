@@ -28,7 +28,7 @@ SERVICE_LINES = {
         "name": "GLP-1 Weight Loss",
         "description": "Semaglutide and Tirzepatide programs with smart monitoring, personalized dosing, and results-driven follow-up.",
         "consultation_fee": 175,
-        "duration_minutes": 30,
+        "duration_minutes": 15,
         "color": "accent-purple",
         "icon": "scale",
         "medications": ["Semaglutide", "Tirzepatide"]
@@ -37,7 +37,7 @@ SERVICE_LINES = {
         "name": "Hormone Health",
         "description": "Women's health, men's testosterone, thyroid optimization — root-cause, not just symptom suppression.",
         "consultation_fee": 175,
-        "duration_minutes": 30,
+        "duration_minutes": 15,
         "color": "accent-pink",
         "icon": "heart-pulse",
         "medications": ["Bioidentical Hormones", "Testosterone", "Thyroid medications"]
@@ -46,7 +46,7 @@ SERVICE_LINES = {
         "name": "Hair Loss Solutions",
         "description": "Medical-grade topical and oral therapies for natural-looking hair restoration.",
         "consultation_fee": 175,
-        "duration_minutes": 30,
+        "duration_minutes": 15,
         "color": "accent-green",
         "icon": "sparkles",
         "medications": ["Finasteride", "Minoxidil", "Topical compounds"]

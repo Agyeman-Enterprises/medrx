@@ -20,7 +20,7 @@ export const drChronoService = {
       const response = await axios.post(`${API}/drchrono/check-availability`, {
         datetime: datetime.toISOString(),
         timezone,
-        duration: 30 // 30 minute appointment
+        duration: 15 // 15 minute appointment
       });
       
       return {
