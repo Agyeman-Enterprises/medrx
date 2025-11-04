@@ -113,7 +113,6 @@ async def create_checkout_session(request: Request):
         )
 
 @router.get("/checkout/status/{session_id}")
-@router.options("/checkout/status/{session_id}")  # Handle CORS preflight
 async def get_checkout_status(session_id: str, request: Request):
     try:
         host_url = str(request.base_url).rstrip('/')

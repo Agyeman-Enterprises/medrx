@@ -38,11 +38,6 @@ app.include_router(voice_intake.router)
 app.include_router(drchrono.router)
 app.include_router(intake.router)
 
-# Add OPTIONS handler for CORS preflight
-@app.options("/api/payments/checkout/status/{session_id}")
-async def options_checkout_status():
-    return {"message": "OK"}
-
 # Include the base api router
 app.include_router(api_router)
 
