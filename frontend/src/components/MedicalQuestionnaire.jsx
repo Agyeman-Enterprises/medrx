@@ -191,18 +191,15 @@ const MedicalQuestionnaire = ({ serviceCategory, onComplete, onCancel }) => {
   const handleTextBlur = (e) => {
     const value = e.target.value.trim();
     if (value) {
-      // Always update answer if there's a value
-      if (value !== answers[currentQuestion.id]) {
-        handleAnswer(value);
-      }
-      // Auto-advance after a short delay if we have a value
+      handleAnswer(value);
+      // Auto-advance after a short delay
       setTimeout(() => {
-        if (currentStep < questions.length - 1 && value) {
+        if (currentStep < questions.length - 1) {
           setCurrentStep(currentStep + 1);
-        } else if (value) {
+        } else {
           onComplete({ ...answers, [currentQuestion.id]: value });
         }
-      }, 800); // Longer delay to give user time to see their input
+      }, 800); // Delay to give user time to see their input
     }
   };
 
